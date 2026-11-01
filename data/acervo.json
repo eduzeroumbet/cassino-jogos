@@ -1,0 +1,817 @@
+{
+ "acervo": "projetos/artes-cassino/acervo",
+ "jogos": {
+  "fortune-tiger": {
+   "bg": [
+    {
+     "arquivo": "assets/acervo/fortune-tiger/bg-1600.webp",
+     "w": 1420,
+     "h": 1020,
+     "kb": 60,
+     "origem": "../../../../../../tmp/pgtiger/Promotion Pack/Background/fortune-tiger_background_landscape1.png"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-tiger/bg-800.webp",
+     "w": 800,
+     "h": 575,
+     "kb": 27,
+     "origem": "../../../../../../tmp/pgtiger/Promotion Pack/Background/fortune-tiger_background_landscape1.png"
+    }
+   ],
+   "logo": [
+    {
+     "arquivo": "assets/acervo/fortune-tiger/logo.webp",
+     "w": 640,
+     "h": 460,
+     "kb": 77,
+     "origem": "../../../../../../tmp/pgtiger/Promotion Pack/Logotype Multilanguages/fortune-tiger_logotype_pt.png"
+    }
+   ]
+  },
+  "fortune-ox": {
+   "bg": [
+    {
+     "arquivo": "assets/acervo/fortune-ox/bg-1600.webp",
+     "w": 1200,
+     "h": 848,
+     "kb": 56,
+     "origem": "PG Soft/Fortune Ox/Promotion Pack/Promotion Pack/Background/fortune-ox_background_landscape.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-ox/bg-800.webp",
+     "w": 800,
+     "h": 565,
+     "kb": 33,
+     "origem": "PG Soft/Fortune Ox/Promotion Pack/Promotion Pack/Background/fortune-ox_background_landscape.jpg"
+    }
+   ],
+   "banner": [
+    {
+     "arquivo": "assets/acervo/fortune-ox/banner-1200.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 46,
+     "origem": "PG Soft/Fortune Ox/Promotion Pack/Promotion Pack/Web Banners/fortune-ox_web_banner_500_500_en.png"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-ox/banner-600.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 45,
+     "origem": "PG Soft/Fortune Ox/Promotion Pack/Promotion Pack/Web Banners/fortune-ox_web_banner_500_500_en.png"
+    }
+   ],
+   "logo": [
+    {
+     "arquivo": "assets/acervo/fortune-ox/logo.webp",
+     "w": 640,
+     "h": 564,
+     "kb": 109,
+     "origem": "PG Soft/Fortune Ox/Promotion Pack/Promotion Pack/Logotype Multilanguage/fortune-ox_logo_pt.png"
+    }
+   ],
+   "char": [
+    {
+     "arquivo": "assets/acervo/fortune-ox/char-1.webp",
+     "w": 547,
+     "h": 900,
+     "kb": 53,
+     "origem": "PG Soft/Fortune Ox/Promotion Pack/Promotion Pack/Characters/fortune-ox_3.png"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-ox/char-2.webp",
+     "w": 605,
+     "h": 900,
+     "kb": 46,
+     "origem": "PG Soft/Fortune Ox/Promotion Pack/Promotion Pack/Characters/fortune-ox_7.png"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-ox/char-3.webp",
+     "w": 500,
+     "h": 846,
+     "kb": 39,
+     "origem": "PG Soft/Fortune Ox/Promotion Pack/Promotion Pack/Characters/fortune-ox_1.png"
+    }
+   ]
+  },
+  "fortune-rabbit": {
+   "bg": [
+    {
+     "arquivo": "assets/acervo/fortune-rabbit/bg-1600.webp",
+     "w": 1080,
+     "h": 1080,
+     "kb": 58,
+     "origem": "PG Soft/Fortune Rabbit/Promotion Pack/Promotion Pack/Background/fortune-rabbit_bg1.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-rabbit/bg-800.webp",
+     "w": 800,
+     "h": 800,
+     "kb": 40,
+     "origem": "PG Soft/Fortune Rabbit/Promotion Pack/Promotion Pack/Background/fortune-rabbit_bg1.jpg"
+    }
+   ],
+   "banner": [
+    {
+     "arquivo": "assets/acervo/fortune-rabbit/banner-1200.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 32,
+     "origem": "PG Soft/Fortune Rabbit/Promotion Pack/Promotion Pack/Web Banner/fortune-rabbit_web-banner_en.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-rabbit/banner-600.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 32,
+     "origem": "PG Soft/Fortune Rabbit/Promotion Pack/Promotion Pack/Web Banner/fortune-rabbit_web-banner_en.jpg"
+    }
+   ],
+   "logo": [
+    {
+     "arquivo": "assets/acervo/fortune-rabbit/logo.webp",
+     "w": 640,
+     "h": 320,
+     "kb": 50,
+     "origem": "PG Soft/Fortune Rabbit/Promotion Pack/Promotion Pack/Logotype Multilanguages/fortune-rabbit_logotype_pt.png"
+    }
+   ],
+   "char": [
+    {
+     "arquivo": "assets/acervo/fortune-rabbit/char-1.webp",
+     "w": 451,
+     "h": 900,
+     "kb": 61,
+     "origem": "PG Soft/Fortune Rabbit/Promotion Pack/Promotion Pack/Characters/fortune-rabbit_character2.png"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-rabbit/char-2.webp",
+     "w": 550,
+     "h": 900,
+     "kb": 84,
+     "origem": "PG Soft/Fortune Rabbit/Promotion Pack/Promotion Pack/Characters/fortune-rabbit_character1.png"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-rabbit/char-3.webp",
+     "w": 584,
+     "h": 900,
+     "kb": 72,
+     "origem": "PG Soft/Fortune Rabbit/Promotion Pack/Promotion Pack/Characters/fortune-rabbit_character3.png"
+    }
+   ]
+  },
+  "fortune-dragon": {
+   "bg": [
+    {
+     "arquivo": "assets/acervo/fortune-dragon/bg-1600.webp",
+     "w": 1080,
+     "h": 715,
+     "kb": 21,
+     "origem": "PG Soft/Fortune Dragon/Promotion Pack/Promotion Pack/Background/fortune-dragon_background_landscape.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-dragon/bg-800.webp",
+     "w": 800,
+     "h": 530,
+     "kb": 14,
+     "origem": "PG Soft/Fortune Dragon/Promotion Pack/Promotion Pack/Background/fortune-dragon_background_landscape.jpg"
+    }
+   ],
+   "banner": [
+    {
+     "arquivo": "assets/acervo/fortune-dragon/banner-1200.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 40,
+     "origem": "PG Soft/Fortune Dragon/Promotion Pack/Promotion Pack/Web Banners/fortune-dragon_web-banner_500_500_en.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-dragon/banner-600.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 40,
+     "origem": "PG Soft/Fortune Dragon/Promotion Pack/Promotion Pack/Web Banners/fortune-dragon_web-banner_500_500_en.jpg"
+    }
+   ],
+   "logo": [
+    {
+     "arquivo": "assets/acervo/fortune-dragon/logo.webp",
+     "w": 640,
+     "h": 402,
+     "kb": 67,
+     "origem": "PG Soft/Fortune Dragon/Promotion Pack/Promotion Pack/Logotype Multilanguage/fortune-dragon_logo_pt.png"
+    }
+   ],
+   "char": [
+    {
+     "arquivo": "assets/acervo/fortune-dragon/char-1.webp",
+     "w": 609,
+     "h": 900,
+     "kb": 99,
+     "origem": "PG Soft/Fortune Dragon/Promotion Pack/Promotion Pack/Characters/fortune-dragon.png"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-dragon/char-2.webp",
+     "w": 585,
+     "h": 900,
+     "kb": 91,
+     "origem": "PG Soft/Fortune Dragon/Promotion Pack/Promotion Pack/Characters/fortune-dragon3.png"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-dragon/char-3.webp",
+     "w": 800,
+     "h": 893,
+     "kb": 82,
+     "origem": "PG Soft/Fortune Dragon/Promotion Pack/Promotion Pack/Characters/fortune-dragon2.png"
+    }
+   ]
+  },
+  "fortune-snake": {
+   "bg": [
+    {
+     "arquivo": "assets/acervo/fortune-snake/bg-1600.webp",
+     "w": 1080,
+     "h": 715,
+     "kb": 70,
+     "origem": "PG Soft/Fortune Snake/Promotion Pack/EN/Promotion Pack/Background/fortune-snake_background_landscape.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-snake/bg-800.webp",
+     "w": 800,
+     "h": 530,
+     "kb": 45,
+     "origem": "PG Soft/Fortune Snake/Promotion Pack/EN/Promotion Pack/Background/fortune-snake_background_landscape.jpg"
+    }
+   ],
+   "banner": [
+    {
+     "arquivo": "assets/acervo/fortune-snake/banner-1200.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 46,
+     "origem": "PG Soft/Fortune Snake/Promotion Pack/EN/Promotion Pack/Web Banners/fortune-snake_web-banner_500_500_en.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-snake/banner-600.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 45,
+     "origem": "PG Soft/Fortune Snake/Promotion Pack/EN/Promotion Pack/Web Banners/fortune-snake_web-banner_500_500_en.jpg"
+    }
+   ],
+   "logo": [
+    {
+     "arquivo": "assets/acervo/fortune-snake/logo.webp",
+     "w": 640,
+     "h": 347,
+     "kb": 62,
+     "origem": "PG Soft/Fortune Snake/Promotion Pack/EN/Promotion Pack/Logotype Multilanguage/fortune-snake_logo_pt_br.png"
+    }
+   ],
+   "char": [
+    {
+     "arquivo": "assets/acervo/fortune-snake/char-1.webp",
+     "w": 704,
+     "h": 900,
+     "kb": 79,
+     "origem": "PG Soft/Fortune Snake/Promotion Pack/EN/Promotion Pack/Characters/fortune-snake.png"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-snake/char-2.webp",
+     "w": 1092,
+     "h": 660,
+     "kb": 74,
+     "origem": "PG Soft/Fortune Snake/Promotion Pack/EN/Promotion Pack/Characters/fortune-snake_gold.png"
+    },
+    {
+     "arquivo": "assets/acervo/fortune-snake/char-3.webp",
+     "w": 620,
+     "h": 900,
+     "kb": 68,
+     "origem": "PG Soft/Fortune Snake/Promotion Pack/EN/Promotion Pack/Characters/fortune-snake2.png"
+    }
+   ]
+  },
+  "wild-bandito": {
+   "bg": [
+    {
+     "arquivo": "assets/acervo/wild-bandito/bg-1600.webp",
+     "w": 800,
+     "h": 834,
+     "kb": 45,
+     "origem": "PG Soft/Wild Bandito/Promotion Packs/Promotion Pack/Backgrounds/wild-bandito_background_landscape1.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/wild-bandito/bg-800.webp",
+     "w": 800,
+     "h": 834,
+     "kb": 44,
+     "origem": "PG Soft/Wild Bandito/Promotion Packs/Promotion Pack/Backgrounds/wild-bandito_background_landscape1.jpg"
+    }
+   ],
+   "banner": [
+    {
+     "arquivo": "assets/acervo/wild-bandito/banner-1200.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 44,
+     "origem": "PG Soft/Wild Bandito/Promotion Packs/Promotion Pack/Web Banner/wild-bandito_game-banner_en.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/wild-bandito/banner-600.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 43,
+     "origem": "PG Soft/Wild Bandito/Promotion Packs/Promotion Pack/Web Banner/wild-bandito_game-banner_en.jpg"
+    }
+   ],
+   "logo": [
+    {
+     "arquivo": "assets/acervo/wild-bandito/logo.webp",
+     "w": 640,
+     "h": 338,
+     "kb": 66,
+     "origem": "PG Soft/Wild Bandito/Promotion Packs/Promotion Pack/Logotype Multilanguages/wild-bandito_logo_pt.png"
+    }
+   ],
+   "char": [
+    {
+     "arquivo": "assets/acervo/wild-bandito/char-1.webp",
+     "w": 512,
+     "h": 900,
+     "kb": 57,
+     "origem": "PG Soft/Wild Bandito/Promotion Packs/Promotion Pack/Characters/wild-bandito_character3.png"
+    },
+    {
+     "arquivo": "assets/acervo/wild-bandito/char-2.webp",
+     "w": 656,
+     "h": 900,
+     "kb": 79,
+     "origem": "PG Soft/Wild Bandito/Promotion Packs/Promotion Pack/Characters/wild-bandito_character1.png"
+    },
+    {
+     "arquivo": "assets/acervo/wild-bandito/char-3.webp",
+     "w": 691,
+     "h": 900,
+     "kb": 89,
+     "origem": "PG Soft/Wild Bandito/Promotion Packs/Promotion Pack/Characters/wild-bandito_character2.png"
+    }
+   ]
+  },
+  "cash-mania": {
+   "bg": [
+    {
+     "arquivo": "assets/acervo/cash-mania/bg-1600.webp",
+     "w": 1080,
+     "h": 1080,
+     "kb": 126,
+     "origem": "PG Soft/Cash Mania/Promotion Pack/EN/promotion packs/Backgrounds/cash-mania_background1.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/cash-mania/bg-800.webp",
+     "w": 800,
+     "h": 800,
+     "kb": 82,
+     "origem": "PG Soft/Cash Mania/Promotion Pack/EN/promotion packs/Backgrounds/cash-mania_background1.jpg"
+    }
+   ],
+   "banner": [
+    {
+     "arquivo": "assets/acervo/cash-mania/banner-1200.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 47,
+     "origem": "PG Soft/Cash Mania/Promotion Pack/EN/promotion packs/Web Banner/cash-mania_web-banner_en.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/cash-mania/banner-600.webp",
+     "w": 500,
+     "h": 500,
+     "kb": 47,
+     "origem": "PG Soft/Cash Mania/Promotion Pack/EN/promotion packs/Web Banner/cash-mania_web-banner_en.jpg"
+    }
+   ],
+   "logo": [
+    {
+     "arquivo": "assets/acervo/cash-mania/logo.webp",
+     "w": 640,
+     "h": 399,
+     "kb": 56,
+     "origem": "PG Soft/Cash Mania/Promotion Pack/EN/promotion packs/Logotype Multilanguages/cash-mania_logotype_pt.png"
+    }
+   ],
+   "char": [
+    {
+     "arquivo": "assets/acervo/cash-mania/char-1.webp",
+     "w": 963,
+     "h": 900,
+     "kb": 54,
+     "origem": "PG Soft/Cash Mania/Promotion Pack/EN/promotion packs/Characters/cash-mania_character2.png"
+    },
+    {
+     "arquivo": "assets/acervo/cash-mania/char-2.webp",
+     "w": 889,
+     "h": 900,
+     "kb": 69,
+     "origem": "PG Soft/Cash Mania/Promotion Pack/EN/promotion packs/Characters/cash-mania_character1.png"
+    },
+    {
+     "arquivo": "assets/acervo/cash-mania/char-3.webp",
+     "w": 1080,
+     "h": 374,
+     "kb": 105,
+     "origem": "PG Soft/Cash Mania/Promotion Pack/EN/promotion packs/Characters/cash-mania_character3.png"
+    }
+   ]
+  },
+  "gates-of-olympus": {
+   "bg": [
+    {
+     "arquivo": "assets/acervo/gates-of-olympus/bg-1600.webp",
+     "w": 960,
+     "h": 540,
+     "kb": 64,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus/Gates-of-Olympus-Background.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/gates-of-olympus/bg-800.webp",
+     "w": 800,
+     "h": 450,
+     "kb": 46,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus/Gates-of-Olympus-Background.jpg"
+    }
+   ],
+   "banner": [
+    {
+     "arquivo": "assets/acervo/gates-of-olympus/banner-1200.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 65,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus/Gates-of-Olympus_1200x630_BR.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/gates-of-olympus/banner-600.webp",
+     "w": 600,
+     "h": 315,
+     "kb": 23,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus/Gates-of-Olympus_1200x630_BR.jpg"
+    }
+   ],
+   "square": [
+    {
+     "arquivo": "assets/acervo/gates-of-olympus/square-800.webp",
+     "w": 800,
+     "h": 800,
+     "kb": 50,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus/Gates-of-Olympus_1000x1000.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/gates-of-olympus/square-400.webp",
+     "w": 400,
+     "h": 400,
+     "kb": 21,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus/Gates-of-Olympus_1000x1000.jpg"
+    }
+   ]
+  },
+  "gates-of-olympus-1000": {
+   "banner": [
+    {
+     "arquivo": "assets/acervo/gates-of-olympus-1000/banner-1200.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 79,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus 1000/Gates-of-Olympus-1000_1200x630_BR.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/gates-of-olympus-1000/banner-600.webp",
+     "w": 600,
+     "h": 315,
+     "kb": 29,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus 1000/Gates-of-Olympus-1000_1200x630_BR.jpg"
+    }
+   ],
+   "square": [
+    {
+     "arquivo": "assets/acervo/gates-of-olympus-1000/square-800.webp",
+     "w": 800,
+     "h": 800,
+     "kb": 63,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus 1000/Gates-of-Olympus-1000_1000x1000.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/gates-of-olympus-1000/square-400.webp",
+     "w": 400,
+     "h": 400,
+     "kb": 25,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus 1000/Gates-of-Olympus-1000_1000x1000.jpg"
+    }
+   ]
+  },
+  "gates-of-olympus-super-scatter": {
+   "banner": [
+    {
+     "arquivo": "assets/acervo/gates-of-olympus-super-scatter/banner-1200.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 85,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus Super Scatter/Gates-of-Olympus-Super-Scatter_1200x630_BR.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/gates-of-olympus-super-scatter/banner-600.webp",
+     "w": 600,
+     "h": 315,
+     "kb": 32,
+     "origem": "Pragmatic Play/Biblioteca do site/Gates Of Olympus Super Scatter/Gates-of-Olympus-Super-Scatter_1200x630_BR.jpg"
+    }
+   ]
+  },
+  "sweet-bonanza": {
+   "square": [
+    {
+     "arquivo": "assets/acervo/sweet-bonanza/square-800.webp",
+     "w": 800,
+     "h": 800,
+     "kb": 48,
+     "origem": "Pragmatic Play/Biblioteca do site/Diversos 2023/Sweet-Bonanza_900x900.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/sweet-bonanza/square-400.webp",
+     "w": 400,
+     "h": 400,
+     "kb": 19,
+     "origem": "Pragmatic Play/Biblioteca do site/Diversos 2023/Sweet-Bonanza_900x900.jpg"
+    }
+   ],
+   "banner": [
+    {
+     "arquivo": "assets/acervo/sweet-bonanza/banner-1200.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 70,
+     "origem": "Pragmatic Play/Biblioteca do site/Sweet Bonanza Super Scatter/Sweet-Bonanza-Super-Scatter_1200x630_WithoutFooter.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/sweet-bonanza/banner-600.webp",
+     "w": 600,
+     "h": 315,
+     "kb": 27,
+     "origem": "Pragmatic Play/Biblioteca do site/Sweet Bonanza Super Scatter/Sweet-Bonanza-Super-Scatter_1200x630_WithoutFooter.jpg"
+    }
+   ]
+  },
+  "sweet-bonanza-1000": {
+   "banner": [
+    {
+     "arquivo": "assets/acervo/sweet-bonanza-1000/banner-1200.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 73,
+     "origem": "Pragmatic Play/Biblioteca do site/Diversos 2026/Sweet-Bonanza-1000_1200x630_BR.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/sweet-bonanza-1000/banner-600.webp",
+     "w": 600,
+     "h": 315,
+     "kb": 29,
+     "origem": "Pragmatic Play/Biblioteca do site/Diversos 2026/Sweet-Bonanza-1000_1200x630_BR.jpg"
+    }
+   ]
+  },
+  "sweet-bonanza-super-scatter": {
+   "banner": [
+    {
+     "arquivo": "assets/acervo/sweet-bonanza-super-scatter/banner-1200.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 70,
+     "origem": "Pragmatic Play/Biblioteca do site/Sweet Bonanza Super Scatter/Sweet-Bonanza-Super-Scatter_1200x630_WithoutFooter.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/sweet-bonanza-super-scatter/banner-600.webp",
+     "w": 600,
+     "h": 315,
+     "kb": 27,
+     "origem": "Pragmatic Play/Biblioteca do site/Sweet Bonanza Super Scatter/Sweet-Bonanza-Super-Scatter_1200x630_WithoutFooter.jpg"
+    }
+   ]
+  },
+  "big-bass-splash": {
+   "banner": [
+    {
+     "arquivo": "assets/acervo/big-bass-splash/banner-1200.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 79,
+     "origem": "Pragmatic Play/Biblioteca do site/Big Bass Splash/Big-Bass-Splash_1200x630_BR.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/big-bass-splash/banner-600.webp",
+     "w": 600,
+     "h": 315,
+     "kb": 29,
+     "origem": "Pragmatic Play/Biblioteca do site/Big Bass Splash/Big-Bass-Splash_1200x630_BR.jpg"
+    }
+   ],
+   "square": [
+    {
+     "arquivo": "assets/acervo/big-bass-splash/square-800.webp",
+     "w": 800,
+     "h": 800,
+     "kb": 77,
+     "origem": "Pragmatic Play/Biblioteca do site/Big Bass Splash/Big-Bass-Splash_900x900.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/big-bass-splash/square-400.webp",
+     "w": 400,
+     "h": 400,
+     "kb": 27,
+     "origem": "Pragmatic Play/Biblioteca do site/Big Bass Splash/Big-Bass-Splash_900x900.jpg"
+    }
+   ],
+   "bg": [
+    {
+     "arquivo": "assets/acervo/big-bass-splash/bg-1600.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 113,
+     "origem": "Pragmatic Play/Biblioteca do site/Big Bass Splash/Big-Bass-Splash-EN.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/big-bass-splash/bg-800.webp",
+     "w": 800,
+     "h": 420,
+     "kb": 62,
+     "origem": "Pragmatic Play/Biblioteca do site/Big Bass Splash/Big-Bass-Splash-EN.jpg"
+    }
+   ]
+  },
+  "sugar-rush": {
+   "banner": [
+    {
+     "arquivo": "assets/acervo/sugar-rush/banner-1200.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 64,
+     "origem": "Pragmatic Play/Biblioteca do site/Sugar Rush/Sugar-Rush_1200x630_BR.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/sugar-rush/banner-600.webp",
+     "w": 600,
+     "h": 315,
+     "kb": 26,
+     "origem": "Pragmatic Play/Biblioteca do site/Sugar Rush/Sugar-Rush_1200x630_BR.jpg"
+    }
+   ],
+   "square": [
+    {
+     "arquivo": "assets/acervo/sugar-rush/square-800.webp",
+     "w": 800,
+     "h": 800,
+     "kb": 49,
+     "origem": "Pragmatic Play/Biblioteca do site/Sugar Rush/Sugar-Rush_900x900.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/sugar-rush/square-400.webp",
+     "w": 400,
+     "h": 400,
+     "kb": 19,
+     "origem": "Pragmatic Play/Biblioteca do site/Sugar Rush/Sugar-Rush_900x900.jpg"
+    }
+   ]
+  },
+  "starlight-princess": {
+   "banner": [
+    {
+     "arquivo": "assets/acervo/starlight-princess/banner-1200.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 88,
+     "origem": "Pragmatic Play/Biblioteca do site/Starlight Princess Super Scatter/Starlight-Princess-Super-Scatter_1200x630_BR.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/starlight-princess/banner-600.webp",
+     "w": 600,
+     "h": 315,
+     "kb": 30,
+     "origem": "Pragmatic Play/Biblioteca do site/Starlight Princess Super Scatter/Starlight-Princess-Super-Scatter_1200x630_BR.jpg"
+    }
+   ]
+  },
+  "the-dog-house": {
+   "banner": [
+    {
+     "arquivo": "assets/acervo/the-dog-house/banner-1200.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 99,
+     "origem": "Pragmatic Play/Biblioteca do site/The Dog House Megaways 1000/The-Dog-House-Megaways-1000_1200x630_BR-1.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/the-dog-house/banner-600.webp",
+     "w": 600,
+     "h": 315,
+     "kb": 34,
+     "origem": "Pragmatic Play/Biblioteca do site/The Dog House Megaways 1000/The-Dog-House-Megaways-1000_1200x630_BR-1.jpg"
+    }
+   ]
+  },
+  "spaceman": {
+   "bg": [
+    {
+     "arquivo": "assets/acervo/spaceman/bg-1600.webp",
+     "w": 1600,
+     "h": 900,
+     "kb": 28,
+     "origem": "Pragmatic Play/Biblioteca do site/Spaceman/Spaceman_Background.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/spaceman/bg-800.webp",
+     "w": 800,
+     "h": 450,
+     "kb": 12,
+     "origem": "Pragmatic Play/Biblioteca do site/Spaceman/Spaceman_Background.jpg"
+    }
+   ],
+   "banner": [
+    {
+     "arquivo": "assets/acervo/spaceman/banner-1200.webp",
+     "w": 1200,
+     "h": 630,
+     "kb": 38,
+     "origem": "Pragmatic Play/Biblioteca do site/Spaceman/spaceman_without-footer.jpg"
+    },
+    {
+     "arquivo": "assets/acervo/spaceman/banner-600.webp",
+     "w": 600,
+     "h": 315,
+     "kb": 15,
+     "origem": "Pragmatic Play/Biblioteca do site/Spaceman/spaceman_without-footer.jpg"
+    }
+   ],
+   "char": [
+    {
+     "arquivo": "assets/acervo/spaceman/char-1.webp",
+     "w": 296,
+     "h": 385,
+     "kb": 15,
+     "origem": "Pragmatic Play/Biblioteca do site/Spaceman/Spaceman_Fly_Pose.png"
+    }
+   ]
+  },
+  "jetx": {
+   "square": [
+    {
+     "arquivo": "assets/acervo/jetx/square-800.webp",
+     "w": 493,
+     "h": 617,
+     "kb": 13,
+     "origem": "Smartsoft/Jogos (capas)/New Era of JetX - 6aad0b0cdfd47b7e59f2965d_JetXNew.webp"
+    },
+    {
+     "arquivo": "assets/acervo/jetx/square-400.webp",
+     "w": 400,
+     "h": 501,
+     "kb": 9,
+     "origem": "Smartsoft/Jogos (capas)/New Era of JetX - 6aad0b0cdfd47b7e59f2965d_JetXNew.webp"
+    }
+   ]
+  },
+  "coyote-crash": {
+   "square": [
+    {
+     "arquivo": "assets/acervo/coyote-crash/square-800.webp",
+     "w": 425,
+     "h": 680,
+     "kb": 45,
+     "origem": "Habanero/Jogos (capas)/Coyote Crash/SGCoyoteCrash_en.png"
+    },
+    {
+     "arquivo": "assets/acervo/coyote-crash/square-400.webp",
+     "w": 400,
+     "h": 640,
+     "kb": 40,
+     "origem": "Habanero/Jogos (capas)/Coyote Crash/SGCoyoteCrash_en.png"
+    }
+   ]
+  },
+  "flying-high": {
+   "square": [
+    {
+     "arquivo": "assets/acervo/flying-high/square-800.webp",
+     "w": 425,
+     "h": 680,
+     "kb": 24,
+     "origem": "Habanero/Jogos (capas)/Flying High/SGFlyingHigh_en.png"
+    },
+    {
+     "arquivo": "assets/acervo/flying-high/square-400.webp",
+     "w": 400,
+     "h": 640,
+     "kb": 22,
+     "origem": "Habanero/Jogos (capas)/Flying High/SGFlyingHigh_en.png"
+    }
+   ]
+  }
+ }
+}
