@@ -3,9 +3,37 @@
 Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile first, com componentes Scrolltide
 (Intro Loader, Focus Reveal, Lime Metrics, Expanded Cards, Reel, Step Path).
 
-- Conteúdo: `data/games.json` (um bloco por jogo: textos, métricas, recursos, FAQ, cores, efeito do hero).
-- Estilo e comportamento: `src/lp.css`, `src/lp.js` (CSS e JS entram inline no HTML: 1 requisição a menos).
-- Gerar: `python3 build.py` grava em `docs/` (publicado pelo GitHub Pages).
+- Conteúdo: `data/games.json` (um bloco por jogo: textos, métricas, recursos, FAQ, cores, efeito do hero, personagem).
+- Estilo e comportamento: `src/lp.css`, `src/lp.js` (CSS e JS entram inline no HTML: 1 requisição a menos). O banco de personagens usa também `src/personagens.js`.
+- Gerar: `python3 build.py` grava em `docs/` (publicado pelo GitHub Pages) e em `dist-dominios/` (um site por jogo). No fim, o verificador confere que todo asset citado no HTML existe e que não há travessão em texto.
 - Imagens: `tools_imgs.py` gera hero WebP 600/896, miniatura e OG 1200x630.
 - Indexação: `site.indexar=false` coloca noindex e robots Disallow (páginas de teste). Troque para true quando houver domínio próprio e operação licenciada.
 - Todos os links para a plataforma levam UTM: utm_source=lp, utm_medium=landing, utm_campaign=<jogo>, utm_content=<posição do botão>.
+
+## Personagens
+
+- Biblioteca: `assets/personagens/` (566 artes em WebP: `<nome>.webp` até 1000 px e `<nome>-thumb.webp` até 360 px) e o catálogo `data/personagens.json`
+  (grupo, marca_ou_tema, subpasta, largura e altura do original, transparente, web, thumb, drive_nome, drive_link). Originais em alta ficam no Drive.
+- Cada jogo tem em `games.json` o campo `character`:
+  `{"main": caminho, "extras": [até 3 caminhos], "name": nome, "alt": texto alternativo, "bio": 2 frases, "crop": [x, y, w, h] opcional}`.
+  `crop` (em px da versão web) mostra só um recorte da arte, em CSS; serve para os boards do elenco da casa, que trazem texto.
+- Na landing: bloco "Conheça o personagem" logo depois das métricas (arte com loading lazy e width/height reais, lidos do cabeçalho do WebP).
+  No desktop (>= 960 px), se a arte principal tiver fundo transparente, o personagem aparece sobreposto no hero com fetchpriority baixo;
+  no celular a imagem nem é baixada (`<picture>` com `media`).
+- Escolhas atuais: Tigrinho, Coelhinho, Tourinho, Dragãozinho e Zeus (artes dos jogos); Sweet Bonanza, Big Bass Splash e Mines não têm
+  personagem adequado no catálogo, então usam o elenco da casa: Lu (arara), Capi (capivara) e Mr. Bit.
+- `docs/personagens.html` (noindex): banco com todas as miniaturas, filtro por grupo e por marca/tema, busca por texto; o clique abre a versão
+  grande e o link do original no Drive. Link discreto no fim da grade da index.
+- O build copia para `docs/` só as imagens de `assets/personagens/` que as páginas referenciam (hoje, todas, por causa do banco).
+
+## Domínio próprio por jogo
+
+- `site.domains` em `games.json` mapeia jogo para domínio (ex.: fortune-tiger = guiadotigrinho.win) e `site.domains_active` liga o uso.
+- O build gera `dist-dominios/<dominio>/` para cada jogo: `index.html` (a landing), só os assets que ela usa, `CNAME`, `robots.txt`
+  (Disallow enquanto `indexar=false`), `.nojekyll` e um `404.html` que volta para o início. A pasta é versionada.
+- `domains_active=false` (hoje): canonical, og:url e og:image continuam no GitHub Pages (https://eduzeroumbet.github.io/cassino-jogos/),
+  e os cards de outros jogos levam às páginas do Pages.
+- `domains_active=true`: canonical, og:url e og:image passam a `https://<dominio>/`, e os cards de outros jogos (nas landings e na index)
+  apontam para os domínios dos outros jogos. Links para a plataforma e UTMs não mudam.
+- Publicação: `tools/publicar_dominios.sh` envia cada pasta para o repositório `eduzeroumbet/lp-<jogo>` (branch main, raiz).
+  Os passos prévios (comprar domínio, DNS, criar o repositório, ativar o Pages) estão no cabeçalho do script. `DRY_RUN=1` só lista o que faria.
