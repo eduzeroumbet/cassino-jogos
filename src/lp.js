@@ -15,12 +15,17 @@ $$('.fx').forEach(function(fx){
 });
 /* foco das palavras (Focus Reveal) */
 setTimeout(function(){$$('.focus').forEach(function(e){e.classList.add('on')})},RM?0:900);
-/* parallax do hero + barra fixa + caminho dos passos */
-var hero=d.querySelector('.hero'),sticky=d.querySelector('.sticky'),steps=d.querySelector('.steps'),tick=false;
+/* barra fixa: só aparece quando o CTA do hero saiu da tela e o CTA final não está visível */
+var sticky=d.querySelector('.sticky');
+if(sticky){var heroCta=d.querySelector('.hero .btn-main'),fin=d.querySelector('.final'),vis={hero:true,fin:false};
+  d.body.classList.add('has-sticky');
+  if('IntersectionObserver' in w&&heroCta){var so=new IntersectionObserver(function(es){es.forEach(function(e){vis[e.target===heroCta?'hero':'fin']=e.isIntersecting});
+    sticky.classList.toggle('show',!vis.hero&&!vis.fin)});so.observe(heroCta);if(fin)so.observe(fin)}}
+/* parallax do hero + caminho dos passos */
+var hero=d.querySelector('.hero'),steps=d.querySelector('.steps'),tick=false;
 function frame(){
   tick=false;var vh=w.innerHeight,y=w.scrollY||w.pageYOffset;
   if(hero&&!RM){var p=Math.min(1,y/Math.max(1,hero.offsetHeight));hero.style.setProperty('--p',p.toFixed(3))}
-  if(sticky){var fin=d.querySelector('.final'),show=y>vh*.8;if(fin){var r=fin.getBoundingClientRect();if(r.top<vh&&r.bottom>0)show=false}sticky.classList.toggle('show',show)}
   if(steps){var r2=steps.getBoundingClientRect(),sp=Math.max(0,Math.min(1,(vh*.75-r2.top)/r2.height));steps.style.setProperty('--sp',sp.toFixed(3));
     $$('.step',steps).forEach(function(s){s.classList.toggle('on',s.getBoundingClientRect().top<vh*.72)})}
 }
@@ -37,9 +42,12 @@ var io=('IntersectionObserver' in w)?new IntersectionObserver(function(es){es.fo
   else if(t.matches('video')){t.src=t.dataset.src;t.play&&t.play().catch(function(){})}
 })},{rootMargin:'0px 0px -10% 0px'}):null;
 $$('.bar i,[data-to],video[data-src]').forEach(function(e){if(io)io.observe(e);else{if(e.dataset.w)e.style.width=e.dataset.w+'%';if(e.dataset.src)e.src=e.dataset.src}});
-/* cartões expansíveis (Expanded Cards) */
-$$('.xcard').forEach(function(b){b.addEventListener('click',function(){var on=b.getAttribute('aria-expanded')==='true';
-  $$('.xcard',b.parentNode).forEach(function(o){o.setAttribute('aria-expanded','false')});b.setAttribute('aria-expanded',on&&w.innerWidth<1024?'false':'true');ev('lp_feature',{item:b.dataset.k})})});
+/* cartões expansíveis (Expanded Cards): acordeão no celular, todos abertos no desktop */
+var DK=w.matchMedia('(min-width:1024px)');
+function xsync(){if(DK.matches)$$('.xcard').forEach(function(o){o.setAttribute('aria-expanded','true')})}
+xsync();if(DK.addEventListener)DK.addEventListener('change',xsync);
+$$('.xcard').forEach(function(b){b.addEventListener('click',function(){if(DK.matches)return;var on=b.getAttribute('aria-expanded')==='true';
+  $$('.xcard',b.parentNode).forEach(function(o){o.setAttribute('aria-expanded','false')});b.setAttribute('aria-expanded',on?'false':'true');ev('lp_feature',{item:b.dataset.k})})});
 /* cliques nos CTAs */
 $$('[data-cta]').forEach(function(a){a.addEventListener('click',function(){ev('lp_cta',{cta:a.dataset.cta,page:d.body.dataset.page})})});
 $$('.faq details').forEach(function(x){x.addEventListener('toggle',function(){if(x.open)ev('lp_faq',{q:x.querySelector('summary').textContent})})});

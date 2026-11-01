@@ -37,7 +37,7 @@
         {"q": "O que é o RTP de 96,81%?", "a": "É o retorno teórico ao jogador informado pelo provedor, calculado em milhões de rodadas. Não é garantia de resultado numa sessão; confira o valor na tela de regras dentro do jogo."},
         {"q": "Como deposito para jogar?", "a": "Depois de criar a conta, escolha o valor e pague o Pix pelo app do seu banco. O saldo cai em segundos."}
       ],
-      "promo": {"text": "Campanha ativa na plataforma: 100 giros no Fortune Tiger com depósito de R$ 50. Regras completas na página da campanha.", "url": "/campanha/deposite-r-50-e-ganhe-100-giros-no-fortune-tiger"}
+      "promo": {"text": "Campanha ativa na plataforma: 100 giros no Fortune Tiger com depósito de R$ 50. Regras completas na página da campanha.", "note": "Campanha de teste da plataforma. Condições, prazo e rollover na página da campanha.", "url": "/campanha/deposite-r-50-e-ganhe-100-giros-no-fortune-tiger"}
     },
     {
       "key": "fortune-rabbit",
@@ -111,7 +111,7 @@
       "video": "",
       "kicker": "PG Soft · Slot 3x3",
       "headline": "O dragão traz multiplicadores ao giro",
-      "lede": "Grade enxuta de 3x3 com multiplicadores que entram durante o recurso do dragão. O mais novo da família Fortune.",
+      "lede": "Grade enxuta de 3x3 com multiplicadores que entram durante o recurso do dragão. Um dos lançamentos mais recentes da família Fortune.",
       "metrics": [
         {"label": "RTP teórico", "value": 96.74, "suffix": "%", "type": "bar", "max": 100},
         {"label": "Ganho máximo", "value": 2500, "suffix": "x", "type": "count"},

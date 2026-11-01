@@ -48,6 +48,7 @@ def top():
 def footer(key):
     return f'''<footer><div class="wrap"><div class="rg"><span class="age">18+</span><p>Proibido para menores de 18 anos. Jogue com responsabilidade: defina um valor por sessão, faça pausas e não trate o jogo como fonte de renda. Os valores de RTP são teóricos, informados pelos provedores, e não garantem resultado.</p></div>
 <nav><a href="./">Todos os jogos</a><a data-cta="rodape_cassino" href="{utm("/cassino", key, "rodape")}">Cassino</a><a data-cta="rodape_cadastro" href="{utm(S["register"], key, "rodape")}">Criar conta</a><a href="{utm("/usuario/carteira", key, "rodape")}">Depósito Pix</a></nav>
+<nav class="docs" aria-label="Documentos da plataforma"><a href="{utm("/pagina/terms", key, "rodape")}">Termos e Condições</a><a href="{utm("/pagina/privacy", key, "rodape")}">Política de Privacidade</a><a href="{utm("/pagina/responsible-gaming", key, "rodape")}">Jogo Responsável</a><a href="{utm("/faq", key, "rodape")}">Central de Ajuda</a></nav>
 <p>Página informativa de {e(S["brand"])}. Os jogos citados pertencem aos respectivos provedores.</p></div></footer>'''
 
 def pic(k, alt, cls='', eager=False):
@@ -76,7 +77,7 @@ def metric(m):
     return f'<div class="m"><small>{e(m["label"])}</small>{body}{bar}</div>'
 
 def card(g, href, sub):
-    return (f'<a class="card" href="{href}"><img src="assets/img/{g["key"]}-thumb.webp" width="300" height="350" loading="lazy" decoding="async" alt="{e(g["name"])}">'
+    return (f'<a class="card" href="{href}" style="--ca:{g["accent"]}"><img src="assets/img/{g["key"]}-thumb.webp" width="300" height="350" loading="lazy" decoding="async" alt="{e(g["name"])}">'
             f'<span>{e(g["name"])}<small>{e(sub)}</small></span></a>')
 
 def game_page(g):
@@ -94,7 +95,8 @@ def game_page(g):
         media = f'<img class="kb" src="assets/img/{k}-thumb.webp" width="300" height="350" loading="lazy" decoding="async" alt="Capa do {e(n)}">'
     promo = ''
     if g.get('promo'):
-        promo = f'<p class="promo">{e(g["promo"]["text"])} <a data-cta="promo" href="{utm(g["promo"]["url"], k, "promo")}">Ver campanha</a></p>'
+        note = f'<small>{e(g["promo"]["note"])}</small>' if g['promo'].get('note') else ''
+        promo = f'<p class="promo">{e(g["promo"]["text"])} <a data-cta="promo" href="{utm(g["promo"]["url"], k, "promo")}">Ver campanha</a>{note}</p>'
     feats = ''.join(f'<button class="xcard" type="button" data-k="{e(f["title"])}" aria-expanded="{"true" if i == 0 else "false"}"><span class="n">0{i + 1}</span><h3>{e(f["title"])}</h3><p>{e(f["text"])}</p></button>'
                     for i, f in enumerate(g['features']))
     others = ''.join(card(o, f'{o["key"]}.html', o['provider']) for o in G if o['key'] != k)
@@ -160,7 +162,7 @@ def game_page(g):
 </section>
 </main>
 {footer(k)}
-<div class="sticky"><a class="btn btn-main" data-cta="sticky_cadastro" href="{utm(S['register'], k, 'sticky')}">Jogar {e(n)} agora {ARROW}</a></div>
+<div class="sticky"><span class="sn">{e(g['provider'])}<b>{e(n)}</b></span><a class="btn btn-main" data-cta="sticky_cadastro" href="{utm(S['register'], k, 'sticky')}">Jogar agora {ARROW}</a></div>
 <script>{JS}</script>
 </body></html>'''
 
@@ -191,7 +193,7 @@ def hub():
 <div class="ctas"><a class="btn btn-main" data-cta="hub_final" href="{utm(S['register'], 'hub', 'final')}">Criar conta grátis {ARROW}</a></div></section>
 </main>
 {footer('hub')}
-<div class="sticky"><a class="btn btn-main" data-cta="sticky_cadastro" href="{utm(S['register'], 'hub', 'sticky')}">Criar conta e jogar {ARROW}</a></div>
+<div class="sticky"><a class="btn btn-main" data-cta="sticky_cadastro" href="{utm(S['register'], 'hub', 'sticky')}">Jogar agora {ARROW}</a></div>
 <script>{JS}</script></body></html>'''
 
 if __name__ == '__main__':
