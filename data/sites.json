@@ -30,6 +30,39 @@
       "pragmatic-vswaysbbb": "Big Bass Bonanza Megaways",
       "reelkingdom-vswayspizza": "Pizza! Pizza? Pizza!",
       "oficial-pragmatic-live-pp-1320": "Big Bass Crash Live"
+    },
+    "acervo": {
+      "pgsoft-126": "fortune-tiger",
+      "pgsoft-98": "fortune-ox",
+      "pgsoft-1543462": "fortune-rabbit",
+      "pgsoft-1695365": "fortune-dragon",
+      "pgsoft-1879752": "fortune-snake",
+      "pgsoft-104": "wild-bandito",
+      "pgsoft-1682240": "cash-mania",
+      "pragmatic-vs20olympgate": "gates-of-olympus",
+      "pragmatic-vs20olympx": "gates-of-olympus-1000",
+      "pragmatic-vs20olympgold": "gates-of-olympus-super-scatter",
+      "pragmatic-vs20fruitsw": "sweet-bonanza",
+      "pragmatic-vs20fruitswx": "sweet-bonanza-1000",
+      "pragmatic-vs20swbonsup": "sweet-bonanza-super-scatter",
+      "pragmatic-vs10txbigbass": "big-bass-splash",
+      "pragmatic-vs20sugarrush": "sugar-rush",
+      "crash-games-spaceman": "spaceman",
+      "crash-games-jetx": "jetx",
+      "habanero-sgcoyotecrash": "coyote-crash",
+      "habanero-sgflyinghigh": "flying-high"
+    },
+    "acervo_foco": {
+      "sweet-bonanza-super-scatter": 0.5,
+      "sweet-bonanza-1000": 0.17
+    },
+    "provedores_jogo": {
+      "crash-games-spaceman": "Pragmatic Play",
+      "crash-games-bigbass": "Pragmatic Play",
+      "crash-games-jetx": "SmartSoft",
+      "crash-games-jetx3": "SmartSoft",
+      "crash-games-aviatrix": "Aviatrix",
+      "oficial-pragmatic-live-pp-2201": "Pragmatic Play"
     }
   },
   "fichas": {
@@ -229,18 +262,17 @@
         "acento": "#A3231B",
         "regua": "#CFC4B0"
       },
-      "hero_img": "assets/img/fortune-tiger-hero-600.webp",
       "og": {
         "fundo": [
           "#F4EDE0",
           "#E2D3B8"
         ],
-        "capas": [
-          "pgsoft-126",
-          "pragmatic-vs20olympgate",
-          "pragmatic-vs20fruitsw"
+        "artes": [
+          "fortune-tiger",
+          "gates-of-olympus",
+          "sweet-bonanza"
         ],
-        "personagem": null
+        "personagem": "spaceman"
       },
       "jogos": [
         "pgsoft-126",
@@ -317,7 +349,7 @@
             },
             {
               "nome": "Ao vivo",
-              "texto": "Jogos com apresentador em tempo real, transmitidos em vídeo. Exemplos são Big Bass Crash e High Flyer, da Pragmatic Play Live.",
+              "texto": "Jogos transmitidos em vídeo, em tempo real. A Pragmatic Play também tem crash games, como Big Bass Crash e High Flyer, reunidos no Guia Pragmatic.",
               "guia": "guiapragmatic.win",
               "ancora": "#live",
               "rotulo": "Pragmatic Live",
@@ -393,7 +425,45 @@
             "a": "Não. O Aviator da Spribe não está disponível. Existem outros jogos com avião e multiplicador, explicados no guia guiaaviator.win."
           }
         ]
-      }
+      },
+      "hero_arte": {
+        "arquivo": "capa",
+        "w": 600,
+        "h": 804,
+        "fundo": "#1D1A16",
+        "celulas": [
+          [
+            "fortune-tiger",
+            0,
+            0,
+            298,
+            400
+          ],
+          [
+            "gates-of-olympus",
+            302,
+            0,
+            298,
+            400
+          ],
+          [
+            "sweet-bonanza",
+            0,
+            404,
+            298,
+            400
+          ],
+          [
+            "spaceman",
+            302,
+            404,
+            298,
+            400
+          ]
+        ],
+        "alt": "Colagem com as artes oficiais de Fortune Tiger, Gates of Olympus, Sweet Bonanza e Spaceman"
+      },
+      "dock": "Cadastro grátis"
     },
     {
       "dominio": "guiaslots.win",
@@ -411,17 +481,16 @@
         "acento": "#C6F432",
         "linha": "#2F343B"
       },
-      "hero_img": null,
       "og": {
         "fundo": [
           "#141619",
           "#2A3320"
         ],
-        "capas": [
-          "pragmatic-vs20olympgate",
-          "pgsoft-126",
-          "pragmatic-vs20fruitsw",
-          "pragmatic-vs20sugarrush"
+        "artes": [
+          "gates-of-olympus-1000",
+          "sweet-bonanza",
+          "sugar-rush",
+          "starlight-princess"
         ],
         "personagem": null
       },
@@ -469,7 +538,7 @@
         "podio_titulo": "Pódio do guia",
         "podio_sub": "Os três slots em destaque no guia. Toque para abrir o jogo.",
         "tabela_titulo": "Top slots",
-        "tabela_sub": "Toque no nome da coluna para ordenar. Quando o dado oficial não é conhecido, a tabela mostra \"ver no jogo\": confira na tela de regras.",
+        "tabela_sub": "Toque no nome da coluna para ordenar. Quando o dado oficial não é conhecido, a tabela mostra n/d: confira na tela de regras do jogo.",
         "cards_titulo": "Todos os slots do ranking",
         "glossario_titulo": "Glossário de slots",
         "glossario": [
@@ -502,14 +571,53 @@
             "p": "Opção de pagar um valor fixo para entrar direto nos giros grátis. Custa um múltiplo da aposta e não garante retorno."
           }
         ]
-      }
+      },
+      "hero_arte": {
+        "arquivo": "hero",
+        "w": 960,
+        "h": 504,
+        "fundo": "#141619",
+        "celulas": [
+          [
+            "gates-of-olympus-1000",
+            0,
+            0,
+            477,
+            250
+          ],
+          [
+            "sweet-bonanza",
+            483,
+            0,
+            477,
+            250,
+            "square"
+          ],
+          [
+            "sugar-rush",
+            0,
+            254,
+            477,
+            250
+          ],
+          [
+            "starlight-princess",
+            483,
+            254,
+            477,
+            250
+          ]
+        ],
+        "alt": "Artes oficiais de Gates of Olympus 1000, Sweet Bonanza, Sugar Rush e Starlight Princess Super Scatter"
+      },
+      "dock": "Slots no navegador"
     },
     {
       "dominio": "guiafortune.win",
       "chave": "guiafortune",
       "estilo": "festival",
       "nome": "Guia Fortune",
-      "titulo": "Guia Fortune: a saga do Tigrinho, Tourinho, Coelhinho e Dragãozinho",
+      "titulo": "Guia Fortune: Fortune Tiger, Fortune Ox, Fortune Rabbit, Fortune Dragon e a série completa",
       "descricao": "A série Fortune da PG Soft contada capítulo por capítulo: Tiger, Ox, Rabbit, Mouse, Dragon e Snake. Quiz para escolher o seu e comparativo lado a lado.",
       "cores": {
         "fundo": "#7A1414",
@@ -519,17 +627,17 @@
         "texto": "#FFF4DC",
         "suave": "#F1D4B0"
       },
-      "hero_img": "assets/img/fortune-dragon-hero-600.webp",
       "og": {
         "fundo": [
           "#8E1B1B",
           "#3E0808"
         ],
-        "capas": [
-          "pgsoft-98",
-          "pgsoft-1543462"
+        "artes": [
+          "fortune-tiger",
+          "fortune-ox",
+          "fortune-rabbit"
         ],
-        "personagem": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon3.webp"
+        "personagem": "fortune-dragon"
       },
       "jogos": [
         "pgsoft-126",
@@ -543,56 +651,43 @@
         {
           "slug": "pgsoft-126",
           "animal": "Tigre",
-          "personagem": "Tigrinho",
-          "arte": "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/tigrinho.webp",
-          "arte_fundo_claro": true,
-          "titulo": "O Tigrinho abre o festival",
+          "titulo": "Fortune Tiger abre o festival",
           "texto": "Foi ele quem começou a série. Grade de 3x3, cinco linhas e um tigre curinga que, a qualquer giro, pode ativar o recurso Fortune Tiger: os rolos giram de novo com um único símbolo em jogo até sair um prêmio. Se os nove espaços forem preenchidos, o prêmio do giro vale dez vezes mais.",
           "recurso": "Recurso Fortune Tiger e multiplicador x10"
         },
         {
           "slug": "pgsoft-98",
           "animal": "Touro",
-          "personagem": "Tourinho",
-          "arte": "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-ox/fortune-ox-7.webp",
-          "titulo": "O Tourinho trava os rolos",
+          "titulo": "Fortune Ox trava os rolos",
           "texto": "O touro dourado trouxe a grade 3-4-3 com dez linhas. No recurso Fortune Ox, os rolos laterais travam um símbolo e o rolo do meio gira de novo até formar um prêmio. Com a grade cheia de símbolos pagantes, o giro também vale dez vezes mais.",
           "recurso": "Rolo do meio gira de novo e multiplicador x10"
         },
         {
           "slug": "pgsoft-1543462",
           "animal": "Coelho",
-          "personagem": "Coelhinho",
-          "arte": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character3.webp",
-          "titulo": "O Coelhinho espalha prêmios",
+          "titulo": "Fortune Rabbit espalha prêmios",
           "texto": "No Fortune Rabbit, símbolos de prêmio trazem valores próprios e, com cinco ou mais na tela, todos são pagos de uma vez. No recurso especial, são oito giros em que só aparecem símbolos de prêmio e espaços vazios. É o maior teto da família: 5.000x.",
           "recurso": "Símbolos de prêmio e 8 giros especiais"
         },
         {
           "slug": "pgsoft-68",
           "animal": "Rato",
-          "personagem": "Ratinho",
-          "arte": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-mouse/fortune-mouse5.webp",
-          "titulo": "O Ratinho enche o rolo do meio",
+          "titulo": "Fortune Mouse enche o rolo do meio",
           "texto": "O Fortune Mouse mantém a grade enxuta de 3x3 com cinco linhas. No recurso Fortune Mouse, o rolo do meio fica todo de curingas e os rolos laterais giram de novo até sair um prêmio. É o mais tranquilo da série, com teto de 1.000x.",
           "recurso": "Rolo do meio com curingas"
         },
         {
           "slug": "pgsoft-1695365",
           "animal": "Dragão",
-          "personagem": "Dragãozinho",
-          "arte": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon3.webp",
-          "titulo": "O Dragãozinho traz multiplicadores",
+          "titulo": "Fortune Dragon traz multiplicadores",
           "texto": "O dragão voltou à grade de 3x3 e trouxe giros especiais com multiplicadores de 2x, 5x ou 10x. Os multiplicadores que caem se somam e valem sobre o prêmio total do giro. Teto de 2.500x.",
           "recurso": "Multiplicadores 2x, 5x e 10x somados"
         },
         {
           "slug": "pgsoft-1879752",
           "animal": "Serpente",
-          "personagem": "Serpente",
-          "arte": null,
-          "titulo": "A Serpente fecha o desfile",
-          "texto": "O capítulo mais recente da série chegou com a Serpente. Como é um lançamento novo, a grade, o recurso especial e os números oficiais estão na tela de regras dentro do jogo: confira antes da primeira rodada.",
+          "titulo": "Fortune Snake fecha o desfile",
+          "texto": "O capítulo mais recente da série chegou com a serpente. Como é um lançamento novo, a grade, o recurso especial e os números oficiais estão na tela de regras dentro do jogo: confira antes da primeira rodada.",
           "recurso": "Confira na tela de regras"
         }
       ],
@@ -626,7 +721,7 @@
             ]
           },
           {
-            "q": "Qual teto de ganho te anima mais?",
+            "q": "Qual teto de ganho e volatilidade você prefere?",
             "op": [
               {
                 "t": "Moderado, sem muita emoção",
@@ -651,40 +746,40 @@
             ]
           },
           {
-            "q": "Qual personagem você levaria para casa?",
+            "q": "Qual recurso especial chama mais a sua atenção?",
             "op": [
               {
-                "t": "Tigre",
+                "t": "Giros repetidos com um único símbolo",
                 "p": {
                   "pgsoft-126": 3
                 }
               },
               {
-                "t": "Touro",
+                "t": "Rolo do meio girando de novo",
                 "p": {
                   "pgsoft-98": 3
                 }
               },
               {
-                "t": "Coelho",
+                "t": "Símbolos com valor em dinheiro",
                 "p": {
                   "pgsoft-1543462": 3
                 }
               },
               {
-                "t": "Rato",
+                "t": "Rolo do meio cheio de curingas",
                 "p": {
                   "pgsoft-68": 3
                 }
               },
               {
-                "t": "Dragão",
+                "t": "Multiplicadores que se somam",
                 "p": {
                   "pgsoft-1695365": 3
                 }
               },
               {
-                "t": "Serpente",
+                "t": "O lançamento mais recente",
                 "p": {
                   "pgsoft-1879752": 4
                 }
@@ -718,9 +813,26 @@
         "titulo_hero": "O festival da sorte",
         "sub_hero": "Seis animais, seis jogos e um mesmo jeito simples de jogar. Role a página e conheça a série Fortune capítulo por capítulo.",
         "comparativo_titulo": "Lado a lado",
-        "comparativo_sub": "Dados informados pela PG Soft. Onde o número oficial não é conhecido, a tabela indica para conferir no jogo.",
+        "comparativo_sub": "Dados informados pela PG Soft. Onde o número oficial não é conhecido, a tabela mostra n/d: confira na tela de regras do jogo.",
         "outros_titulo": "Outros PG Soft populares"
-      }
+      },
+      "hero_arte": {
+        "arquivo": "hero",
+        "w": 600,
+        "h": 600,
+        "fundo": "#4E0B0B",
+        "celulas": [
+          [
+            "fortune-tiger",
+            0,
+            0,
+            600,
+            600
+          ]
+        ],
+        "alt": "Logotipo oficial do Fortune Tiger sobre o cenário do jogo"
+      },
+      "dock": "Série Fortune"
     },
     {
       "dominio": "guiapragmatic.win",
@@ -738,17 +850,18 @@
         "rosa": "#FF7AB6",
         "branco": "#FFFFFF"
       },
-      "hero_img": "assets/personagens/04-oficiais-provedores/pragmatic-gates-of-olympus/pose-1.webp",
       "og": {
         "fundo": [
           "#7B3FF2",
           "#2EE6D6"
         ],
-        "capas": [
-          "pragmatic-vs20fruitsw",
-          "pragmatic-vs10txbigbass"
+        "artes": [
+          "gates-of-olympus-super-scatter",
+          "sweet-bonanza-super-scatter",
+          "big-bass-splash",
+          "the-dog-house"
         ],
-        "personagem": "assets/personagens/04-oficiais-provedores/pragmatic-gates-of-olympus/pose-1.webp"
+        "personagem": null
       },
       "bento_grandes": [
         "pragmatic-vs20olympgate",
@@ -847,12 +960,14 @@
         {
           "slug": "oficial-pragmatic-live-pp-1320",
           "nome": "Big Bass Crash Live",
-          "texto": "O pescador da série Big Bass num jogo de crash ao vivo: o multiplicador sobe e você decide a hora de retirar."
+          "texto": "O pescador da série Big Bass num jogo de crash: o multiplicador sobe e você decide a hora de retirar.",
+          "selo": "Crash"
         },
         {
           "slug": "oficial-pragmatic-live-pp-2201",
           "nome": "High Flyer",
-          "texto": "Um avião decola e o multiplicador acompanha a subida. Retire antes de ele sumir da tela."
+          "texto": "Um avião decola e o multiplicador acompanha a subida. Retire antes de ele sumir da tela.",
+          "selo": "Crash"
         }
       ],
       "textos": {
@@ -861,9 +976,48 @@
         "sub_hero": "Os slots mais jogados da Pragmatic Play, separados por mecânica. Escolha o seu estilo e abra o jogo direto.",
         "abas_titulo": "Por mecânica",
         "versoes_titulo": "1000 e Super Scatter: o que muda",
-        "live_titulo": "Pragmatic Live"
+        "live_titulo": "Crash games da Pragmatic Play"
       },
-      "hero_largura": 520
+      "hero_arte": {
+        "arquivo": "hero",
+        "w": 960,
+        "h": 504,
+        "fundo": "#111111",
+        "celulas": [
+          [
+            "gates-of-olympus-super-scatter",
+            0,
+            0,
+            477,
+            250
+          ],
+          [
+            "sweet-bonanza-super-scatter",
+            483,
+            0,
+            477,
+            250
+          ],
+          [
+            "big-bass-splash",
+            0,
+            254,
+            477,
+            250
+          ],
+          [
+            "the-dog-house",
+            483,
+            254,
+            477,
+            250
+          ]
+        ],
+        "alt": "Artes oficiais de Gates of Olympus Super Scatter, Sweet Bonanza Super Scatter, Big Bass Splash e The Dog House Megaways 1000"
+      },
+      "dock": "Pragmatic Play",
+      "zeus": "assets/personagens/04-oficiais-provedores/pragmatic-gates-of-olympus/pose-1.webp",
+      "zeus_largura": 520
     },
     {
       "dominio": "guiadecrash.win",
@@ -881,18 +1035,16 @@
         "suave": "#86B9A0",
         "alerta": "#FF4D6D"
       },
-      "hero_img": "assets/personagens/04-oficiais-provedores/pragmatic-spaceman/pose1.webp",
       "og": {
         "fundo": [
           "#050807",
           "#06302A"
         ],
-        "capas": [
-          "crash-games-jetx",
-          "crash-games-aviatrix",
-          "galaxsys-original-12540"
+        "artes": [
+          "jetx",
+          "coyote-crash"
         ],
-        "personagem": "assets/personagens/04-oficiais-provedores/pragmatic-spaceman/pose1.webp"
+        "personagem": "spaceman"
       },
       "crash": [
         {
@@ -980,7 +1132,37 @@
         "lista_titulo": "Crash games na plataforma",
         "originais_titulo": "Originais Galaxsys"
       },
-      "hero_largura": 300
+      "hero_arte": {
+        "arquivo": "hero",
+        "w": 840,
+        "h": 420,
+        "fundo": "#050807",
+        "celulas": [
+          [
+            "spaceman",
+            0,
+            0,
+            276,
+            420
+          ],
+          [
+            "jetx",
+            282,
+            0,
+            276,
+            420
+          ],
+          [
+            "coyote-crash",
+            564,
+            0,
+            276,
+            420
+          ]
+        ],
+        "alt": "Artes oficiais dos crash games Spaceman, JetX e Coyote Crash"
+      },
+      "dock": "Crash games"
     },
     {
       "dominio": "guiaaviator.win",
@@ -999,18 +1181,16 @@
         "suave": "#4A5C78",
         "cta": "#FF5A1F"
       },
-      "hero_img": null,
       "og": {
         "fundo": [
           "#2F7BF5",
           "#FF9A4D"
         ],
-        "capas": [
-          "crash-games-aviatrix",
-          "oficial-pragmatic-live-pp-2201",
-          "habanero-sgflyinghigh"
+        "artes": [
+          "flying-high",
+          "jetx"
         ],
-        "personagem": null
+        "personagem": "spaceman"
       },
       "jogos": [
         {
@@ -1019,7 +1199,7 @@
         },
         {
           "slug": "oficial-pragmatic-live-pp-2201",
-          "texto": "Versão ao vivo da Pragmatic Play: o avião decola e você retira na hora certa."
+          "texto": "Crash da Pragmatic Play: o avião decola e você retira na hora certa."
         },
         {
           "slug": "habanero-sgflyinghigh",
@@ -1082,7 +1262,38 @@
             "a": "Sim. Todos os jogos abrem no navegador, sem baixar aplicativo."
           }
         ]
-      }
+      },
+      "hero_arte": {
+        "arquivo": "hero",
+        "w": 480,
+        "h": 560,
+        "fundo": "#0E1C3A",
+        "celulas": [
+          [
+            "flying-high",
+            0,
+            0,
+            480,
+            330
+          ],
+          [
+            "jetx",
+            0,
+            336,
+            237,
+            224
+          ],
+          [
+            "spaceman",
+            243,
+            336,
+            237,
+            224
+          ]
+        ],
+        "alt": "Artes oficiais dos jogos de voo Flying High, JetX e Spaceman"
+      },
+      "dock": "Jogos de voo"
     }
   ]
 }

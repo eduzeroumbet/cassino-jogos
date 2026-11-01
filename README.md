@@ -56,13 +56,23 @@ Seis sites de uma página, um por domínio .win, cada um com layout, tipografia 
 | guiaaviator.win | guiaaviator | App de conversão: céu azul ao pôr do sol, avião em SVG, cartões arredondados | O que é o estilo Aviator (o Aviator da Spribe não está na plataforma), 3 passos, jogos de voo disponíveis, FAQ, CTA fixo no celular. |
 
 - Conteúdo: `data/sites.json`. `comum` (caminhos da plataforma, textos do rodapé, nomes de provedores e correções de nomes do catálogo),
-  `fichas` (RTP teórico, volatilidade, ganho máximo e grade por slug; só dados oficiais conhecidos, o resto aparece como "ver no jogo")
+  `fichas` (RTP teórico, volatilidade, ganho máximo e grade por slug; só dados oficiais conhecidos, o resto aparece como "n/d"),
+  `acervo` (slug do catálogo para a chave em `data/acervo.json`), `acervo_foco` (onde cortar banners largos), `provedores_jogo`
+  (provedor real quando o catálogo traz a categoria, como "Crash Games")
   e `sites` (domínio, chave, estilo, título, descrição, cores, imagem do hero, OG, listas de jogos por slug e textos de cada seção).
   Os jogos vêm de `data/catalogo-plataforma.json` (url, nome, capa); itens com `disponivel=false` (Aviator da Spribe) fazem o build parar se forem usados.
 - Gerar: `python3 build_sites.py` grava `dist-sites/<dominio>/` com `index.html` (CSS e JS inline), `404.html` que volta para `/`, `CNAME`,
   `robots.txt` (Disallow), `.nojekyll` e só os assets usados. A pasta é versionada.
-- Imagens (Pillow, só quando faltam; `python3 build_sites.py --imagens` refaz todas): capas leves `assets/catalogo-web/<slug>-240.webp`
-  (240x280, q72), OG 1200x630 sem texto em `assets/sites/<chave>/og.jpg` e artes reduzidas de personagens em `assets/sites/<chave>/`.
+- Imagens (Pillow, só quando faltam; `python3 build_sites.py --imagens` refaz todas), todas locais em cada site:
+  cards com as artes oficiais do acervo (`assets/sites/cards/<chave do acervo>.webp`, 360x420: fundo + personagem + logo PT, ou banner
+  sem a faixa legal); jogos sem arte no acervo usam a capa leve do catálogo `assets/catalogo-web/<slug>-240.webp`; sem imagem nenhuma,
+  o card vira um degradê com o nome do jogo em CSS. Arte do topo de cada site montada a partir de `hero_arte` em `sites.json`
+  (`assets/sites/<chave>/capa.webp` ou `hero.webp`), OG 1200x630 sem texto em `assets/sites/<chave>/og.jpg` (copiada para `og.jpg` na raiz
+  do site) e personagens reduzidos em `assets/sites/<chave>/`.
+- Todos os sites: header fixo com "Criar conta" e, no celular (< 720 px), barra fixa de cadastro no rodapé (o body ganha padding-bottom;
+  com JS ela some enquanto a arte do topo está na tela).
+- Depois do build: `python3 tools/checar_sites.py` confere que todo src/href local existe, `<img>` com alt/width/height, og.jpg,
+  noindex, robots.txt e que nenhum texto tem "Tigrinho" ou "ver no jogo".
 - Todos os sites: noindex, canonical e og:url em `https://<dominio>/`, GA4 com evento `lp_cta` nos cliques com `data-cta`, rodapé com
   Termos, Privacidade, Jogo Responsável, Central de Ajuda, selo 18+ e a barra "Outros guias" com os outros 5 domínios.
   Links para a plataforma levam `utm_source=site&utm_medium=landing&utm_campaign=<chave>&utm_content=<posição>`.
