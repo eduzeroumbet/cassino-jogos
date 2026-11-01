@@ -424,7 +424,7 @@ h2{font-size:24px;letter-spacing:-.01em}
 .chip{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--ln);background:var(--p2);color:var(--tx);font-weight:600;font-size:14px}
 .chip[aria-pressed="true"]{background:var(--ac);border-color:var(--ac);color:#111}
 .cnt{color:var(--mu);font-size:13px}
-.tw{overflow-x:auto;border:1px solid var(--ln);border-radius:12px}
+.pan,.w,main{min-width:0}.tw{position:relative;overflow-x:auto;max-width:100%;border:1px solid var(--ln);border-radius:12px}
 table{width:100%;border-collapse:collapse;min-width:720px;font-size:15px}
 th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--ln);white-space:nowrap}
 th{background:var(--p2);font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);position:sticky;top:0}
@@ -600,7 +600,7 @@ h1{font-size:clamp(42px,11vw,92px);line-height:1;margin:14px 0 12px;color:var(--
 .res h3{font-size:26px;color:var(--au2)}
 .res p{color:var(--mu);margin:4px 0 12px}
 [hidden]{display:none!important}
-.tw{overflow-x:auto;border-radius:16px;border:2px solid rgba(242,193,78,.5)}
+.tw{position:relative;overflow-x:auto;border-radius:16px;border:2px solid rgba(242,193,78,.5)}
 table{border-collapse:collapse;width:100%;min-width:760px;background:rgba(0,0,0,.2)}
 th,td{padding:12px;border-bottom:1px solid rgba(242,193,78,.25);text-align:left;vertical-align:top;font-size:15px}
 thead th{color:var(--au2);font-family:"Songti SC","STSong",Georgia,serif;font-size:17px}
