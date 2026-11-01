@@ -1,0 +1,254 @@
+{
+  "site": {
+    "base": "https://cassino.b7bet7.bet",
+    "register": "/register",
+    "brand": "Cassino",
+    "ga4": "G-K23B4D0N14",
+    "indexar": false,
+    "pages_url": "https://eduzeroumbet.github.io/cassino-jogos"
+  },
+  "games": [
+    {
+      "key": "fortune-tiger",
+      "name": "Fortune Tiger",
+      "provider": "PG Soft",
+      "provider_code": "pgsoft",
+      "slug": "pgsoft-126",
+      "accent": "#F5B942",
+      "accent2": "#FF3D5A",
+      "effect": "coins",
+      "video": "pgsoft-126",
+      "kicker": "PG Soft · Slot 3x3",
+      "headline": "O tigre que vira a rodada num giro",
+      "lede": "Três rolos, cinco linhas e um recurso que pode encher a tela com o mesmo símbolo. Rápido de entender, feito para jogar no celular.",
+      "metrics": [
+        {"label": "RTP teórico", "value": 96.81, "suffix": "%", "type": "bar", "max": 100},
+        {"label": "Ganho máximo", "value": 2500, "suffix": "x", "type": "count"},
+        {"label": "Volatilidade", "value": 2, "type": "level", "text": "Média"},
+        {"label": "Grade", "text": "3x3 · 5 linhas", "type": "text"}
+      ],
+      "features": [
+        {"title": "Recurso Fortune Tiger", "text": "A qualquer giro o tigre pode ativar o recurso: os rolos giram de novo com um único símbolo em jogo até sair um prêmio."},
+        {"title": "Multiplicador x10", "text": "Se os nove espaços da grade forem preenchidos com símbolos que pagam, o prêmio do giro é multiplicado por dez."},
+        {"title": "Wild do tigre", "text": "O tigre é o curinga: substitui todos os símbolos e também paga sozinho quando forma linha."}
+      ],
+      "faq": [
+        {"q": "Fortune Tiger funciona no celular?", "a": "Sim. O jogo foi feito em formato vertical e roda direto no navegador do Android e do iPhone, sem baixar nada."},
+        {"q": "O que é o RTP de 96,81%?", "a": "É o retorno teórico ao jogador informado pelo provedor, calculado em milhões de rodadas. Não é garantia de resultado numa sessão; confira o valor na tela de regras dentro do jogo."},
+        {"q": "Como deposito para jogar?", "a": "Depois de criar a conta, escolha o valor e pague o Pix pelo app do seu banco. O saldo cai em segundos."}
+      ],
+      "promo": {"text": "Campanha ativa na plataforma: 100 giros no Fortune Tiger com depósito de R$ 50. Regras completas na página da campanha.", "url": "/campanha/deposite-r-50-e-ganhe-100-giros-no-fortune-tiger"}
+    },
+    {
+      "key": "fortune-rabbit",
+      "name": "Fortune Rabbit",
+      "provider": "PG Soft",
+      "provider_code": "pgsoft",
+      "slug": "pgsoft-1543462",
+      "accent": "#FF7AA8",
+      "accent2": "#F5B942",
+      "effect": "sparkles",
+      "video": "pgsoft-1543462",
+      "kicker": "PG Soft · Slot 3-4-3",
+      "headline": "Símbolos de prêmio que pagam na hora",
+      "lede": "O coelho espalha símbolos de prêmio pela grade e, no recurso especial, só eles aparecem. Leve, colorido e com o maior teto da família Fortune.",
+      "metrics": [
+        {"label": "RTP teórico", "value": 96.75, "suffix": "%", "type": "bar", "max": 100},
+        {"label": "Ganho máximo", "value": 5000, "suffix": "x", "type": "count"},
+        {"label": "Volatilidade", "value": 2, "type": "level", "text": "Média"},
+        {"label": "Grade", "text": "3-4-3 · 10 linhas", "type": "text"}
+      ],
+      "features": [
+        {"title": "Símbolos de prêmio", "text": "Cada símbolo de prêmio traz um valor próprio. Com cinco ou mais na tela, todos os valores visíveis são pagos de uma vez."},
+        {"title": "Recurso Fortune Rabbit", "text": "Ativado aleatoriamente: oito giros em que só aparecem símbolos de prêmio e espaços vazios."},
+        {"title": "Wild do coelho", "text": "O coelho substitui os símbolos comuns e ajuda a fechar as dez linhas de pagamento."}
+      ],
+      "faq": [
+        {"q": "Qual a diferença entre Fortune Rabbit e Fortune Tiger?", "a": "O Rabbit tem grade 3-4-3 com dez linhas e símbolos de prêmio com valor; o Tiger é 3x3 com cinco linhas e multiplicador x10."},
+        {"q": "Dá para jogar no iPhone?", "a": "Sim. Abra o site no Safari, entre na sua conta e toque no jogo. Funciona em tela cheia na vertical."},
+        {"q": "O RTP é garantido?", "a": "Não. O RTP é uma média teórica informada pelo provedor para milhões de rodadas; cada giro é independente."}
+      ]
+    },
+    {
+      "key": "fortune-ox",
+      "name": "Fortune Ox",
+      "provider": "PG Soft",
+      "provider_code": "pgsoft",
+      "slug": "pgsoft-98",
+      "accent": "#FF5A3D",
+      "accent2": "#F5B942",
+      "effect": "coins",
+      "video": "pgsoft-98",
+      "kicker": "PG Soft · Slot 3-4-3",
+      "headline": "Força, sorte e rodadas que repetem",
+      "lede": "O touro dourado ativa giros repetidos até sair prêmio e multiplica por dez quando a grade enche. Ritmo constante, ótimo para sessões curtas.",
+      "metrics": [
+        {"label": "RTP teórico", "value": 96.75, "suffix": "%", "type": "bar", "max": 100},
+        {"label": "Ganho máximo", "value": 2000, "suffix": "x", "type": "count"},
+        {"label": "Volatilidade", "value": 2, "type": "level", "text": "Média"},
+        {"label": "Grade", "text": "3-4-3 · 10 linhas", "type": "text"}
+      ],
+      "features": [
+        {"title": "Recurso Fortune Ox", "text": "Os rolos laterais travam um símbolo e o rolo do meio gira de novo até formar um prêmio."},
+        {"title": "Multiplicador x10", "text": "Com todos os espaços cobertos por símbolos de pagamento, o prêmio do giro vale dez vezes mais."},
+        {"title": "Wild do touro", "text": "O touro substitui os demais símbolos e completa linhas nos três rolos."}
+      ],
+      "faq": [
+        {"q": "Fortune Ox paga mais que o Tiger?", "a": "O teto de ganho informado pelo provedor é de 2.000x no Ox e 2.500x no Tiger. O RTP teórico dos dois é parecido."},
+        {"q": "Preciso baixar aplicativo?", "a": "Não. O jogo abre no navegador. Se preferir, dá para adicionar o site à tela de início do celular."},
+        {"q": "Quanto tempo leva para o depósito cair?", "a": "No Pix o saldo costuma aparecer em segundos depois do pagamento no app do banco."}
+      ]
+    },
+    {
+      "key": "fortune-dragon",
+      "name": "Fortune Dragon",
+      "provider": "PG Soft",
+      "provider_code": "pgsoft",
+      "slug": "pgsoft-1695365",
+      "accent": "#FF3D5A",
+      "accent2": "#F5B942",
+      "effect": "embers",
+      "video": "",
+      "kicker": "PG Soft · Slot 3x3",
+      "headline": "O dragão traz multiplicadores ao giro",
+      "lede": "Grade enxuta de 3x3 com multiplicadores que entram durante o recurso do dragão. O mais novo da família Fortune.",
+      "metrics": [
+        {"label": "RTP teórico", "value": 96.74, "suffix": "%", "type": "bar", "max": 100},
+        {"label": "Ganho máximo", "value": 2500, "suffix": "x", "type": "count"},
+        {"label": "Volatilidade", "value": 2, "type": "level", "text": "Média"},
+        {"label": "Grade", "text": "3x3 · 5 linhas", "type": "text"}
+      ],
+      "features": [
+        {"title": "Recurso Fortune Dragon", "text": "O dragão pode ativar giros especiais em que os rolos trazem multiplicadores de 2x, 5x ou 10x."},
+        {"title": "Multiplicadores somados", "text": "Os multiplicadores que caem na grade se somam e são aplicados ao prêmio total do giro."},
+        {"title": "Wild do dragão", "text": "O dragão é o curinga do jogo e completa as cinco linhas de pagamento."}
+      ],
+      "faq": [
+        {"q": "Fortune Dragon é bom para iniciantes?", "a": "É um dos slots mais simples de entender: 3x3, cinco linhas e um recurso principal."},
+        {"q": "Onde vejo as regras completas?", "a": "Dentro do jogo, no menu de informações. Lá estão a tabela de pagamentos e o RTP configurado."},
+        {"q": "Como começo?", "a": "Crie sua conta em cerca de um minuto, deposite via Pix e toque em Fortune Dragon."}
+      ]
+    },
+    {
+      "key": "gates-of-olympus",
+      "name": "Gates of Olympus",
+      "provider": "Pragmatic Play",
+      "provider_code": "pragmatic",
+      "slug": "pragmatic-vs20olympgate",
+      "accent": "#C9A2FF",
+      "accent2": "#F5B942",
+      "effect": "gates",
+      "video": "",
+      "kicker": "Pragmatic Play · Slot 6x5",
+      "headline": "Os portões se abrem para multiplicadores de até 500x",
+      "lede": "Zeus derruba multiplicadores na grade, os símbolos caem em cascata e o pagamento vale em qualquer posição. Alta volatilidade, alto teto.",
+      "metrics": [
+        {"label": "RTP teórico", "value": 96.50, "suffix": "%", "type": "bar", "max": 100},
+        {"label": "Ganho máximo", "value": 5000, "suffix": "x", "type": "count"},
+        {"label": "Volatilidade", "value": 3, "type": "level", "text": "Alta"},
+        {"label": "Grade", "text": "6x5 · paga em qualquer lugar", "type": "text"}
+      ],
+      "features": [
+        {"title": "Paga em qualquer lugar", "text": "Oito ou mais símbolos iguais em qualquer posição da grade já formam prêmio. Não existem linhas."},
+        {"title": "Cascatas", "text": "Os símbolos premiados somem e novos caem de cima, podendo gerar vários prêmios no mesmo giro."},
+        {"title": "Multiplicadores de Zeus", "text": "Orbes com multiplicadores de 2x a 500x podem cair a qualquer momento e se somam ao fim da sequência."},
+        {"title": "Giros grátis", "text": "Quatro ou mais símbolos de dispersão liberam 15 giros grátis em que os multiplicadores se acumulam."}
+      ],
+      "faq": [
+        {"q": "O que quer dizer volatilidade alta?", "a": "Os prêmios tendem a ser menos frequentes e maiores. É bom definir um valor por sessão antes de começar."},
+        {"q": "Gates of Olympus roda bem no celular?", "a": "Sim. A grade se ajusta à tela vertical e as animações podem ser aceleradas no menu do jogo."},
+        {"q": "Os multiplicadores se somam?", "a": "Sim. Todos os multiplicadores que caem durante a sequência de cascatas são somados e aplicados ao prêmio total."}
+      ]
+    },
+    {
+      "key": "sweet-bonanza",
+      "name": "Sweet Bonanza",
+      "provider": "Pragmatic Play",
+      "provider_code": "pragmatic",
+      "slug": "pragmatic-vs20fruitsw",
+      "accent": "#FF6FB5",
+      "accent2": "#F5B942",
+      "effect": "candy",
+      "video": "",
+      "kicker": "Pragmatic Play · Slot 6x5",
+      "headline": "Doces em cascata e bombas multiplicadoras",
+      "lede": "Frutas e balas caem sem parar, o pagamento vale em qualquer lugar da grade e, nos giros grátis, as bombas multiplicam o prêmio.",
+      "metrics": [
+        {"label": "RTP teórico", "value": 96.48, "suffix": "%", "type": "bar", "max": 100},
+        {"label": "Ganho máximo", "value": 21100, "suffix": "x", "type": "count"},
+        {"label": "Volatilidade", "value": 3, "type": "level", "text": "Alta"},
+        {"label": "Grade", "text": "6x5 · paga em qualquer lugar", "type": "text"}
+      ],
+      "features": [
+        {"title": "Tumble", "text": "Cada prêmio faz os símbolos sumirem e novos caírem, em sequência, até não haver mais combinação."},
+        {"title": "Giros grátis", "text": "Quatro ou mais pirulitos dão 10 giros grátis. Três pirulitos durante o recurso adicionam mais 5 giros."},
+        {"title": "Bombas multiplicadoras", "text": "Nos giros grátis, bombas coloridas trazem multiplicadores de 2x a 100x que se somam no fim da cascata."}
+      ],
+      "faq": [
+        {"q": "Sweet Bonanza é parecido com Gates of Olympus?", "a": "Usam a mesma mecânica de grade 6x5 com cascatas. No Sweet Bonanza os multiplicadores aparecem só nos giros grátis."},
+        {"q": "Qual o valor mínimo para jogar?", "a": "A aposta mínima aparece no próprio jogo. O depósito mínimo via Pix é exibido na tela de depósito."},
+        {"q": "Posso jogar na vertical?", "a": "Sim. A versão mobile reorganiza a grade para a tela em pé."}
+      ]
+    },
+    {
+      "key": "big-bass-splash",
+      "name": "Big Bass Splash",
+      "provider": "Pragmatic Play",
+      "provider_code": "pragmatic",
+      "slug": "pragmatic-vs10txbigbass",
+      "accent": "#3DD6C4",
+      "accent2": "#F5B942",
+      "effect": "bubbles",
+      "video": "",
+      "kicker": "Pragmatic Play · Slot 5x3",
+      "headline": "Jogue a isca e pesque os peixes de dinheiro",
+      "lede": "Nos giros grátis, o pescador coleta o valor de cada peixe na tela. Quanto mais pescadores, maior o multiplicador.",
+      "metrics": [
+        {"label": "RTP teórico", "value": 96.71, "suffix": "%", "type": "bar", "max": 100},
+        {"label": "Ganho máximo", "value": 5000, "suffix": "x", "type": "count"},
+        {"label": "Volatilidade", "value": 3, "type": "level", "text": "Alta"},
+        {"label": "Grade", "text": "5x3 · 10 linhas", "type": "text"}
+      ],
+      "features": [
+        {"title": "Peixes de dinheiro", "text": "Os peixes trazem valores em dinheiro. Eles são coletados quando o pescador aparece na mesma rodada."},
+        {"title": "Giros grátis", "text": "Três ou mais dispersões liberam de 10 a 20 giros grátis com o pescador como coletor."},
+        {"title": "Níveis do pescador", "text": "A cada quatro pescadores coletados, o recurso avança de nível e ganha giros extras com multiplicador maior."}
+      ],
+      "faq": [
+        {"q": "Como funcionam os giros grátis?", "a": "O pescador entra como curinga e coleta o valor de todos os peixes visíveis. Acumular pescadores sobe o multiplicador."},
+        {"q": "Big Bass Splash é o mesmo que Big Bass Bonanza?", "a": "É da mesma série, com grade 5x3 e dez linhas, mas com recursos aleatórios extras antes dos giros grátis."},
+        {"q": "Precisa de internet rápida?", "a": "Não. O jogo é leve e funciona bem em 4G."}
+      ]
+    },
+    {
+      "key": "mines",
+      "name": "Turbo Mines",
+      "provider": "Galaxsys",
+      "provider_code": "galaxsys-original",
+      "slug": "galaxsys-original-12540",
+      "accent": "#FF3D5A",
+      "accent2": "#3DD6C4",
+      "effect": "grid",
+      "video": "",
+      "kicker": "Galaxsys · Jogo de minas 5x5",
+      "headline": "Você escolhe o risco. Você decide quando parar",
+      "lede": "Uma grade 5x5, de 1 a 24 minas escondidas. Cada casa segura aumenta o multiplicador e você pode sacar quando quiser.",
+      "metrics": [
+        {"label": "RTP informado", "value": 98.89, "suffix": "%", "type": "bar", "max": 100, "prefix": "até "},
+        {"label": "Minas na grade", "value": 24, "type": "count", "prefix": "1 a "},
+        {"label": "Risco", "value": 2, "type": "level", "text": "Ajustável"},
+        {"label": "Grade", "text": "5x5 · 25 casas", "type": "text"}
+      ],
+      "features": [
+        {"title": "Escolha as minas", "text": "Antes da rodada, defina quantas minas ficam escondidas. Mais minas significa multiplicador maior a cada acerto."},
+        {"title": "Abra casa por casa", "text": "Cada casa segura revela um diamante e sobe o multiplicador da rodada."},
+        {"title": "Saque a qualquer momento", "text": "O botão de saque fica disponível depois do primeiro acerto. Encontrou uma mina, a rodada termina."}
+      ],
+      "faq": [
+        {"q": "Qual a melhor quantidade de minas?", "a": "Não existe configuração vencedora. Poucas minas dão acertos mais frequentes com multiplicador menor; muitas minas, o contrário."},
+        {"q": "O RTP é fixo?", "a": "O provedor informa uma faixa que pode chegar a 98,89% conforme a configuração. Confira o valor nas regras dentro do jogo."},
+        {"q": "Funciona no celular?", "a": "Sim. A grade é grande, com toques simples, ideal para jogar com uma mão."}
+      ]
+    }
+  ]
+}
