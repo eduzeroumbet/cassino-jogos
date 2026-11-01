@@ -48,6 +48,13 @@ function xsync(){if(DK.matches)$$('.xcard').forEach(function(o){o.setAttribute('
 xsync();if(DK.addEventListener)DK.addEventListener('change',xsync);
 $$('.xcard').forEach(function(b){b.addEventListener('click',function(){if(DK.matches)return;var on=b.getAttribute('aria-expanded')==='true';
   $$('.xcard',b.parentNode).forEach(function(o){o.setAttribute('aria-expanded','false')});b.setAttribute('aria-expanded',on?'false':'true');ev('lp_feature',{item:b.dataset.k})})});
+/* personagem: tocar numa miniatura troca a arte grande */
+var chi=d.getElementById('ch-img');
+$$('.ch-x button').forEach(function(b){b.addEventListener('click',function(){if(!chi||b.getAttribute('aria-pressed')==='true')return;
+  var a=chi.parentNode;a.className=b.dataset.cls;a.setAttribute('style',b.dataset.box);
+  if(b.dataset.img)chi.setAttribute('style',b.dataset.img);else chi.removeAttribute('style');
+  chi.width=+b.dataset.w;chi.height=+b.dataset.h;chi.alt=b.dataset.alt;chi.src=b.dataset.src;
+  $$('.ch-x button').forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false')});ev('lp_personagem',{arte:b.dataset.src.split('/').pop()})})});
 /* cliques nos CTAs */
 $$('[data-cta]').forEach(function(a){a.addEventListener('click',function(){ev('lp_cta',{cta:a.dataset.cta,page:d.body.dataset.page})})});
 $$('.faq details').forEach(function(x){x.addEventListener('toggle',function(){if(x.open)ev('lp_faq',{q:x.querySelector('summary').textContent})})});

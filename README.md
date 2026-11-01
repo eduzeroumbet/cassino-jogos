@@ -17,13 +17,17 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
 - Cada jogo tem em `games.json` o campo `character`:
   `{"main": caminho, "extras": [até 3 caminhos], "name": nome, "alt": texto alternativo, "bio": 2 frases, "crop": [x, y, w, h] opcional}`.
   `crop` (em px da versão web) mostra só um recorte da arte, em CSS; serve para os boards do elenco da casa, que trazem texto.
-- Na landing: bloco "Conheça o personagem" logo depois das métricas (arte com loading lazy e width/height reais, lidos do cabeçalho do WebP).
+- Na landing: bloco "Conheça o personagem" logo depois das métricas (arte sem loading lazy, com fetchpriority baixo e width/height reais,
+  lidos do cabeçalho do WebP; arte de fundo branco fica num cartão branco de cantos arredondados). Se a arte falhar (onerror), o cartão
+  mostra a capa do jogo (`assets/img/<jogo>-thumb.webp`). As miniaturas (principal + extras, 76 px no celular, 96 px no desktop) são botões
+  que trocam a arte grande; abaixo, link "Ver todos os personagens" (personagens.html; no domínio próprio, a do GitHub Pages).
   No desktop (>= 960 px), se a arte principal tiver fundo transparente, o personagem aparece sobreposto no hero com fetchpriority baixo;
-  no celular a imagem nem é baixada (`<picture>` com `media`).
+  no celular a imagem nem é baixada (`<picture>` com `media`). Nesse caso o bloco abre com a primeira extra, para não repetir a arte do hero.
+- Carrossel "Outros favoritos": os 3 primeiros cards sem lazy; os demais com `loading="lazy"` nativo (sem IntersectionObserver).
 - Escolhas atuais: Tigrinho, Coelhinho, Tourinho, Dragãozinho e Zeus (artes dos jogos); Sweet Bonanza, Big Bass Splash e Mines não têm
   personagem adequado no catálogo, então usam o elenco da casa: Lu (arara), Capi (capivara) e Mr. Bit.
 - `docs/personagens.html` (noindex): banco com todas as miniaturas, filtro por grupo e por marca/tema, busca por texto; o clique abre a versão
-  grande e o link do original no Drive. Link discreto no fim da grade da index.
+  grande e o link do original no Drive. Título "Personagens dos jogos"; link com esse nome no fim da grade da index.
 - O build copia para `docs/` só as imagens de `assets/personagens/` que as páginas referenciam (hoje, todas, por causa do banco).
 
 ## Domínio próprio por jogo

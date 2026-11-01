@@ -107,33 +107,51 @@ def metric(m):
     bar = f'<div class="bar" aria-hidden="true"><i data-w="{v / m.get("max", 100) * 100:.1f}"></i></div>' if m['type'] == 'bar' else ''
     return f'<div class="m"><small>{e(m["label"])}</small>{body}{bar}</div>'
 
-def card(g, href, sub):
-    return (f'<a class="card" href="{href}" style="--ca:{g["accent"]}"><img src="assets/img/{g["key"]}-thumb.webp" width="300" height="350" loading="lazy" decoding="async" alt="{e(g["name"])}">'
+def card(g, href, sub, lazy=True):
+    """Card de jogo. lazy=False nos primeiros do carrossel: a miniatura carrega mesmo sem rolar a página."""
+    lz = 'loading="lazy" ' if lazy else ''
+    return (f'<a class="card" href="{href}" style="--ca:{g["accent"]}"><img src="assets/img/{g["key"]}-thumb.webp" width="300" height="350" {lz}decoding="async" alt="{e(g["name"])}">'
             f'<span>{e(g["name"])}<small>{e(sub)}</small></span></a>')
 
-def char_art(c):
-    """Arte grande do personagem. Com "crop" [x, y, w, h] (px da versão web), mostra só esse recorte, em CSS."""
-    w, h = webp_size(c['main'])
-    img = f'src="{c["main"]}" width="{w}" height="{h}" alt="{e(c["alt"])}" loading="lazy" decoding="async"'
-    if c.get('crop'):
-        x, y, cw, ch = c['crop']
-        return (f'<div class="ch-art ch-crop" style="aspect-ratio:{cw}/{ch}"><img {img} '
-                f'style="width:{w / cw * 100:.2f}%;left:-{x / cw * 100:.2f}%;top:-{y / ch * 100:.2f}%"></div>')
-    return f'<div class="ch-art{" cut" if TRANSP.get(c["main"]) else ""}"><img {img}></div>'
+def art_view(p, crop=None):
+    """Tamanho, classe da moldura, estilo da moldura e estilo da imagem da arte p.
+    Com "crop" [x, y, w, h] (px da versão web), mostra só esse recorte, em CSS."""
+    w, h = webp_size(p)
+    if crop:
+        x, y, cw, ch = crop
+        return w, h, 'ch-art ch-crop', f'aspect-ratio:{cw}/{ch}', f'width:{w / cw * 100:.2f}%;left:-{x / cw * 100:.2f}%;top:-{y / ch * 100:.2f}%'
+    if TRANSP.get(p): return w, h, 'ch-art cut', '', ''
+    return w, h, 'ch-art', f'aspect-ratio:{w}/{h}', ''
 
-def char_section(g):
+def char_section(g, mode='pages'):
+    """Bloco "Conheça o personagem". A arte grande não usa loading lazy (com lazy ela ficava vazia em capturas e rolagens
+    rápidas) e, se falhar, troca pela capa do jogo. Quando a arte principal já aparece no hero, o bloco abre com outra pose.
+    As miniaturas são botões: ao tocar, trocam a arte grande (src/lp.js)."""
     c = g.get('character')
     if not c: return ''
+    k = g['key']
+    arts = [(c['main'], c.get('crop'), c['alt'])] + [(p, None, f'{c["name"]}, outra pose') for p in c.get('extras', [])]
+    if hero_char(g) and len(arts) > 1: arts = arts[1:] + arts[:1]
+    p, crop, alt = arts[0]
+    w, h, cls, box, ist = art_view(p, crop)
+    fb = (f"this.onerror=null;var a=this.parentNode;a.className='ch-art';a.style.aspectRatio='300/350';this.removeAttribute('style');"
+          f"this.width=300;this.height=350;this.src='assets/img/{k}-thumb.webp'")
+    sty = f' style="{ist}"' if ist else ''
+    art = (f'<div class="{cls}" style="{box}"><img id="ch-img" src="{p}" width="{w}" height="{h}" alt="{e(alt)}" decoding="async" fetchpriority="low" '
+           f'onerror="{fb}"{sty}></div>')
     xs = ''
-    for p in c.get('extras', []):
-        t = THUMB[p]; w, h = webp_size(t)
-        xs += f'<img src="{t}" width="{w}" height="{h}" loading="lazy" decoding="async" alt="{e(c["name"])}, outra arte">'
-    xs = f'<div class="ch-x">{xs}</div>' if xs else ''
+    if len(arts) > 1:
+        for i, (p, crop, alt) in enumerate(arts):
+            w, h, cls, box, ist = art_view(p, crop); t = THUMB[p]; tw, th = webp_size(t)
+            xs += (f'<button type="button" aria-pressed="{"true" if i == 0 else "false"}" aria-label="Ver {e(alt)}" data-src="{p}" data-w="{w}" data-h="{h}" '
+                   f'data-alt="{e(alt)}" data-cls="{cls}" data-box="{box}" data-img="{ist}"><img src="{t}" width="{tw}" height="{th}" decoding="async" alt=""></button>')
+        xs = f'<div class="ch-x" aria-label="Outras artes do personagem">{xs}</div>'
+    todos = 'personagens.html' if mode == 'pages' else f'{PAGES}/personagens.html'
     return f'''
 <section class="s" id="personagem"><div class="wrap ch">
-{char_art(c)}
+{art}
 <div><p class="eyebrow">Conheça o personagem</p><h2><span class="hl">{e(c['name'])}</span></h2>
-<p class="sub">{e(c['bio'])}</p>{xs}</div>
+<p class="sub">{e(c['bio'])}</p>{xs}<p class="ch-all"><a href="{todos}">Ver todos os personagens</a></p></div>
 </div></section>
 '''
 
@@ -166,7 +184,7 @@ def game_page(g, mode='pages'):
         promo = f'<p class="promo">{e(g["promo"]["text"])} <a data-cta="promo" href="{utm(g["promo"]["url"], k, "promo")}">Ver campanha</a>{note}</p>'
     feats = ''.join(f'<button class="xcard" type="button" data-k="{e(f["title"])}" aria-expanded="{"true" if i == 0 else "false"}"><span class="n">0{i + 1}</span><h3>{e(f["title"])}</h3><p>{e(f["text"])}</p></button>'
                     for i, f in enumerate(g['features']))
-    others = ''.join(card(o, game_href(o['key'], mode), o['provider']) for o in G if o['key'] != k)
+    others = ''.join(card(o, game_href(o['key'], mode), o['provider'], lazy=i >= 3) for i, o in enumerate(o for o in G if o['key'] != k))
     faqs = ''.join(f'<details><summary>{e(f["q"])}</summary><p>{e(f["a"])}</p></details>' for f in g['faq'])
     style = f'<style>:root{{--acc:{g["accent"]};--acc2:{g.get("accent2", "#FF3D5A")}}}</style>'
     return head(title, desc, og, canonical, g['accent'], f'assets/img/{k}-hero', style + f'<script type="application/ld+json">{faq_ld}</script>') + f'''
@@ -192,7 +210,7 @@ def game_page(g, mode='pages'):
 <div class="metrics">{''.join(metric(m) for m in g['metrics'])}</div>
 <p class="note">RTP é uma média teórica de longo prazo, não uma previsão para a sua sessão.</p>
 </div></section>
-{char_section(g)}
+{char_section(g, mode)}
 <section class="s" id="recursos"><div class="wrap">
 <p class="eyebrow">Recursos</p><h2>Como o jogo <span class="hl">paga</span></h2>
 <div class="xcards">{feats}</div>
@@ -246,7 +264,7 @@ def hub():
 <main>
 <section class="hero" aria-label="Jogos">
 <div class="veil l" aria-hidden="true"></div><div class="veil r" aria-hidden="true"></div>
-<div class="collage" aria-hidden="true">{col}</div>
+<div class="cbox" aria-hidden="true"><div class="collage">{col}</div></div>
 <div class="fx fx-coins" aria-hidden="true"></div>
 <div class="hero-in"><span class="kicker"><b></b>Guia dos jogos</span>
 <h1>Os mais<em>jogados</em></h1>
@@ -255,7 +273,7 @@ def hub():
 <div class="ctas"><a class="btn btn-main" data-cta="hub_cadastro" href="{utm(S['register'], 'hub', 'hero')}">Criar conta {ARROW}</a><a class="btn btn-ghost" href="#jogos">Ver os jogos</a></div>
 </div></section>
 <section class="s" id="jogos"><div class="wrap"><p class="eyebrow">{len(G)} guias</p><h2>Escolha o <span class="hl">seu jogo</span></h2>
-<div class="grid">{grid}</div><p class="note more"><a href="personagens.html">Banco de personagens</a></p></div></section>
+<div class="grid">{grid}</div><p class="note more"><a href="personagens.html">Personagens dos jogos</a></p></div></section>
 <section class="final"><h2>Tudo pronto em 1 minuto</h2><p class="sub" style="margin:0 auto">Cadastro rápido, Pix na hora e centenas de jogos.</p>
 <div class="ctas"><a class="btn btn-main" data-cta="hub_final" href="{utm(S['register'], 'hub', 'final')}">Criar conta grátis {ARROW}</a></div></section>
 </main>
@@ -291,13 +309,13 @@ def personagens():
              '.dl a{background:var(--cta);color:#fff}.dl button{background:none;border:1.5px solid var(--cream);color:var(--cream)}'
              '@media (min-width:720px){.bf{grid-template-columns:1fr 1fr 1.4fr}.bg{grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}}</style>')
     pdata = json.dumps(data, ensure_ascii=False).replace('</', '<\\/')
-    title = f'Banco de personagens | {S["brand"]}'
+    title = f'Personagens dos jogos | {S["brand"]}'
     return head(title, 'Biblioteca interna de artes de personagens de cassino.', f'{PAGES}/assets/img/fortune-tiger-og.jpg',
                 f'{PAGES}/personagens.html', '#F5B942', extra=style, noindex=True) + f'''
 <body data-page="personagens">
 {top()}
 <main class="bank"><div class="wrap">
-<p class="eyebrow">Uso interno</p><h1 class="bt">Banco de <span class="hl">personagens</span></h1>
+<p class="eyebrow">Uso interno</p><h1 class="bt">Personagens <span class="hl">dos jogos</span></h1>
 <p class="sub">{len(CAT)} artes de personagens do catálogo. Toque numa miniatura para ver a versão grande e o link do arquivo original no Drive.</p>
 <form class="bf" role="search" onsubmit="return false">
 <label class="sr" for="fg">Grupo</label><select id="fg"><option value="">Todos os grupos</option>{gopts}</select>
@@ -307,7 +325,7 @@ def personagens():
 <p class="bc" id="bc" aria-live="polite">{len(CAT)} artes</p>
 <ul class="bg" id="bg">{''.join(items)}</ul>
 </div></main>
-<dialog id="dlg" aria-label="Arte do personagem"><img id="di" src="{GIF}" alt=""><p id="dt"></p>
+<dialog id="dlg" aria-label="Arte do personagem"><img id="di" src="{GIF}" width="1" height="1" alt=""><p id="dt"></p>
 <div class="dl"><a id="dd" href="#" target="_blank" rel="noopener">Abrir original no Drive</a><a id="dw" href="#" target="_blank" rel="noopener">Abrir versão web</a><button type="button" id="dx">Fechar</button></div></dialog>
 <script id="pdata" type="application/json">{pdata}</script>
 <script>{PJS}</script>
