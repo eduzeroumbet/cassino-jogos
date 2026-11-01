@@ -358,9 +358,11 @@ def robots():
 
 if __name__ == '__main__':
     if os.path.exists(OUT): shutil.rmtree(OUT)
-    # assets/personagens não entra inteiro: só os arquivos que o banco de personagens referencia (copiados abaixo)
+    # assets/personagens não entra inteiro: só os arquivos que o banco de personagens referencia (copiados abaixo).
+    # catalogo, catalogo-web e sites são dos sites .win (build_sites.py) e não entram no docs/.
+    FORA = ['personagens', 'catalogo', 'catalogo-web', 'sites']
     shutil.copytree(os.path.join(R, 'assets'), os.path.join(OUT, 'assets'),
-                    ignore=lambda d, names: ['personagens'] if os.path.abspath(d) == os.path.join(R, 'assets') else [])
+                    ignore=lambda d, names: FORA if os.path.abspath(d) == os.path.join(R, 'assets') else [])
     pages = {g['key'] + '.html': game_page(g) for g in G}
     pages['index.html'] = hub()
     pages['personagens.html'] = personagens()

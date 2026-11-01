@@ -1,0 +1,1088 @@
+{
+  "comum": {
+    "paths": {
+      "register": "/register",
+      "login": "/login",
+      "crash": "/cassino/categoria/crash-games",
+      "slots": "/cassino/categoria/slots",
+      "pgsoft": "/cassino/provedores/pgsoft",
+      "pragmatic": "/cassino/provedores/pragmatic"
+    },
+    "rodape": {
+      "rtp": "Os valores de RTP são teóricos, informados pelos provedores para milhões de rodadas, e não garantem resultado em nenhuma sessão.",
+      "aviso": "Proibido para menores de 18 anos. Defina um valor por sessão, faça pausas e não trate o jogo como fonte de renda.",
+      "nota": "Site informativo de Cassino. Os jogos citados pertencem aos respectivos provedores."
+    },
+    "provedores": {
+      "pgsoft": "PG Soft",
+      "pragmatic": "Pragmatic Play",
+      "reelkingdom": "Reel Kingdom",
+      "egt": "EGT",
+      "crash-games": "Crash Games",
+      "galaxsys-original": "Galaxsys",
+      "habanero": "Habanero",
+      "oficial-pragmatic-live": "Pragmatic Play Live",
+      "cq9": "CQ9",
+      "oficial-ezugi": "Ezugi"
+    },
+    "nomes": {
+      "pragmatic-vs5joker": "Joker's Jewels",
+      "pragmatic-vswaysbbb": "Big Bass Bonanza Megaways",
+      "reelkingdom-vswayspizza": "Pizza! Pizza? Pizza!",
+      "oficial-pragmatic-live-pp-1320": "Big Bass Crash Live"
+    }
+  },
+  "fichas": {
+    "pgsoft-126": {
+      "rtp": 96.81,
+      "vol": "Média",
+      "max": 2500,
+      "grade": "3x3",
+      "linhas": "5 linhas"
+    },
+    "pgsoft-1543462": {
+      "rtp": 96.75,
+      "vol": "Média",
+      "max": 5000,
+      "grade": "3-4-3",
+      "linhas": "10 linhas"
+    },
+    "pgsoft-98": {
+      "rtp": 96.75,
+      "vol": "Média",
+      "max": 2000,
+      "grade": "3-4-3",
+      "linhas": "10 linhas"
+    },
+    "pgsoft-1695365": {
+      "rtp": 96.74,
+      "vol": "Média",
+      "max": 2500,
+      "grade": "3x3",
+      "linhas": "5 linhas"
+    },
+    "pgsoft-68": {
+      "rtp": 96.96,
+      "vol": null,
+      "max": 1000,
+      "grade": "3x3",
+      "linhas": "5 linhas"
+    },
+    "pgsoft-1879752": {
+      "rtp": null,
+      "vol": null,
+      "max": null,
+      "grade": null,
+      "linhas": null
+    },
+    "pgsoft-65": {
+      "rtp": 96.92,
+      "vol": null,
+      "max": null
+    },
+    "pgsoft-74": {
+      "rtp": 96.95,
+      "vol": null,
+      "max": null
+    },
+    "pgsoft-104": {
+      "rtp": 96.73,
+      "vol": null,
+      "max": null
+    },
+    "pgsoft-89": {
+      "rtp": 96.73,
+      "vol": null,
+      "max": null
+    },
+    "pgsoft-57": {
+      "rtp": 96.83,
+      "vol": null,
+      "max": null
+    },
+    "pgsoft-87": {
+      "rtp": 96.71,
+      "vol": null,
+      "max": null
+    },
+    "pgsoft-42": {
+      "rtp": 96.08,
+      "vol": null,
+      "max": null
+    },
+    "pragmatic-vs20olympgate": {
+      "rtp": 96.5,
+      "vol": "Alta",
+      "max": 5000,
+      "grade": "6x5",
+      "linhas": "paga em qualquer lugar"
+    },
+    "pragmatic-vs20fruitsw": {
+      "rtp": 96.48,
+      "vol": "Alta",
+      "max": 21100,
+      "grade": "6x5",
+      "linhas": "paga em qualquer lugar"
+    },
+    "pragmatic-vs10txbigbass": {
+      "rtp": 96.71,
+      "vol": "Alta",
+      "max": 5000,
+      "grade": "5x3",
+      "linhas": "10 linhas"
+    },
+    "pragmatic-vs20sugarrush": {
+      "rtp": 96.5,
+      "vol": "Alta",
+      "max": 5000,
+      "grade": "7x7",
+      "linhas": "clusters"
+    },
+    "pragmatic-vs20starlight": {
+      "rtp": 96.5,
+      "vol": "Alta",
+      "max": 5000,
+      "grade": "6x5",
+      "linhas": "paga em qualquer lugar"
+    },
+    "pragmatic-vs20doghouse": {
+      "rtp": 96.51,
+      "vol": "Alta",
+      "max": 6750,
+      "grade": "5x3",
+      "linhas": "20 linhas"
+    },
+    "pragmatic-vs20fruitparty": {
+      "rtp": 96.47,
+      "vol": "Alta",
+      "max": 5000,
+      "grade": "7x7",
+      "linhas": "clusters"
+    },
+    "pragmatic-vs25wolfgold": {
+      "rtp": 96.01,
+      "vol": "Média",
+      "max": 2500,
+      "grade": "5x3",
+      "linhas": "25 linhas"
+    },
+    "pragmatic-vs10bbbonanza": {
+      "rtp": 96.71,
+      "vol": "Alta",
+      "max": 2100,
+      "grade": "5x3",
+      "linhas": "10 linhas"
+    },
+    "pragmatic-vs20olympx": {
+      "rtp": 96.5,
+      "vol": "Alta",
+      "max": 15000,
+      "grade": "6x5",
+      "linhas": "paga em qualquer lugar"
+    },
+    "pragmatic-vs20fruitswx": {
+      "rtp": 96.53,
+      "vol": "Alta",
+      "max": 25000,
+      "grade": "6x5",
+      "linhas": "paga em qualquer lugar"
+    },
+    "pragmatic-vswaysrhino": {
+      "rtp": 96.58,
+      "vol": "Alta",
+      "max": 20000,
+      "grade": "Megaways",
+      "linhas": "formas variáveis"
+    },
+    "pragmatic-vs40wildwest": {
+      "rtp": 96.51,
+      "vol": "Alta",
+      "max": null
+    },
+    "crash-games-spaceman": {
+      "rtp": 96.5
+    },
+    "crash-games-aviatrix": {
+      "rtp": 97.0
+    },
+    "crash-games-jetx": {
+      "rtp": 97.0
+    },
+    "galaxsys-original-12540": {
+      "rtp": 98.89,
+      "rtp_prefixo": "até "
+    }
+  },
+  "sites": [
+    {
+      "dominio": "guiadecassino.win",
+      "chave": "guiadecassino",
+      "estilo": "revista",
+      "nome": "Guia de Cassino",
+      "titulo": "Guia de Cassino: como começar, categorias, Pix e jogo responsável",
+      "descricao": "A revista do iniciante: cadastro em 3 minutos, as 5 categorias do cassino, depósito e saque via Pix, jogo responsável e os jogos mais jogados.",
+      "cores": {
+        "fundo": "#F4EDE0",
+        "papel": "#FBF7EF",
+        "tinta": "#1D1A16",
+        "suave": "#5C554B",
+        "acento": "#A3231B",
+        "regua": "#CFC4B0"
+      },
+      "hero_img": "assets/img/fortune-tiger-hero-600.webp",
+      "og": {
+        "fundo": [
+          "#F4EDE0",
+          "#E2D3B8"
+        ],
+        "capas": [
+          "pgsoft-126",
+          "pragmatic-vs20olympgate",
+          "pragmatic-vs20fruitsw"
+        ],
+        "personagem": null
+      },
+      "jogos": [
+        "pgsoft-126",
+        "pgsoft-1543462",
+        "pgsoft-98",
+        "pgsoft-1695365",
+        "pragmatic-vs20olympgate",
+        "pragmatic-vs20fruitsw",
+        "pragmatic-vs10txbigbass",
+        "galaxsys-original-12540"
+      ],
+      "textos": {
+        "edicao": "Edição nº 1",
+        "secao_capa": "Especial iniciantes",
+        "manchete": "Tudo o que você precisa saber antes do primeiro giro",
+        "linha_fina": "Cadastro, Pix, as categorias do cassino e como jogar com limite. Um guia curto, direto e sem promessas milagrosas.",
+        "chamadas_capa": [
+          "Cadastro em 3 minutos",
+          "Pix: depósito e saque",
+          "Os 8 mais jogados"
+        ],
+        "comecar": {
+          "titulo": "Como começar em 3 minutos",
+          "olho": "Do cadastro ao primeiro jogo, sem baixar aplicativo.",
+          "passos": [
+            {
+              "t": "Cadastro",
+              "p": "Toque em Criar conta e informe nome, CPF, e-mail e uma senha. A plataforma confere se você tem mais de 18 anos antes de liberar depósitos."
+            },
+            {
+              "t": "Pix",
+              "p": "Na carteira, escolha o valor e copie o código Pix. Pague pelo app do seu banco e o saldo costuma aparecer em segundos."
+            },
+            {
+              "t": "Primeiro jogo",
+              "p": "Use a busca ou as categorias para abrir um jogo. Antes do primeiro giro, abra a tela de regras para ver a aposta mínima e como ele paga."
+            }
+          ],
+          "nota": "Dica da redação: comece com apostas baixas para conhecer o ritmo do jogo. Todos os jogos rodam no navegador do celular."
+        },
+        "categorias": {
+          "titulo": "As 5 categorias do cassino",
+          "olho": "Cada categoria tem um ritmo diferente. Conhecer a diferença ajuda a escolher o jogo certo para a sua sessão.",
+          "itens": [
+            {
+              "nome": "Slots",
+              "texto": "Rolos que giram e pagam por linhas, clusters ou em qualquer lugar da grade. Têm RTP teórico e volatilidade informados pelo provedor.",
+              "guia": "guiaslots.win",
+              "rotulo": "Ranking de slots",
+              "path": "/cassino/categoria/slots",
+              "extra": {
+                "guia": "guiafortune.win",
+                "rotulo": "Série Fortune"
+              }
+            },
+            {
+              "nome": "Crash",
+              "texto": "Um multiplicador sobe até cair em um ponto aleatório. Você decide a hora de retirar; se esperar demais, perde a aposta da rodada.",
+              "guia": "guiadecrash.win",
+              "rotulo": "Guia de crash",
+              "path": "/cassino/categoria/crash-games",
+              "extra": {
+                "guia": "guiaaviator.win",
+                "rotulo": "Jogos de aviãozinho"
+              }
+            },
+            {
+              "nome": "Mines e originais",
+              "texto": "Jogos rápidos como Turbo Mines, Plinko e Hilo. Você ajusta o risco antes da rodada e, em vários deles, pode sacar no meio.",
+              "guia": "guiadecrash.win",
+              "ancora": "#originais",
+              "rotulo": "Originais Galaxsys",
+              "slug": "galaxsys-original-12540"
+            },
+            {
+              "nome": "Ao vivo",
+              "texto": "Jogos com apresentador em tempo real, transmitidos em vídeo. Exemplos são Big Bass Crash e High Flyer, da Pragmatic Play Live.",
+              "guia": "guiapragmatic.win",
+              "ancora": "#live",
+              "rotulo": "Pragmatic Live",
+              "slug": "oficial-pragmatic-live-pp-2201"
+            },
+            {
+              "nome": "Mesa",
+              "texto": "Clássicos como o Baccarat: regras fixas, poucas decisões e rodadas curtas. Bom para quem prefere jogos de cartas.",
+              "slug": "oficial-ezugi-ezugi-100"
+            }
+          ]
+        },
+        "pix": {
+          "titulo": "Pix: depósito e saque",
+          "olho": "O dinheiro entra e sai pelo mesmo caminho: a sua conta bancária, no seu CPF.",
+          "deposito": [
+            "Na carteira, escolha Depositar, digite o valor e gere o código Pix.",
+            "Pague pelo app do banco com o código copia e cola ou o QR Code. O saldo costuma cair em segundos.",
+            "O valor mínimo aparece na própria tela de depósito."
+          ],
+          "saque": [
+            "Em Sacar, informe o valor. O Pix vai para uma chave no mesmo CPF da conta.",
+            "Antes do primeiro saque a plataforma pode pedir confirmação de identidade.",
+            "Saldo de bônus pode ter regras de liberação. Leia as condições da campanha antes de aceitar."
+          ],
+          "citacao": "Pix no mesmo CPF da conta: é isso que deixa o saque simples e seguro."
+        },
+        "responsavel": {
+          "titulo": "Jogo responsável",
+          "olho": "Jogar é entretenimento pago. Estas regras valem para qualquer jogo, em qualquer dia.",
+          "itens": [
+            {
+              "t": "Limite antes de abrir o jogo",
+              "p": "Escolha quanto pode gastar na sessão e pare quando chegar nele, ganhando ou perdendo."
+            },
+            {
+              "t": "Pausas programadas",
+              "p": "Faça intervalos curtos a cada meia hora. Rodadas rápidas passam a sensação de que o tempo voou."
+            },
+            {
+              "t": "Nada de correr atrás do prejuízo",
+              "p": "Aumentar a aposta para recuperar uma perda costuma aumentar a perda."
+            },
+            {
+              "t": "Ferramentas da plataforma",
+              "p": "Use limites de depósito, pausa e autoexclusão na página de Jogo Responsável. Se o jogo deixou de ser diversão, peça ajuda."
+            }
+          ]
+        },
+        "vitrine": {
+          "titulo": "Os mais jogados",
+          "olho": "Os 8 jogos com guia próprio, escolhidos pela redação entre os favoritos da plataforma."
+        },
+        "faq": [
+          {
+            "q": "Preciso baixar algum aplicativo?",
+            "a": "Não. Todos os jogos abrem no navegador do celular ou do computador. Se quiser, adicione o site à tela de início."
+          },
+          {
+            "q": "Quanto tempo leva para o depósito via Pix cair?",
+            "a": "Normalmente segundos depois do pagamento no app do banco. Se demorar, confira o comprovante e fale com a Central de Ajuda."
+          },
+          {
+            "q": "O que é RTP?",
+            "a": "É o retorno teórico ao jogador, calculado pelo provedor em milhões de rodadas. Não é previsão nem garantia para a sua sessão."
+          },
+          {
+            "q": "Qual categoria é melhor para começar?",
+            "a": "Não existe uma melhor. Slots simples de 3x3, como os da série Fortune, são fáceis de entender; crash e mines exigem decidir a hora de parar."
+          },
+          {
+            "q": "Posso jogar o Aviator na plataforma?",
+            "a": "Não. O Aviator da Spribe não está disponível. Existem outros jogos com avião e multiplicador, explicados no guia guiaaviator.win."
+          }
+        ]
+      }
+    },
+    {
+      "dominio": "guiaslots.win",
+      "chave": "guiaslots",
+      "estilo": "dashboard",
+      "nome": "Guia Slots",
+      "titulo": "Guia Slots: ranking e comparador de slots com RTP teórico",
+      "descricao": "Compare slots da PG Soft, Pragmatic Play, Reel Kingdom e EGT por RTP teórico, volatilidade e ganho máximo. Tabela ordenável, filtros e glossário.",
+      "cores": {
+        "fundo": "#141619",
+        "painel": "#1D2024",
+        "painel2": "#252930",
+        "texto": "#E8EAED",
+        "suave": "#A0A6AE",
+        "acento": "#C6F432",
+        "linha": "#2F343B"
+      },
+      "hero_img": null,
+      "og": {
+        "fundo": [
+          "#141619",
+          "#2A3320"
+        ],
+        "capas": [
+          "pragmatic-vs20olympgate",
+          "pgsoft-126",
+          "pragmatic-vs20fruitsw",
+          "pragmatic-vs20sugarrush"
+        ],
+        "personagem": null
+      },
+      "podio": [
+        "pgsoft-126",
+        "pragmatic-vs20olympgate",
+        "pragmatic-vs20fruitsw"
+      ],
+      "jogos": [
+        "pgsoft-126",
+        "pragmatic-vs20olympgate",
+        "pragmatic-vs20fruitsw",
+        "pgsoft-1543462",
+        "pgsoft-98",
+        "pgsoft-1695365",
+        "pragmatic-vs10txbigbass",
+        "pragmatic-vs20sugarrush",
+        "pragmatic-vs20starlight",
+        "pragmatic-vs20doghouse",
+        "pragmatic-vs20fruitparty",
+        "pragmatic-vs25wolfgold",
+        "pragmatic-vs10bbbonanza",
+        "pragmatic-vs20olympx",
+        "pragmatic-vs20fruitswx",
+        "pragmatic-vswaysrhino",
+        "pragmatic-vs40wildwest",
+        "pgsoft-68",
+        "pgsoft-65",
+        "pgsoft-74",
+        "pgsoft-104",
+        "pgsoft-89",
+        "pgsoft-57",
+        "pgsoft-87",
+        "pgsoft-42",
+        "reelkingdom-vs10bbbbrnd",
+        "reelkingdom-vswayspizza",
+        "egt-eg-40superfruits",
+        "egt-eg-20charmingjoker",
+        "egt-eg-40luckykingbelllink"
+      ],
+      "textos": {
+        "rotulo": "Painel de slots",
+        "titulo_hero": "Compare antes de girar",
+        "sub_hero": "RTP teórico, volatilidade e ganho máximo dos slots da plataforma, lado a lado. Ordene a tabela, filtre por provedor e abra o jogo direto.",
+        "podio_titulo": "Pódio do guia",
+        "podio_sub": "Os três slots em destaque no guia. Toque para abrir o jogo.",
+        "tabela_titulo": "Top slots",
+        "tabela_sub": "Toque no nome da coluna para ordenar. Quando o dado oficial não é conhecido, a tabela mostra \"ver no jogo\": confira na tela de regras.",
+        "cards_titulo": "Todos os slots do ranking",
+        "glossario_titulo": "Glossário de slots",
+        "glossario": [
+          {
+            "t": "RTP",
+            "p": "Retorno teórico ao jogador. Um RTP de 96,5% significa que, em milhões de rodadas, o jogo devolve em média 96,5% do que foi apostado. Não vale para uma sessão curta."
+          },
+          {
+            "t": "Volatilidade",
+            "p": "Mostra como os prêmios se distribuem. Alta: prêmios mais raros e maiores. Baixa: prêmios mais frequentes e menores."
+          },
+          {
+            "t": "Scatter",
+            "p": "Símbolo de dispersão que paga em qualquer posição e costuma ativar os giros grátis."
+          },
+          {
+            "t": "Wild",
+            "p": "Curinga que substitui outros símbolos para completar combinações. Alguns ficam presos ou se expandem."
+          },
+          {
+            "t": "Tumble",
+            "p": "Também chamado de cascata: os símbolos premiados somem e novos caem no lugar, podendo gerar vários prêmios no mesmo giro."
+          },
+          {
+            "t": "Megaways",
+            "p": "Mecânica em que cada rolo muda de altura a cada giro, criando milhares de formas de ganhar."
+          },
+          {
+            "t": "Compra de bônus",
+            "p": "Opção de pagar um valor fixo para entrar direto nos giros grátis. Custa um múltiplo da aposta e não garante retorno."
+          }
+        ]
+      }
+    },
+    {
+      "dominio": "guiafortune.win",
+      "chave": "guiafortune",
+      "estilo": "festival",
+      "nome": "Guia Fortune",
+      "titulo": "Guia Fortune: a saga do Tigrinho, Tourinho, Coelhinho e Dragãozinho",
+      "descricao": "A série Fortune da PG Soft contada capítulo por capítulo: Tiger, Ox, Rabbit, Mouse, Dragon e Snake. Quiz para escolher o seu e comparativo lado a lado.",
+      "cores": {
+        "fundo": "#7A1414",
+        "fundo2": "#4E0B0B",
+        "ouro": "#F2C14E",
+        "ouro2": "#FFE39A",
+        "texto": "#FFF4DC",
+        "suave": "#F1D4B0"
+      },
+      "hero_img": "assets/img/fortune-dragon-hero-600.webp",
+      "og": {
+        "fundo": [
+          "#8E1B1B",
+          "#3E0808"
+        ],
+        "capas": [
+          "pgsoft-98",
+          "pgsoft-1543462"
+        ],
+        "personagem": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon3.webp"
+      },
+      "jogos": [
+        "pgsoft-126",
+        "pgsoft-98",
+        "pgsoft-1543462",
+        "pgsoft-68",
+        "pgsoft-1695365",
+        "pgsoft-1879752"
+      ],
+      "capitulos": [
+        {
+          "slug": "pgsoft-126",
+          "animal": "Tigre",
+          "personagem": "Tigrinho",
+          "arte": "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/tigrinho.webp",
+          "arte_fundo_claro": true,
+          "titulo": "O Tigrinho abre o festival",
+          "texto": "Foi ele quem começou a série. Grade de 3x3, cinco linhas e um tigre curinga que, a qualquer giro, pode ativar o recurso Fortune Tiger: os rolos giram de novo com um único símbolo em jogo até sair um prêmio. Se os nove espaços forem preenchidos, o prêmio do giro vale dez vezes mais.",
+          "recurso": "Recurso Fortune Tiger e multiplicador x10"
+        },
+        {
+          "slug": "pgsoft-98",
+          "animal": "Touro",
+          "personagem": "Tourinho",
+          "arte": "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-ox/fortune-ox-7.webp",
+          "titulo": "O Tourinho trava os rolos",
+          "texto": "O touro dourado trouxe a grade 3-4-3 com dez linhas. No recurso Fortune Ox, os rolos laterais travam um símbolo e o rolo do meio gira de novo até formar um prêmio. Com a grade cheia de símbolos pagantes, o giro também vale dez vezes mais.",
+          "recurso": "Rolo do meio gira de novo e multiplicador x10"
+        },
+        {
+          "slug": "pgsoft-1543462",
+          "animal": "Coelho",
+          "personagem": "Coelhinho",
+          "arte": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character3.webp",
+          "titulo": "O Coelhinho espalha prêmios",
+          "texto": "No Fortune Rabbit, símbolos de prêmio trazem valores próprios e, com cinco ou mais na tela, todos são pagos de uma vez. No recurso especial, são oito giros em que só aparecem símbolos de prêmio e espaços vazios. É o maior teto da família: 5.000x.",
+          "recurso": "Símbolos de prêmio e 8 giros especiais"
+        },
+        {
+          "slug": "pgsoft-68",
+          "animal": "Rato",
+          "personagem": "Ratinho",
+          "arte": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-mouse/fortune-mouse5.webp",
+          "titulo": "O Ratinho enche o rolo do meio",
+          "texto": "O Fortune Mouse mantém a grade enxuta de 3x3 com cinco linhas. No recurso Fortune Mouse, o rolo do meio fica todo de curingas e os rolos laterais giram de novo até sair um prêmio. É o mais tranquilo da série, com teto de 1.000x.",
+          "recurso": "Rolo do meio com curingas"
+        },
+        {
+          "slug": "pgsoft-1695365",
+          "animal": "Dragão",
+          "personagem": "Dragãozinho",
+          "arte": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon3.webp",
+          "titulo": "O Dragãozinho traz multiplicadores",
+          "texto": "O dragão voltou à grade de 3x3 e trouxe giros especiais com multiplicadores de 2x, 5x ou 10x. Os multiplicadores que caem se somam e valem sobre o prêmio total do giro. Teto de 2.500x.",
+          "recurso": "Multiplicadores 2x, 5x e 10x somados"
+        },
+        {
+          "slug": "pgsoft-1879752",
+          "animal": "Serpente",
+          "personagem": "Serpente",
+          "arte": null,
+          "titulo": "A Serpente fecha o desfile",
+          "texto": "O capítulo mais recente da série chegou com a Serpente. Como é um lançamento novo, a grade, o recurso especial e os números oficiais estão na tela de regras dentro do jogo: confira antes da primeira rodada.",
+          "recurso": "Confira na tela de regras"
+        }
+      ],
+      "quiz": {
+        "titulo": "Qual Fortune combina com você?",
+        "sub": "Três perguntas rápidas. No fim, uma sugestão de jogo para começar.",
+        "perguntas": [
+          {
+            "q": "Como você gosta da rodada?",
+            "op": [
+              {
+                "t": "Rápida e direta, poucos símbolos",
+                "p": {
+                  "pgsoft-126": 2,
+                  "pgsoft-68": 2
+                }
+              },
+              {
+                "t": "Com mais linhas na tela",
+                "p": {
+                  "pgsoft-98": 2,
+                  "pgsoft-1543462": 2
+                }
+              },
+              {
+                "t": "Com multiplicadores que se somam",
+                "p": {
+                  "pgsoft-1695365": 3
+                }
+              }
+            ]
+          },
+          {
+            "q": "Qual teto de ganho te anima mais?",
+            "op": [
+              {
+                "t": "Moderado, sem muita emoção",
+                "p": {
+                  "pgsoft-68": 2,
+                  "pgsoft-98": 1
+                }
+              },
+              {
+                "t": "Equilibrado",
+                "p": {
+                  "pgsoft-126": 2,
+                  "pgsoft-1695365": 1
+                }
+              },
+              {
+                "t": "O mais alto da série",
+                "p": {
+                  "pgsoft-1543462": 3
+                }
+              }
+            ]
+          },
+          {
+            "q": "Qual personagem você levaria para casa?",
+            "op": [
+              {
+                "t": "Tigre",
+                "p": {
+                  "pgsoft-126": 3
+                }
+              },
+              {
+                "t": "Touro",
+                "p": {
+                  "pgsoft-98": 3
+                }
+              },
+              {
+                "t": "Coelho",
+                "p": {
+                  "pgsoft-1543462": 3
+                }
+              },
+              {
+                "t": "Rato",
+                "p": {
+                  "pgsoft-68": 3
+                }
+              },
+              {
+                "t": "Dragão",
+                "p": {
+                  "pgsoft-1695365": 3
+                }
+              },
+              {
+                "t": "Serpente",
+                "p": {
+                  "pgsoft-1879752": 4
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "outros": [
+        "pgsoft-65",
+        "pgsoft-74",
+        "pgsoft-104",
+        "pgsoft-89",
+        "pgsoft-57",
+        "pgsoft-87",
+        "pgsoft-1682240",
+        "pgsoft-42"
+      ],
+      "outros_textos": {
+        "pgsoft-65": "Peças de mahjong em cascata e multiplicador que sobe a cada cascata.",
+        "pgsoft-74": "A continuação do Mahjong Ways, com mais formas de ganhar.",
+        "pgsoft-104": "Bandidos do velho oeste e símbolos dourados que viram curingas.",
+        "pgsoft-89": "O gato da sorte japonês e símbolos com moldura dourada que viram curingas.",
+        "pgsoft-57": "Grade de clusters em que os dragões ativam recursos conforme as cascatas.",
+        "pgsoft-87": "Templo asteca com cascatas e multiplicador crescente.",
+        "pgsoft-1682240": "Lançamento recente da PG Soft com tema de dinheiro. Recursos na tela de regras.",
+        "pgsoft-42": "Tema indiano com Ganesha e giros grátis."
+      },
+      "textos": {
+        "selo": "PG Soft · série Fortune",
+        "titulo_hero": "O festival da sorte",
+        "sub_hero": "Seis animais, seis jogos e um mesmo jeito simples de jogar. Role a página e conheça a série Fortune capítulo por capítulo.",
+        "comparativo_titulo": "Lado a lado",
+        "comparativo_sub": "Dados informados pela PG Soft. Onde o número oficial não é conhecido, a tabela indica para conferir no jogo.",
+        "outros_titulo": "Outros PG Soft populares"
+      }
+    },
+    {
+      "dominio": "guiapragmatic.win",
+      "chave": "guiapragmatic",
+      "estilo": "bento",
+      "nome": "Guia Pragmatic",
+      "titulo": "Guia Pragmatic: Gates of Olympus, Sweet Bonanza, Big Bass e mais",
+      "descricao": "Os slots da Pragmatic Play por mecânica: scatter pays, Megaways, Big Bass, Hold and Spin e clássicos. Versões 1000, Super Scatter e Pragmatic Live.",
+      "cores": {
+        "fundo": "#F6F2E8",
+        "tinta": "#111111",
+        "roxo": "#7B3FF2",
+        "amarelo": "#FFD23F",
+        "ciano": "#2EE6D6",
+        "rosa": "#FF7AB6",
+        "branco": "#FFFFFF"
+      },
+      "hero_img": "assets/personagens/04-oficiais-provedores/pragmatic-gates-of-olympus/pose-1.webp",
+      "og": {
+        "fundo": [
+          "#7B3FF2",
+          "#2EE6D6"
+        ],
+        "capas": [
+          "pragmatic-vs20fruitsw",
+          "pragmatic-vs10txbigbass"
+        ],
+        "personagem": "assets/personagens/04-oficiais-provedores/pragmatic-gates-of-olympus/pose-1.webp"
+      },
+      "bento_grandes": [
+        "pragmatic-vs20olympgate",
+        "pragmatic-vs20fruitsw",
+        "pragmatic-vs10txbigbass"
+      ],
+      "bento_menores": [
+        "pragmatic-vs20sugarrush",
+        "pragmatic-vs20starlight",
+        "pragmatic-vs20doghouse",
+        "pragmatic-vs20fruitparty",
+        "pragmatic-vs25wolfgold"
+      ],
+      "bento_textos": {
+        "pragmatic-vs20olympgate": "Zeus derruba multiplicadores de 2x a 500x numa grade 6x5 que paga em qualquer lugar.",
+        "pragmatic-vs20fruitsw": "Doces em cascata e, nos giros grátis, bombas multiplicadoras de 2x a 100x.",
+        "pragmatic-vs10txbigbass": "O pescador coleta os peixes de dinheiro nos giros grátis. Mais pescadores, mais multiplicador."
+      },
+      "abas": [
+        {
+          "nome": "Scatter pays",
+          "texto": "Grade grande, pagamento em qualquer lugar ou por clusters, com cascatas (tumble).",
+          "slugs": [
+            "pragmatic-vs20olympgate",
+            "pragmatic-vs20fruitsw",
+            "pragmatic-vs20sugarrush",
+            "pragmatic-vs20starlight",
+            "pragmatic-vs20fruitparty",
+            "pragmatic-vs20olympx",
+            "pragmatic-vs20fruitswx"
+          ]
+        },
+        {
+          "nome": "Megaways",
+          "texto": "Rolos que mudam de altura a cada giro e milhares de formas de ganhar.",
+          "slugs": [
+            "pragmatic-vswaysbbb",
+            "pragmatic-vswaysbufking",
+            "pragmatic-vswaysmadame",
+            "pragmatic-vswaysrhino"
+          ]
+        },
+        {
+          "nome": "Big Bass",
+          "texto": "A série do pescador: peixes com valores em dinheiro coletados nos giros grátis.",
+          "slugs": [
+            "pragmatic-vs10txbigbass",
+            "pragmatic-vs10bbbonanza",
+            "pragmatic-vs10bxmasbnza",
+            "pragmatic-vswaysbbb",
+            "reelkingdom-vs10bbbbrnd"
+          ]
+        },
+        {
+          "nome": "Hold and Spin",
+          "texto": "Símbolos de dinheiro ficam presos e os outros espaços giram de novo.",
+          "slugs": [
+            "pragmatic-vs20hburnhs",
+            "pragmatic-vs25wolfgold",
+            "pragmatic-vs25mustang"
+          ]
+        },
+        {
+          "nome": "Clássicos",
+          "texto": "Frutas, joias e linhas fixas: regras curtas e rodadas rápidas.",
+          "slugs": [
+            "pragmatic-vs20doghouse",
+            "pragmatic-vs100firehot",
+            "pragmatic-vs100sh",
+            "pragmatic-vs5joker",
+            "pragmatic-vs5aztecgems",
+            "pragmatic-vs5triple8gold",
+            "pragmatic-vs1masterjoker"
+          ]
+        }
+      ],
+      "versoes": [
+        {
+          "nome": "Versões 1000",
+          "texto": "Mesma grade e mesma mecânica do original, com multiplicadores que podem chegar a 1.000x e um teto de ganho maior. Em troca, a volatilidade sobe: os prêmios grandes ficam mais raros.",
+          "slugs": [
+            "pragmatic-vs20olympx",
+            "pragmatic-vs20fruitswx"
+          ]
+        },
+        {
+          "nome": "Super Scatter",
+          "texto": "Variação recente em que entra um símbolo de dispersão especial, o Super Scatter, que muda a forma de ativar o recurso e pode pagar prêmios diretos. Os valores exatos estão na tela de regras de cada jogo.",
+          "slugs": [
+            "pragmatic-vs20olympgold",
+            "pragmatic-vs20swbonsup"
+          ]
+        }
+      ],
+      "live": [
+        {
+          "slug": "oficial-pragmatic-live-pp-1320",
+          "nome": "Big Bass Crash Live",
+          "texto": "O pescador da série Big Bass num jogo de crash ao vivo: o multiplicador sobe e você decide a hora de retirar."
+        },
+        {
+          "slug": "oficial-pragmatic-live-pp-2201",
+          "nome": "High Flyer",
+          "texto": "Um avião decola e o multiplicador acompanha a subida. Retire antes de ele sumir da tela."
+        }
+      ],
+      "textos": {
+        "selo": "Pragmatic Play",
+        "titulo_hero": "Pragmatic sem enrolação",
+        "sub_hero": "Os slots mais jogados da Pragmatic Play, separados por mecânica. Escolha o seu estilo e abra o jogo direto.",
+        "abas_titulo": "Por mecânica",
+        "versoes_titulo": "1000 e Super Scatter: o que muda",
+        "live_titulo": "Pragmatic Live"
+      },
+      "hero_largura": 520
+    },
+    {
+      "dominio": "guiadecrash.win",
+      "chave": "guiadecrash",
+      "estilo": "hud",
+      "nome": "Guia de Crash",
+      "titulo": "Guia de Crash: simulador educativo, multiplicador e saque automático",
+      "descricao": "Entenda os jogos de crash com um simulador sem dinheiro: multiplicador, saque automático e RTP. Lista dos crash games e dos originais Galaxsys da plataforma.",
+      "cores": {
+        "fundo": "#050807",
+        "painel": "#0B1210",
+        "verde": "#39FF88",
+        "ciano": "#22E4FF",
+        "texto": "#D7FFE9",
+        "suave": "#86B9A0",
+        "alerta": "#FF4D6D"
+      },
+      "hero_img": "assets/personagens/04-oficiais-provedores/pragmatic-spaceman/pose1.webp",
+      "og": {
+        "fundo": [
+          "#050807",
+          "#06302A"
+        ],
+        "capas": [
+          "crash-games-jetx",
+          "crash-games-aviatrix",
+          "galaxsys-original-12540"
+        ],
+        "personagem": "assets/personagens/04-oficiais-provedores/pragmatic-spaceman/pose1.webp"
+      },
+      "crash": [
+        {
+          "slug": "crash-games-spaceman"
+        },
+        {
+          "slug": "crash-games-jetx"
+        },
+        {
+          "slug": "crash-games-jetx3"
+        },
+        {
+          "slug": "crash-games-aviatrix"
+        },
+        {
+          "slug": "crash-games-bigbass"
+        },
+        {
+          "slug": "oficial-pragmatic-live-pp-1320",
+          "nome": "Big Bass Crash Live"
+        },
+        {
+          "slug": "oficial-pragmatic-live-pp-2201"
+        },
+        {
+          "slug": "galaxsys-original-12493"
+        },
+        {
+          "slug": "galaxsys-original-12516"
+        },
+        {
+          "slug": "galaxsys-original-12526"
+        },
+        {
+          "slug": "galaxsys-original-12501"
+        },
+        {
+          "slug": "habanero-sgcoyotecrash"
+        },
+        {
+          "slug": "habanero-sgflyinghigh"
+        }
+      ],
+      "originais": [
+        {
+          "slug": "galaxsys-original-12540",
+          "texto": "Grade 5x5 com 1 a 24 minas. Cada casa segura sobe o multiplicador."
+        },
+        {
+          "slug": "galaxsys-original-12518",
+          "texto": "Outra versão do jogo de minas: escolha o risco e abra casa por casa."
+        },
+        {
+          "slug": "galaxsys-original-12528",
+          "texto": "A bolinha desce pelos pinos e cai num multiplicador na base."
+        },
+        {
+          "slug": "galaxsys-original-12494",
+          "texto": "A próxima carta é maior ou menor? Cada acerto sobe o multiplicador."
+        },
+        {
+          "slug": "galaxsys-original-12500",
+          "texto": "Escolha o canto do chute e torça para o goleiro errar."
+        }
+      ],
+      "textos": {
+        "selo": "SIMULADOR EDUCATIVO",
+        "titulo_hero": "Entenda o crash antes de jogar",
+        "sub_hero": "O multiplicador sobe até cair num ponto aleatório. Retire antes da queda. Teste a mecânica aqui, sem dinheiro.",
+        "aviso_sim": "Simulação para entender a mecânica, sem valor real. Não há aposta, saldo nem prêmio. Os resultados daqui não indicam nada sobre os jogos reais.",
+        "explica": [
+          {
+            "t": "MULTIPLICADOR",
+            "p": "Começa em 1,00x e sobe enquanto a rodada dura. O ponto de queda é sorteado no início de cada rodada e ninguém sabe qual é: nem você, nem o histórico das rodadas anteriores."
+          },
+          {
+            "t": "SAQUE AUTOMÁTICO",
+            "p": "Você define um multiplicador alvo, por exemplo 1,50x. Se a rodada chegar lá, a retirada acontece sozinha. Ajuda a manter um plano e evita decidir no impulso."
+          },
+          {
+            "t": "RTP",
+            "p": "É o retorno teórico em milhões de rodadas, informado pelo provedor. Nos crash games ele fica perto de 96% a 97%, ou seja, a casa sempre tem vantagem no longo prazo."
+          }
+        ],
+        "lista_titulo": "Crash games na plataforma",
+        "originais_titulo": "Originais Galaxsys"
+      },
+      "hero_largura": 300
+    },
+    {
+      "dominio": "guiaaviator.win",
+      "chave": "guiaaviator",
+      "estilo": "app",
+      "nome": "Guia Aviator",
+      "titulo": "Jogos de aviãozinho: como funciona o estilo Aviator e onde jogar",
+      "descricao": "O que é o estilo Aviator, como funciona o multiplicador do avião e quais jogos de voo estão disponíveis na plataforma: Aviatrix, High Flyer, Flying High, JETX e mais.",
+      "cores": {
+        "ceu": "#2F7BF5",
+        "ceu2": "#7FB6FF",
+        "sol": "#FF9A4D",
+        "sol2": "#FFC36B",
+        "cartao": "#FFFFFF",
+        "tinta": "#10233F",
+        "suave": "#4A5C78",
+        "cta": "#FF5A1F"
+      },
+      "hero_img": null,
+      "og": {
+        "fundo": [
+          "#2F7BF5",
+          "#FF9A4D"
+        ],
+        "capas": [
+          "crash-games-aviatrix",
+          "oficial-pragmatic-live-pp-2201",
+          "habanero-sgflyinghigh"
+        ],
+        "personagem": null
+      },
+      "jogos": [
+        {
+          "slug": "crash-games-aviatrix",
+          "texto": "Avião personalizável e multiplicador subindo na tela. O mais parecido com o estilo."
+        },
+        {
+          "slug": "oficial-pragmatic-live-pp-2201",
+          "texto": "Versão ao vivo da Pragmatic Play: o avião decola e você retira na hora certa."
+        },
+        {
+          "slug": "habanero-sgflyinghigh",
+          "texto": "Crash da Habanero com tema de voo e rodadas curtas."
+        },
+        {
+          "slug": "crash-games-jetx",
+          "texto": "Um jato no lugar do avião, com o multiplicador subindo junto com a altitude."
+        },
+        {
+          "slug": "crash-games-jetx3",
+          "texto": "Três jatos voando ao mesmo tempo, cada um com seu multiplicador."
+        },
+        {
+          "slug": "crash-games-spaceman",
+          "texto": "O astronauta sobe em vez do avião. Permite retirar metade e deixar o resto voando."
+        }
+      ],
+      "textos": {
+        "selo": "Jogos de aviãozinho",
+        "titulo_hero": "Decole, acompanhe, retire",
+        "sub_hero": "O estilo Aviator explicado em 1 minuto e os jogos de voo que você encontra na plataforma.",
+        "aviso_aviator": "O Aviator, da Spribe, não está disponível na plataforma. Os jogos abaixo são de outros provedores e funcionam de forma parecida.",
+        "oque_titulo": "O que é o estilo Aviator",
+        "oque": [
+          "Um avião decola e um multiplicador começa a subir: 1,20x, 1,50x, 2x e assim por diante.",
+          "Em algum ponto aleatório o avião voa para longe e a rodada acaba.",
+          "Você ganha se retirar antes desse momento. Se esperar demais, perde a aposta da rodada."
+        ],
+        "passos_titulo": "Em 3 passos",
+        "passos": [
+          {
+            "icone": "conta",
+            "t": "Crie sua conta",
+            "p": "Nome, CPF e e-mail. Leva cerca de um minuto."
+          },
+          {
+            "icone": "pix",
+            "t": "Deposite via Pix",
+            "p": "Pague pelo app do banco e o saldo cai em segundos."
+          },
+          {
+            "icone": "aviao",
+            "t": "Escolha um jogo de voo",
+            "p": "Defina o valor da rodada e, se quiser, um saque automático."
+          }
+        ],
+        "jogos_titulo": "Jogos de voo disponíveis",
+        "faq": [
+          {
+            "q": "Posso jogar o Aviator aqui?",
+            "a": "Não. O Aviator da Spribe não está na plataforma. Aviatrix, High Flyer, Flying High, JETX, JETX3 e SpaceMan seguem a mesma ideia de multiplicador."
+          },
+          {
+            "q": "Existe um jeito certo de saber quando o avião vai cair?",
+            "a": "Não. O ponto de queda é aleatório em cada rodada. Usar um saque automático ajuda a seguir um plano, mas não muda o resultado."
+          },
+          {
+            "q": "Funciona no celular?",
+            "a": "Sim. Todos os jogos abrem no navegador, sem baixar aplicativo."
+          }
+        ]
+      }
+    }
+  ]
+}
