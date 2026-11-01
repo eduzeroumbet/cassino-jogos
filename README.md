@@ -41,3 +41,35 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
   apontam para os domínios dos outros jogos. Links para a plataforma e UTMs não mudam.
 - Publicação: `tools/publicar_dominios.sh` envia cada pasta para o repositório `eduzeroumbet/lp-<jogo>` (branch main, raiz).
   Os passos prévios (comprar domínio, DNS, criar o repositório, ativar o Pages) estão no cabeçalho do script. `DRY_RUN=1` só lista o que faria.
+
+## Sites por domínio (.win)
+
+Seis sites de uma página, um por domínio .win, cada um com layout, tipografia e paleta próprios (diferentes entre si e das landings):
+
+| Domínio | Chave | Estilo | Conteúdo |
+| --- | --- | --- | --- |
+| guiadecassino.win | guiadecassino | Revista editorial: papel creme, títulos serifados, colunas de jornal | Capa com sumário, como começar, as 5 categorias (liga os outros guias), Pix, jogo responsável, os 8 mais jogados, FAQ. É o hub. |
+| guiaslots.win | guiaslots | Dashboard grafite e verde-limão | KPIs, pódio animado, tabela ordenável com filtro por provedor (30 slots), cards com capa, glossário. |
+| guiafortune.win | guiafortune | Festival oriental: vermelho laca, dourado, lanternas em CSS | Um capítulo por jogo da série Fortune com personagem, quiz de 3 perguntas, comparativo lado a lado, outros PG Soft. |
+| guiapragmatic.win | guiapragmatic | Bento grid neo-brutalista: bordas pretas, sombras duras, roxo, amarelo e ciano | Bento de destaques (Zeus no Gates of Olympus), abas por mecânica, versões 1000 e Super Scatter, Pragmatic Live. |
+| guiadecrash.win | guiadecrash | HUD/terminal: preto, verde e ciano neon, monoespaçada | Simulador educativo em canvas (sem dinheiro), multiplicador, saque automático, RTP, crash games e originais Galaxsys. |
+| guiaaviator.win | guiaaviator | App de conversão: céu azul ao pôr do sol, avião em SVG, cartões arredondados | O que é o estilo Aviator (o Aviator da Spribe não está na plataforma), 3 passos, jogos de voo disponíveis, FAQ, CTA fixo no celular. |
+
+- Conteúdo: `data/sites.json`. `comum` (caminhos da plataforma, textos do rodapé, nomes de provedores e correções de nomes do catálogo),
+  `fichas` (RTP teórico, volatilidade, ganho máximo e grade por slug; só dados oficiais conhecidos, o resto aparece como "ver no jogo")
+  e `sites` (domínio, chave, estilo, título, descrição, cores, imagem do hero, OG, listas de jogos por slug e textos de cada seção).
+  Os jogos vêm de `data/catalogo-plataforma.json` (url, nome, capa); itens com `disponivel=false` (Aviator da Spribe) fazem o build parar se forem usados.
+- Gerar: `python3 build_sites.py` grava `dist-sites/<dominio>/` com `index.html` (CSS e JS inline), `404.html` que volta para `/`, `CNAME`,
+  `robots.txt` (Disallow), `.nojekyll` e só os assets usados. A pasta é versionada.
+- Imagens (Pillow, só quando faltam; `python3 build_sites.py --imagens` refaz todas): capas leves `assets/catalogo-web/<slug>-240.webp`
+  (240x280, q72), OG 1200x630 sem texto em `assets/sites/<chave>/og.jpg` e artes reduzidas de personagens em `assets/sites/<chave>/`.
+- Todos os sites: noindex, canonical e og:url em `https://<dominio>/`, GA4 com evento `lp_cta` nos cliques com `data-cta`, rodapé com
+  Termos, Privacidade, Jogo Responsável, Central de Ajuda, selo 18+ e a barra "Outros guias" com os outros 5 domínios.
+  Links para a plataforma levam `utm_source=site&utm_medium=landing&utm_campaign=<chave>&utm_content=<posição>`.
+- Verificador (no fim do build): todo asset citado existe na pasta do site, nenhum travessão no HTML, nenhum link para `oficial-spribe`,
+  todo link para cassino.b7bet7.bet com `utm_campaign`, toda `<img>` com width, height e alt, imagem pré-carregada do hero abaixo de 120 KB
+  e `index.html` abaixo de 150 KB.
+- `build.py` não copia `assets/catalogo`, `assets/catalogo-web` nem `assets/sites` para `docs/` (são só dos sites .win).
+- Publicação: `tools/publicar_sites.sh` envia cada pasta para o repositório `eduzeroumbet/site-<chave>` (branch main, raiz), no mesmo
+  esquema de `tools/publicar_dominios.sh`. Os passos prévios (DNS na Cloudflare, criar o repositório, ativar o Pages) estão no cabeçalho.
+  `DRY_RUN=1` só lista o que faria; `tools/publicar_sites.sh guiaslots` publica só os sites informados.
