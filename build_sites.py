@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Gera os 6 sites dos domínios .win a partir de data/sites.json, data/catalogo-plataforma.json e data/games.json.
+"""Gera os 6 sites dos domínios .win a partir de data/sites.json, data/catalogo-plataforma.json, data/acervo.json e data/games.json.
 Cada site tem layout, tipografia e paleta próprios e é gravado em dist-sites/<dominio>/ (index.html, 404.html, CNAME,
-robots.txt, .nojekyll e só os assets usados).
-Imagens (Pillow, só quando faltam ou com --imagens): capas leves assets/catalogo-web/<slug>-240.webp,
-OG 1200x630 sem texto e artes reduzidas em assets/sites/<chave>/.
+robots.txt, .nojekyll, og.jpg e só os assets usados).
+Imagens (Pillow, só quando faltam ou com --imagens): cards com as artes oficiais do acervo em assets/sites/cards/<chave do acervo>.webp,
+capas leves do catálogo assets/catalogo-web/<slug>-240.webp (jogos sem arte no acervo), colagens do topo, OG 1200x630
+e artes reduzidas em assets/sites/<chave>/.
 Uso: python3 build_sites.py [--imagens]"""
 import json, os, re, sys, shutil, html
 from build import webp_size
@@ -14,6 +15,8 @@ S = GJ['site']; GAMES = {g['slug']: g for g in GJ['games']}
 SJ = json.load(open(os.path.join(R, 'data/sites.json'), encoding='utf-8'))
 C = SJ['comum']; F = SJ['fichas']; SITES = SJ['sites']; P = C['paths']
 CAT = {i['slug']: i for i in json.load(open(os.path.join(R, 'data/catalogo-plataforma.json'), encoding='utf-8'))}
+ACJ = json.load(open(os.path.join(R, 'data/acervo.json'), encoding='utf-8'))['jogos']  # chave do acervo -> bg, banner, square, logo, char
+ACV = C.get('acervo', {})  # slug do catálogo -> chave do acervo
 BASE = S['base'].rstrip('/'); BRAND = S['brand']; GA = S.get('ga4', '')
 OUT = os.path.join(R, 'dist-sites')
 FORCE = '--imagens' in sys.argv
@@ -32,7 +35,8 @@ def nome(slug):
     return C['nomes'].get(slug, CAT[slug]['name'])
 
 def prov(slug):
-    return C['provedores'].get(CAT[slug]['provider_code'], CAT[slug]['prov'])
+    """Provedor real do jogo. "Crash Games" do catálogo é categoria, por isso provedores_jogo vem antes."""
+    return C.get('provedores_jogo', {}).get(slug) or C['provedores'].get(CAT[slug]['provider_code'], CAT[slug]['prov'])
 
 def ficha(slug):
     return F.get(slug, {})
@@ -87,8 +91,84 @@ def reduzida(src, chave, nome_arq, w):
 def hexrgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
 
+def acv(key, tipo):
+    """Caminho do maior arquivo de um tipo (bg, banner, square, logo, char) do acervo, ou None."""
+    l = ACJ.get(key, {}).get(tipo) or []
+    return os.path.join(R, l[0]['arquivo']) if l else None
+
+def sem_faixa(im):
+    """Corta a faixa preta de rodapé (aviso legal e endereço do provedor) que vem nos banners 1200x630."""
+    from PIL import ImageStat
+    g = im.convert('L'); w, h = g.size; run = max(4, h * 3 // 100)
+    esc = [ImageStat.Stat(g.crop((0, y, w, y + 1))).mean[0] < 25 for y in range(h)]
+    corte = next((y for y in range(h // 2, h - run) if all(esc[y:y + run])), None)
+    return im.crop((0, 0, w, corte)) if corte else im
+
+def compor(key, W, H, tipo=None):
+    """Arte oficial do acervo em W x H (RGBA). Com personagem ou logo: fundo do jogo + personagem embaixo + logo PT.
+    Sem eles: banner/quadrado/fundo cobrindo a área; se a proporção for muito diferente, a arte inteira sobre ela mesma desfocada.
+    tipo força bg, banner ou square (ex.: o banner de sweet-bonanza no acervo é o do Super Scatter)."""
+    Image, _, ImageFilter = pil()
+    from PIL import ImageOps
+    abre = lambda p: Image.open(p).convert('RGBA')
+    char, logo, bg = acv(key, 'char'), acv(key, 'logo'), acv(key, 'bg')
+    if bg and (char or logo) and tipo in (None, 'bg'):
+        im = ImageOps.fit(abre(bg), (W, H), Image.LANCZOS)
+        if char:
+            c = abre(char); h = round(H * (.86 if logo else .94))
+            wc = round(c.width * h / c.height)
+            if wc > W * .96: wc = round(W * .96); h = round(c.height * wc / c.width)
+            im.alpha_composite(c.resize((wc, h), Image.LANCZOS), ((W - wc) // 2, H - h))
+        if logo:
+            lg = abre(logo); lw = round(W * (.78 if char else .84)); lh = round(lg.height * lw / lg.width)
+            mh = H * (.36 if char else .62)
+            if lh > mh: lh = round(mh); lw = round(lg.width * lh / lg.height)
+            y = H - lh - round(H * .03) if char else (H - lh) // 2
+            if char:  # sombra suave para o logo descolar do personagem
+                sh = Image.new('RGBA', (W, H), (0, 0, 0, 0)); sh.paste((0, 0, 0, 150), ((W - lw) // 2, y + 6), lg.resize((lw, lh)).split()[3])
+                im = Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(10)))
+            im.alpha_composite(lg.resize((lw, lh), Image.LANCZOS), ((W - lw) // 2, y))
+        return im
+    ordem = (tipo,) if tipo else ('square', 'banner', 'bg') if W / H < 1.25 else ('banner', 'square', 'bg')
+    t = next(t for t in ordem if acv(key, t))
+    src = abre(acv(key, t))
+    if t == 'banner': src = sem_faixa(src)
+    rs = src.width / src.height
+    foco = C.get('acervo_foco', {}).get(key)  # posição horizontal do logo nos banners largos (0 a 1)
+    if abs(W / H - rs) / rs <= .45 or (foco is not None and W / H < 1.25):
+        return ImageOps.fit(src, (W, H), Image.LANCZOS, centering=(.5 if foco is None else foco, .42))
+    im = ImageOps.fit(src, (W, H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(16))
+    im = Image.alpha_composite(im, Image.new('RGBA', (W, H), (0, 0, 0, 70)))
+    k = min(W / src.width, H / src.height); a = src.resize((round(src.width * k), round(src.height * k)), Image.LANCZOS)
+    im.alpha_composite(a, ((W - a.width) // 2, (H - a.height) // 2))
+    return im
+
+def card_acervo(key):
+    """Card 360x420 (mesma proporção das capas do catálogo) montado com a arte oficial do acervo."""
+    p = f'assets/sites/cards/{key}.webp'
+    if FORCE or not os.path.exists(os.path.join(R, p)):
+        os.makedirs(os.path.join(R, 'assets/sites/cards'), exist_ok=True)
+        compor(key, 360, 420).convert('RGB').save(os.path.join(R, p), 'WEBP', quality=74, method=6)
+    return p
+
+def colagem(s):
+    """Arte do topo do site (hero_arte em sites.json): células com artes oficiais do acervo sobre um fundo liso."""
+    h = s['hero_arte']; p = f'assets/sites/{s["chave"]}/{h["arquivo"]}.webp'
+    if FORCE or not os.path.exists(os.path.join(R, p)):
+        Image, _, _ = pil()
+        im = Image.new('RGBA', (h['w'], h['h']), hexrgb(h['fundo']) + (255,))
+        for key, x, y, w, hh, *tipo in h['celulas']:
+            im.alpha_composite(compor(key, w, hh, *tipo), (x, y))
+        os.makedirs(os.path.dirname(os.path.join(R, p)), exist_ok=True)
+        im.convert('RGB').save(os.path.join(R, p), 'WEBP', quality=76, method=6)
+    return p
+
+def hero(s, cls='', lazy=False):
+    """<img> da arte do topo: carrega antes (fetchpriority alto), com width/height reais e alt descritivo."""
+    return arte(colagem(s), s['hero_arte']['alt'], cls=cls, lazy=lazy, eager=not lazy)
+
 def og_image(s):
-    """OG 1200x630 sem texto: fundo em degradê da paleta, capas inclinadas e, se houver, o personagem."""
+    """OG 1200x630 sem texto: fundo em degradê da paleta, artes oficiais inclinadas e, se houver, o personagem do acervo."""
     p = f'assets/sites/{s["chave"]}/og.jpg'
     if not FORCE and os.path.exists(os.path.join(R, p)): return p
     Image, ImageDraw, ImageFilter = pil()
@@ -101,32 +181,46 @@ def og_image(s):
     for x, y, r in ((160, 90, 220), (1040, 560, 300), (700, 40, 120)):
         d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 255, 255, 22))
     im = Image.alpha_composite(im, deco)
-    capas = o['capas']; char = o.get('personagem')
-    area = 700 if char else W
-    step = (area - 120) / max(1, len(capas))
-    for i, slug in enumerate(capas):
-        c = Image.open(os.path.join(R, CAT[slug]['thumb'])).convert('RGBA').resize((330, 385), Image.LANCZOS)
+    artes = o['artes']; char = acv(o['personagem'], 'char') if o.get('personagem') else None
+    area = 760 if char else W
+    step = (area - 120) / max(1, len(artes))
+    cw = min(330, int(step + 60))
+    for i, key in enumerate(artes):
+        c = compor(key, cw, round(cw * 7 / 6))
         m = Image.new('L', c.size, 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, c.width - 1, c.height - 1), 26, fill=255)
         c.putalpha(m)
         ang = (-7, 5, -3, 6)[i % 4]
         c = c.rotate(ang, expand=True, resample=Image.BICUBIC)
-        x = int(60 + i * step + (step - c.width) / 2) if len(capas) > 1 else int((area - c.width) / 2)
+        x = int(60 + i * step + (step - c.width) / 2) if len(artes) > 1 else int((area - c.width) / 2)
         y = (H - c.height) // 2 + (18 if i % 2 else -18)
         sh = Image.new('RGBA', (W, H), (0, 0, 0, 0)); sh.paste((0, 0, 0, 120), (x + 12, y + 18), c.split()[3])
         im = Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(14)))
         im.alpha_composite(c, (x, y))
     if char:
-        ch = Image.open(os.path.join(R, char)).convert('RGBA')
+        ch = Image.open(char).convert('RGBA')
         h = 600; ch = ch.resize((round(ch.width * h / ch.height), h), Image.LANCZOS)
-        im.alpha_composite(ch, (min(W - ch.width - 20, 720), H - h))
+        if ch.width > 440: ch = ch.resize((440, round(ch.height * 440 / ch.width)), Image.LANCZOS)
+        im.alpha_composite(ch, (min(W - ch.width - 20, 740), H - ch.height))
     os.makedirs(os.path.dirname(os.path.join(R, p)), exist_ok=True)
     im.convert('RGB').save(os.path.join(R, p), 'JPEG', quality=84, optimize=True, progressive=True)
     return p
 
+def card(slug):
+    """Imagem do card: arte oficial do acervo, senão a capa do catálogo; None se o jogo não tiver nenhuma imagem."""
+    k = ACV.get(slug)
+    if k in ACJ: return card_acervo(k)
+    th = CAT[slug].get('thumb')
+    return web(slug) if th and os.path.exists(os.path.join(R, th)) else None
+
 def capa(slug, alt=None, lazy=True, cls='', eager=False):
+    """Card do jogo. Sem imagem nenhuma, vira um bloco em degradê com o nome do jogo (CSS), nunca um espaço em branco."""
+    p = card(slug)
+    a = alt or (f'Arte oficial do jogo {nome(slug)}' if ACV.get(slug) in ACJ else f'Capa do jogo {nome(slug)}')
+    if not p:
+        return f'<span class="ph{" " + cls if cls else ""}" role="img" aria-label="{e(a)}"><b>{e(nome(slug))}</b></span>'
+    w, h = webp_size(os.path.join(R, p))
     pr = ' fetchpriority="high"' if eager else (' loading="lazy"' if lazy else '')
-    c = f' class="{cls}"' if cls else ''
-    return f'<img{c} src="{web(slug)}" width="240" height="280" alt="{e(alt if alt is not None else "Capa do " + nome(slug))}" decoding="async"{pr}>'
+    return f'<img class="ci{" " + cls if cls else ""}" src="{p}" width="{w}" height="{h}" alt="{e(a)}" decoding="async"{pr}>'
 
 def arte(p, alt, cls='', lazy=True, eager=False):
     w, h = webp_size(os.path.join(R, p))
@@ -136,8 +230,12 @@ def arte(p, alt, cls='', lazy=True, eager=False):
 
 # ---------------------------------------------------------------- peças comuns
 
-BASECSS = ('*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}body{margin:0}'
-           'img{max-width:100%;height:auto;display:block}a{color:inherit}h1,h2,h3,p,ol,ul,dl,dd,figure{margin:0}button{font:inherit;cursor:pointer}'
+SANS = 'system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif'
+BASECSS = ('*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;font-family:' + SANS + '}body{margin:0}'
+           'img{max-width:100%;height:auto;display:block}a{color:inherit}h1,h2,h3,p,ol,ul,dl,dd,figure{margin:0}button,input,select,textarea{font:inherit;cursor:pointer}'
+           # card sem imagem (ou imagem que falhou): degradê com o nome do jogo, nunca um espaço em branco
+           '.ci{background:linear-gradient(135deg,#3B2A78,#C2386F);color:#fff;font:700 13px/1.3 ' + SANS + ';text-align:center}'
+           '.ph{display:grid;place-items:center;width:100%;aspect-ratio:240/280;padding:12px;text-align:center;background:linear-gradient(135deg,#3B2A78,#C2386F);color:#fff;font:800 16px/1.2 ' + SANS + '}'
            '.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}'
            '.skip{position:absolute;left:12px;top:-60px;z-index:99;padding:10px 14px;background:#000;color:#fff;border-radius:8px}.skip:focus{top:12px}'
            ':focus-visible{outline:3px solid var(--focus,#1A73E8);outline-offset:3px}'
@@ -149,9 +247,25 @@ FOOTCSS = ('.ft{padding:40px 20px calc(40px + env(safe-area-inset-bottom));font-
            '.ft-rg{display:flex;gap:14px;align-items:flex-start}.ft-18{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;border:2px solid currentColor;font-weight:800}'
            '.ft-docs{display:flex;flex-wrap:wrap;gap:6px 18px}.ft-docs a{min-height:40px;display:inline-flex;align-items:center}.ft-nota{opacity:.85}')
 
+# barra fixa de cadastro no rodapé, só no celular; o body ganha padding-bottom para ela não cobrir o fim da página.
+# Com JS, fica escondida enquanto a arte do topo ([data-topo]) está na tela, para não cobrir a ilustração.
+DOCKCSS = ('.dock{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:40;display:flex;gap:10px;align-items:center;'
+           'padding:8px 8px 8px 16px;border-radius:16px;background:var(--dk,#111);color:var(--dkt,#fff);box-shadow:0 10px 30px rgba(0,0,0,.35);'
+           'font-family:' + SANS + ';transition:transform .25s,opacity .25s,visibility .25s}'
+           '.dock span{flex:1;min-width:0;font-size:13px;line-height:1.2}.dock b{display:block;font-size:15px}'
+           '.dock a{flex:none;display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 18px;border-radius:12px;'
+           'background:var(--dkb,#fff);color:var(--dkbt,#111);font-weight:800;text-decoration:none}'
+           '.dock.off{transform:translateY(150%);opacity:0;visibility:hidden}'
+           '@media (max-width:719px){body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}}@media (min-width:720px){.dock{display:none}}')
+
+def dock(s):
+    return (f'<div class="dock"><span>{e(s["dock"])}<b>Cadastro em 1 minuto</b></span>'
+            f'<a data-cta="dock_cadastro" href="{utm(s, P["register"], "dock")}">Criar conta</a></div>')
+
 def head(s, css, preload=None, extra=''):
     url = f'https://{s["dominio"]}/'
-    og = f'{url}{og_image(s)}'
+    og_image(s)  # gerada em assets/sites/<chave>/og.jpg e copiada para a raiz do site
+    og = f'{url}og.jpg'
     cor = list(s['cores'].values())[0]
     fav = (cor if s['estilo'] != 'revista' else s['cores']['acento']).replace('#', '%23')
     pl = f'<link rel="preload" as="image" href="{preload}" fetchpriority="high">' if preload else ''
@@ -162,9 +276,10 @@ def head(s, css, preload=None, extra=''):
 <meta property="og:type" content="website"><meta property="og:locale" content="pt_BR"><meta property="og:site_name" content="{e(s['nome'])}">
 <meta property="og:title" content="{e(s['titulo'])}"><meta property="og:description" content="{e(s['descricao'])}">
 <meta property="og:image" content="{og}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="{url}">
-<meta name="twitter:card" content="summary_large_image">{pl}{extra}
+<meta property="og:image:alt" content="{e(s['hero_arte']['alt'])}">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{og}">{pl}{extra}
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='{fav}'/%3E%3C/svg%3E">
-<style>{BASECSS}{FOOTCSS}{css}</style></head>'''
+<style>{BASECSS}{FOOTCSS}{DOCKCSS}{css}</style></head>'''
 
 def footer(s):
     k = s['chave']; r = C['rodape']
@@ -189,6 +304,8 @@ def script(js=''):
             'w.gtag("js",new Date());w.gtag("config",GA,{page_title:d.title});var t=d.createElement("script");t.async=true;'
             't.src="https://www.googletagmanager.com/gtag/js?id="+GA;d.head.appendChild(t)}'
             '["scroll","touchstart","pointerdown","keydown"].forEach(function(n){w.addEventListener(n,ga,{once:true,passive:true})});setTimeout(ga,3500)}'
+            'var dk=d.querySelector(".dock"),tp=d.querySelector("[data-topo]");if(dk&&tp&&"IntersectionObserver" in w){dk.classList.add("off");'
+            'new IntersectionObserver(function(es){dk.classList.toggle("off",es[0].isIntersecting)}).observe(tp)}'
             + js + '})();</script>')
 
 def body(s):
@@ -205,13 +322,17 @@ ARROW = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="cur
 # ================================================================ 1. revista editorial (guiadecassino)
 
 CSS_REVISTA = '''
-:root{--bg:#F4EDE0;--paper:#FBF7EF;--ink:#1D1A16;--soft:#5C554B;--acc:#A3231B;--rule:#CFC4B0;--focus:#A3231B}
-body{background:var(--bg);color:var(--ink);font:18px/1.65 Georgia,"Times New Roman",Times,serif}
+:root{--bg:#F4EDE0;--paper:#FBF7EF;--ink:#1D1A16;--soft:#5C554B;--acc:#A3231B;--rule:#CFC4B0;--focus:#A3231B;--dk:#1D1A16;--dkt:#FBF7EF;--dkb:#A3231B;--dkbt:#fff}
+body{background:var(--bg);color:var(--ink);font:18px/1.65 Georgia,Charter,"Iowan Old Style","Noto Serif",Cambria,system-ui,-apple-system,"Segoe UI",sans-serif}
 .w{max-width:1180px;margin:0 auto;padding:0 20px}
 .lbl{font:700 12px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.14em;text-transform:uppercase}
 .mast{border-bottom:1px solid var(--ink)}
-.mast-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule);color:var(--soft)}
-.mast-top a{color:var(--ink);text-decoration:none;border:1px solid var(--ink);padding:8px 14px;min-height:40px;display:inline-flex;align-items:center}
+.mast-top{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--ink)}
+.mast-top .w{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:8px;padding-bottom:8px;color:var(--soft)}
+.mast-top .ed{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mast-top .acts{display:flex;gap:8px;flex:none}
+.mast-top a{color:var(--ink);text-decoration:none;border:1px solid var(--ink);padding:0 14px;min-height:44px;display:inline-flex;align-items:center}
+.mast-top a.cta{background:var(--acc);border-color:var(--acc);color:#fff}
 .mast-top .hide-m{display:none}
 .mast-name{font-size:clamp(46px,13vw,136px);line-height:.95;font-weight:700;letter-spacing:-.03em;text-align:center;padding:14px 0 10px;border-bottom:4px double var(--ink)}
 .mast-name a{text-decoration:none}
@@ -274,7 +395,7 @@ h1{font-size:clamp(34px,8.4vw,64px);line-height:1.04;letter-spacing:-.02em;margi
 .vit .no{color:var(--acc);font-weight:700}
 .vit b{display:block;font-size:20px;line-height:1.2;margin:2px 0}
 .vit small{display:block;color:var(--soft);font-size:15px;line-height:1.4}
-.vit .go{display:inline-block;margin-top:6px;font:700 14px system-ui,sans-serif;color:var(--acc);text-decoration:underline}
+.vit .go{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;font:700 14px system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--acc);text-decoration:underline}
 .faq details{border-bottom:1px solid var(--rule)}
 .faq summary{cursor:pointer;list-style:none;padding:18px 40px 18px 0;font-size:21px;position:relative}
 .faq summary::-webkit-details-marker{display:none}
@@ -305,7 +426,7 @@ ROMANOS = ['I', 'II', 'III', 'IV', 'V']
 
 def site_revista(s):
     t = s['textos']; k = s['chave']
-    hero = s['hero_img']
+    hero_p = colagem(s)
     sec = [('comecar', t['comecar']['titulo'], 'Primeiros passos'), ('categorias', t['categorias']['titulo'], 'Guia de categorias'),
            ('pix', t['pix']['titulo'], 'Dinheiro'), ('responsavel', t['responsavel']['titulo'], 'Cuidado'),
            ('maisjogados', t['vitrine']['titulo'], 'Vitrine'), ('faq', 'Perguntas frequentes', 'Dúvidas')]
@@ -339,14 +460,15 @@ def site_revista(s):
                 f'<span class="go">Jogar no {e(BRAND)}</span></span></a>')
     chamadas = ''.join(f'<li>{e(x)}</li>' for x in [t['secao_capa']] + t['chamadas_capa'])
     reg = utm(s, P['register'], 'capa')
-    return head(s, css_min(CSS_REVISTA), hero) + body(s) + f'''
+    return head(s, css_min(CSS_REVISTA), hero_p) + body(s) + f'''
+<div class="mast-top lbl"><div class="w"><span class="ed">{e(t['edicao'])}<span class="hide-m"> · Leitura de 6 minutos</span></span>
+<span class="acts"><a data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">Entrar</a><a class="cta" data-cta="topo_cadastro" href="{utm(s, P['register'], 'topo')}">Criar conta</a></span></div></div>
 <header class="mast"><div class="w">
-<div class="mast-top lbl"><span>{e(t['edicao'])}</span><span class="hide-m">Leitura de 6 minutos</span><a data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">Entrar</a></div>
 <p class="mast-name"><a href="/">{e(s['nome'])}</a></p>
 <nav class="mast-nav lbl" aria-label="Seções">{nav}</nav></div></header>
 <main id="conteudo"><div class="w">
 <section class="capa" aria-labelledby="manchete">
-<figure class="cover"><img src="{hero}" width="600" height="804" alt="Ilustração de capa: tigre dourado num palco com lanternas vermelhas" fetchpriority="high" decoding="async">
+<figure class="cover" data-topo>{hero(s)}
 <div class="cover-top" aria-hidden="true"><span class="lbl">{e(t['edicao'])}</span><b>{e(s['nome'])}</b></div>
 <ul class="cover-lines">{chamadas}</ul></figure>
 <div><p class="kick lbl">{e(t['secao_capa'])}</p><h1 id="manchete">{e(t['manchete'])}</h1><p class="dek">{e(t['linha_fina'])}</p>
@@ -375,6 +497,7 @@ def site_revista(s):
 <section class="assine"><h2>Pronto para o primeiro giro?</h2><p>Cadastro rápido, Pix na hora e jogos no navegador.</p>
 <a class="btn" data-cta="final_cadastro" href="{utm(s, P['register'], 'final')}">Criar conta grátis {ARROW}</a><a class="btn btn-l" data-cta="final_entrar" href="{utm(s, P['login'], 'final_entrar')}">Já tenho conta</a></section>
 </div></main>
+{dock(s)}
 {footer(s)}
 {script()}
 </body></html>'''
@@ -382,7 +505,7 @@ def site_revista(s):
 # ================================================================ 2. ranking / dashboard (guiaslots)
 
 CSS_DASH = '''
-:root{--bg:#141619;--p:#1D2024;--p2:#252930;--tx:#E8EAED;--mu:#A0A6AE;--ac:#C6F432;--ln:#2F343B;--focus:#C6F432}
+:root{--bg:#141619;--p:#1D2024;--p2:#252930;--tx:#E8EAED;--mu:#A0A6AE;--ac:#C6F432;--ln:#2F343B;--focus:#C6F432;--dk:#252930;--dkt:#E8EAED;--dkb:#C6F432;--dkbt:#111}
 body{background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
 .w{max-width:1280px;margin:0 auto;padding:0 16px}
 .bar{position:sticky;top:0;z-index:10;background:rgba(20,22,25,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--ln)}
@@ -394,13 +517,15 @@ body{background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,
 .b{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;font-weight:700;text-decoration:none;border:1px solid var(--ln)}
 .b-ac{background:var(--ac);color:#111;border-color:var(--ac)}
 .b-ac:hover{filter:brightness(1.08)}
-.hide-m{display:none}
 .tag{display:inline-flex;gap:8px;align-items:center;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ac)}
 .tag::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ac);box-shadow:0 0 0 4px rgba(198,244,50,.18)}
-.hero{padding:28px 0 18px}
+.hero{padding:28px 0 18px;display:grid;gap:18px}
 h1{font-size:clamp(34px,8vw,60px);line-height:1.02;letter-spacing:-.03em;margin:10px 0}
 .hero p.sub{color:var(--mu);max-width:44em}
-.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0}
+.hb{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.hart{border:1px solid var(--ln);border-radius:16px;overflow:hidden;background:var(--p)}
+.hart img{width:100%}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .kpi{background:var(--p);border:1px solid var(--ln);border-radius:14px;padding:14px}
 .kpi small{display:block;color:var(--mu);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
 .kpi b{display:block;font-size:30px;line-height:1.15;margin-top:4px}
@@ -437,7 +562,7 @@ td.n{text-align:right}th.n{text-align:right}
 td .nd{color:var(--mu);font-size:13px}
 tr:hover td{background:rgba(255,255,255,.03)}
 td:first-child{position:sticky;left:0;background:var(--p);font-weight:700}
-td a{color:var(--ac);font-weight:700}
+td a{color:var(--ac);font-weight:700;display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px}
 .vol{display:inline-flex;gap:3px;margin-right:6px;vertical-align:middle}.vol i{width:6px;height:12px;border-radius:2px;background:var(--ln)}.vol i.f{background:var(--ac)}
 .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .cd{background:var(--p2);border:1px solid var(--ln);border-radius:12px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column}
@@ -454,7 +579,27 @@ td a{color:var(--ac);font-weight:700}
 .fin p{color:var(--mu);margin:6px 0 16px}
 .ft{border-top:1px solid var(--ln);color:var(--mu)}
 .ft a{color:var(--tx)}.ft strong{color:var(--tx)}.ft-18{color:var(--ac)}
-@media (min-width:720px){.kpis{grid-template-columns:repeat(4,1fr)}.cards{grid-template-columns:repeat(4,1fr)}.glo{grid-template-columns:repeat(2,1fr)}.hide-m{display:inline-flex}}
+@media (max-width:639px){
+.bar .b{padding:0 12px}.logo{font-size:16px}
+.tw{overflow:visible;border:0;border-radius:0}
+table,thead,tbody{display:block;min-width:0}
+thead tr{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+th{position:static;background:none;padding:0;border:0;white-space:nowrap}
+th:last-child{display:none}
+th button{min-height:40px;padding:0 12px;border:1px solid var(--ln);border-radius:999px;background:var(--p2);color:var(--tx);text-transform:none;letter-spacing:0;font-size:13px}
+tbody tr{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px;background:var(--p2);border:1px solid var(--ln);border-radius:12px;padding:12px;margin-bottom:10px}
+tbody tr:hover td{background:none}
+td,td.n{display:block;padding:0;border:0;white-space:normal;text-align:left;position:static;background:none}
+td::before{content:attr(data-l);display:block;font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}
+td:first-child{grid-column:1/-1;font-size:18px;position:static;background:none}
+td:nth-child(2){grid-column:1/-1}
+td:first-child::before,td:last-child::before{display:none}
+td:last-child{grid-column:1/-1}
+td:last-child a{display:flex;min-height:44px;border-radius:10px;background:var(--ac);color:#111;text-decoration:none}
+td:last-child a::after{content:"";position:absolute;inset:0;border-radius:12px}
+}
+@media (min-width:720px){.kpis{grid-template-columns:repeat(4,1fr)}.cards{grid-template-columns:repeat(4,1fr)}.glo{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:960px){.hero{grid-template-columns:1.1fr .9fr;align-items:center}.kpis{grid-column:1/-1}}
 @media (min-width:1100px){.cards{grid-template-columns:repeat(6,1fr)}.glo{grid-template-columns:repeat(4,1fr)}}
 '''
 
@@ -491,34 +636,35 @@ def site_dash(s):
     hs = {1: '120px', 2: '86px', 3: '62px'}
     for pos in (2, 1, 3):
         slug = s['podio'][pos - 1]
-        pod += (f'<a class="pd pd-{pos}" data-cta="podio_{pos}" href="{play(s, slug, "podio_" + str(pos))}">{capa(slug, lazy=False, eager=pos == 1)}'
+        pod += (f'<a class="pd pd-{pos}" data-cta="podio_{pos}" href="{play(s, slug, "podio_" + str(pos))}">{capa(slug, lazy=False)}'
                 f'<b>{e(nome(slug))}</b><small>{e(prov(slug))}{" · RTP teórico " + rtp(slug) if rtp(slug) else ""}</small>'
                 f'<span class="blk" style="--h:{hs[pos]}">{pos}º</span></a>')
     chips = '<button class="chip" type="button" aria-pressed="true" data-f="">Todos</button>' + ''.join(
         f'<button class="chip" type="button" aria-pressed="false" data-f="{e(p)}">{e(p)}</button>' for p in provs)
-    nd = '<span class="nd">ver no jogo</span>'
+    nd = '<span class="nd" title="Dado oficial não conhecido: consulte no jogo">n/d</span>'
     trs = ''
     for i, slug in enumerate(js):
         f = ficha(slug); v = f.get('vol')
         vb = (f'<span class="vol" aria-hidden="true">{"".join("<i class=f></i>" if j < VOL[v] else "<i></i>" for j in range(3))}</span>{v}' if v else nd)
-        trs += (f'<tr data-p="{e(prov(slug))}"><td data-v="{e(nome(slug))}">{e(nome(slug))}</td><td data-v="{e(prov(slug))}">{e(prov(slug))}</td>'
-                f'<td class="n" data-v="{f.get("rtp", "")}">{rtp(slug) or nd}</td><td data-v="{VOL.get(v, "") if v else ""}">{vb}</td>'
-                f'<td class="n" data-v="{f.get("max", "")}">{maxw(slug) or nd}</td>'
+        trs += (f'<tr data-p="{e(prov(slug))}"><td data-v="{e(nome(slug))}">{e(nome(slug))}</td><td data-l="Provedor" data-v="{e(prov(slug))}">{e(prov(slug))}</td>'
+                f'<td class="n" data-l="RTP teórico" data-v="{f.get("rtp", "")}">{rtp(slug) or nd}</td><td data-l="Volatilidade" data-v="{VOL.get(v, "") if v else ""}">{vb}</td>'
+                f'<td class="n" data-l="Ganho máximo" data-v="{f.get("max", "")}">{maxw(slug) or nd}</td>'
                 f'<td><a data-cta="tabela_{i + 1}" href="{play(s, slug, "tabela_" + slug)}">Jogar<span class="sr"> {e(nome(slug))}</span></a></td></tr>')
     cols = [('Nome', 't'), ('Provedor', 't'), ('RTP teórico', 'n'), ('Volatilidade', 'n'), ('Ganho máximo', 'n')]
     ths = ''.join(f'<th scope="col" data-k="{i}" data-t="{tp}" aria-sort="none"{" class=n" if tp == "n" and i != 3 else ""}><button type="button">{c}</button></th>'
                   for i, (c, tp) in enumerate(cols)) + '<th scope="col"><span class="sr">Abrir jogo</span></th>'
-    cards = ''.join(f'<a class="cd" data-p="{e(prov(slug))}" data-cta="card_{i + 1}" href="{play(s, slug, "card_" + slug)}">{capa(slug, alt="")}'
+    cards = ''.join(f'<a class="cd" data-p="{e(prov(slug))}" data-cta="card_{i + 1}" href="{play(s, slug, "card_" + slug)}">{capa(slug)}'
                     f'<span>{e(nome(slug))}<small>{e(prov(slug))}{" · " + rtp(slug) if rtp(slug) else ""}</small></span></a>' for i, slug in enumerate(js))
     glo = ''.join(f'<article class="gl"><h3>{e(g["t"])}</h3><p>{e(g["p"])}</p></article>' for g in t['glossario'])
-    return head(s, css_min(CSS_DASH), web(s['podio'][0])) + body(s) + f'''
+    return head(s, css_min(CSS_DASH), colagem(s)) + body(s) + f'''
 <header class="bar"><div class="w"><a class="logo" href="/"><i></i>guiaslots<span>.win</span></a>
-<div class="acts"><a class="b" data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">Entrar</a><a class="b b-ac hide-m" data-cta="topo_cadastro" href="{utm(s, P['register'], 'topo')}">Criar conta</a></div></div></header>
+<div class="acts"><a class="b" data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">Entrar</a><a class="b b-ac" data-cta="topo_cadastro" href="{utm(s, P['register'], 'topo')}">Criar conta</a></div></div></header>
 <main id="conteudo"><div class="w">
-<section class="hero"><p class="tag">{e(t['rotulo'])}</p><h1>{e(t['titulo_hero'])}</h1><p class="sub">{e(t['sub_hero'])}</p>
-<div class="kpis">{kpis}</div>
-<a class="b b-ac" data-cta="hero_cadastro" href="{utm(s, P['register'], 'hero')}">Criar conta e jogar {ARROW}</a>
-<a class="b" data-cta="hero_slots" href="{utm(s, P['slots'], 'hero_slots')}">Todos os slots da plataforma</a></section>
+<section class="hero"><div><p class="tag">{e(t['rotulo'])}</p><h1>{e(t['titulo_hero'])}</h1><p class="sub">{e(t['sub_hero'])}</p>
+<p class="hb"><a class="b b-ac" data-cta="hero_cadastro" href="{utm(s, P['register'], 'hero')}">Criar conta e jogar {ARROW}</a>
+<a class="b" data-cta="hero_slots" href="{utm(s, P['slots'], 'hero_slots')}">Todos os slots da plataforma</a></p></div>
+<figure class="hart" data-topo>{hero(s)}</figure>
+<div class="kpis">{kpis}</div></section>
 <section class="pan" aria-labelledby="pod-h"><div class="pan-h"><div><h2 id="pod-h">{e(t['podio_titulo'])}</h2><p>{e(t['podio_sub'])}</p></div></div><div class="pod">{pod}</div></section>
 <section class="pan" id="ranking" aria-labelledby="rk-h"><div class="pan-h"><div><h2 id="rk-h">{e(t['tabela_titulo'])}</h2><p>{e(t['tabela_sub'])}</p></div><span class="cnt" id="cnt" aria-live="polite">{len(js)} slots</span></div>
 <div class="chips" role="group" aria-label="Filtrar por provedor">{chips}</div>
@@ -529,6 +675,7 @@ def site_dash(s):
 <section class="fin"><h2>Escolheu o seu?</h2><p>Crie a conta, deposite via Pix e abra o slot direto no navegador.</p>
 <a class="b b-ac" data-cta="final_cadastro" href="{utm(s, P['register'], 'final')}">Criar conta grátis {ARROW}</a></section>
 </div></main>
+{dock(s)}
 {footer(s)}
 {script(JS_DASH)}
 </body></html>'''
@@ -536,17 +683,21 @@ def site_dash(s):
 # ================================================================ 3. festival oriental (guiafortune)
 
 CSS_FEST = '''
-:root{--bg:#7A1414;--bg2:#4E0B0B;--au:#F2C14E;--au2:#FFE39A;--tx:#FFF4DC;--mu:#F1D4B0;--focus:#FFE39A}
+:root{--bg:#7A1414;--bg2:#4E0B0B;--au:#F2C14E;--au2:#FFE39A;--tx:#FFF4DC;--mu:#F1D4B0;--focus:#FFE39A;--hh:64px;--dk:#2E0606;--dkt:#FFF4DC;--dkb:#F2C14E;--dkbt:#4E0B0B}
 body{background:var(--bg2);color:var(--tx);font:17px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
-.serif,h1,h2,h3{font-family:"Songti SC","STSong","Noto Serif",Georgia,serif;font-weight:700}
+.serif,h1,h2,h3{font-family:"Songti SC","STSong","Noto Serif",Georgia,system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:700}
 .pat{background:radial-gradient(circle at 50% 50%,rgba(242,193,78,.10) 0 18px,transparent 19px) 0 0/56px 56px,radial-gradient(circle at 50% 50%,transparent 0 26px,rgba(242,193,78,.07) 27px 28px,transparent 29px) 28px 28px/56px 56px,linear-gradient(var(--bg),var(--bg2))}
 .w{max-width:1120px;margin:0 auto;padding:0 20px}
-.top{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:14px 20px}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;letter-spacing:.04em}
-.seal{width:36px;height:36px;border-radius:8px;background:var(--au);color:var(--bg2);display:grid;place-items:center;font-family:Georgia,serif;font-size:20px;transform:rotate(-6deg)}
+.top{position:sticky;top:0;z-index:30;height:var(--hh);display:flex;justify-content:space-between;align-items:center;gap:10px;padding:0 16px;background:rgba(78,11,11,.94);backdrop-filter:blur(6px);border-bottom:1px solid rgba(242,193,78,.3)}
+.top .acts{display:flex;gap:8px}
+.top .bt{min-height:44px;padding:0 16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;letter-spacing:.04em;min-width:0}
+.seal{flex:none;width:36px;height:36px;border-radius:8px;background:var(--au);color:var(--bg2);display:grid;place-items:center;font-family:Georgia,"Noto Serif",system-ui,sans-serif;font-size:20px;transform:rotate(-6deg)}
 .bt{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;font-weight:800;text-decoration:none;background:linear-gradient(var(--au2),var(--au));color:#4E0B0B;box-shadow:0 6px 0 #9C6A12,0 10px 24px rgba(0,0,0,.35)}
 .bt:hover{filter:brightness(1.06)}
 .bt-o{background:none;color:var(--au2);box-shadow:none;border:2px solid var(--au)}
+.top .bt:not(.bt-o){box-shadow:0 3px 0 #9C6A12}
+@media (max-width:420px){.logo .nm{display:none}}
 .lant{position:absolute;left:0;right:0;top:0;height:0;z-index:2;pointer-events:none}
 .lant i{position:absolute;top:0;width:2px;height:var(--l);background:var(--au);left:var(--x);transform-origin:top center;animation:sway 4s ease-in-out infinite alternate;animation-delay:var(--d)}
 .lant i::after{content:"";position:absolute;left:-21px;bottom:-54px;width:44px;height:56px;border-radius:45%;background:radial-gradient(circle at 50% 40%,#FF8A4C,#C21E1E 70%);box-shadow:0 0 30px rgba(255,120,60,.55);border-top:5px solid var(--au);border-bottom:5px solid var(--au)}
@@ -558,13 +709,14 @@ body{background:var(--bg2);color:var(--tx);font:17px/1.6 system-ui,-apple-system
 h1{font-size:clamp(42px,11vw,92px);line-height:1;margin:14px 0 12px;color:var(--au2);text-shadow:0 4px 0 #8A1010}
 .hero .sub{max-width:36em;margin:0 auto 22px;color:var(--mu);font-size:19px}
 .ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
-.idx{display:flex;gap:8px;overflow-x:auto;padding:14px 20px;justify-content:flex-start;border-top:1px solid rgba(242,193,78,.3);border-bottom:1px solid rgba(242,193,78,.3);background:rgba(0,0,0,.18);position:sticky;top:0;z-index:5;backdrop-filter:blur(6px)}
+.idx{display:flex;gap:8px;overflow-x:auto;padding:12px 20px;justify-content:flex-start;border-top:1px solid rgba(242,193,78,.3);border-bottom:1px solid rgba(242,193,78,.3);background:rgba(46,6,6,.9);position:sticky;top:var(--hh);z-index:5;backdrop-filter:blur(6px)}
+.cap,.sec{scroll-margin-top:calc(var(--hh) + 70px)}
 .idx a{flex:none;text-decoration:none;padding:8px 14px;border-radius:999px;border:1px solid rgba(242,193,78,.5);font-size:14px;min-height:40px;display:inline-flex;align-items:center}
 .idx a:hover{background:var(--au);color:var(--bg2)}
 .cap{padding:64px 0;position:relative}
 .cap:nth-of-type(even){background:rgba(0,0,0,.16)}
 .cap .w{display:grid;gap:26px;align-items:center}
-.cap-n{position:absolute;right:12px;top:24px;font-family:Georgia,serif;font-size:clamp(90px,22vw,200px);line-height:1;color:rgba(242,193,78,.12);font-weight:700}
+.cap-n{position:absolute;right:12px;top:24px;font-family:Georgia,"Noto Serif",system-ui,sans-serif;font-size:clamp(90px,22vw,200px);line-height:1;color:rgba(242,193,78,.12);font-weight:700}
 .cap-k{color:var(--au);letter-spacing:.14em;text-transform:uppercase;font-size:13px;font-weight:700}
 .cap h2{font-size:clamp(32px,7vw,54px);line-height:1.05;margin:8px 0 14px;color:var(--au2)}
 .cap p.tx{color:var(--tx);max-width:36em}
@@ -576,13 +728,10 @@ h1{font-size:clamp(42px,11vw,92px);line-height:1;margin:14px 0 12px;color:var(--
 .art{position:relative;display:grid;place-items:center;min-height:300px}
 .art::before{content:"";position:absolute;width:86%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,227,154,.35),rgba(242,193,78,.08) 60%,transparent 70%)}
 .art img{position:relative;max-height:420px;width:auto;filter:drop-shadow(0 20px 30px rgba(0,0,0,.4))}
-.art .scroll{background:#FFF4DC;padding:14px;border-radius:18px;border:4px solid var(--au);box-shadow:0 20px 40px rgba(0,0,0,.35);transform:rotate(-2deg)}
-.art .scroll img{max-height:380px;filter:none;border-radius:8px}
 .art .cv{position:absolute;right:4%;bottom:0;width:104px;border-radius:12px;border:3px solid var(--au);box-shadow:0 10px 20px rgba(0,0,0,.4);transform:rotate(6deg)}
-.art.solo img{max-height:380px;border-radius:16px;border:4px solid var(--au)}
-.rv{opacity:1}
-.js .rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
-.js .rv.on{opacity:1;transform:none}
+.art.solo img{max-height:380px;width:auto;border-radius:16px;border:4px solid var(--au)}
+.rv-on{animation:rise .5s ease both}
+@keyframes rise{from{opacity:.25;transform:translateY(24px)}to{opacity:1;transform:none}}
 .sec{padding:64px 0}
 .sec h2{font-size:clamp(30px,6.4vw,48px);line-height:1.08;color:var(--au2);text-align:center}
 .sec .lead{text-align:center;color:var(--mu);max-width:40em;margin:10px auto 28px}
@@ -603,7 +752,7 @@ h1{font-size:clamp(42px,11vw,92px);line-height:1;margin:14px 0 12px;color:var(--
 .tw{position:relative;overflow-x:auto;border-radius:16px;border:2px solid rgba(242,193,78,.5)}
 table{border-collapse:collapse;width:100%;min-width:760px;background:rgba(0,0,0,.2)}
 th,td{padding:12px;border-bottom:1px solid rgba(242,193,78,.25);text-align:left;vertical-align:top;font-size:15px}
-thead th{color:var(--au2);font-family:"Songti SC","STSong",Georgia,serif;font-size:17px}
+thead th{color:var(--au2);font-family:"Songti SC","STSong","Noto Serif",Georgia,system-ui,sans-serif;font-size:17px}
 tbody th{color:var(--mu);font-weight:600;white-space:nowrap}
 td .nd{color:var(--mu);font-size:14px}
 .pg{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
@@ -622,9 +771,8 @@ td .nd{color:var(--mu);font-size:14px}
 '''
 
 JS_FEST = '''
-d.documentElement.classList.add("js");
-var rv=$$(".rv");if(RM||!("IntersectionObserver" in w))rv.forEach(function(x){x.classList.add("on")});
-else{var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add("on");io.unobserve(x.target)}})},{rootMargin:"0px 0px -12% 0px"});rv.forEach(function(x){io.observe(x)})}
+var rv=$$(".rv");if(!RM&&"IntersectionObserver" in w){var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add("rv-on");io.unobserve(x.target)}})},{rootMargin:"0px 0px 10% 0px"});
+  rv.forEach(function(x){if(x.getBoundingClientRect().top>w.innerHeight)io.observe(x)})}
 var qz=d.getElementById("qz");
 if(qz)qz.addEventListener("submit",function(x){x.preventDefault();var sc={},last=null,n=0;
   $$("input:checked",qz).forEach(function(i){n++;var p=JSON.parse(i.dataset.p);for(var k in p){sc[k]=(sc[k]||0)+p[k]}if(i.name==="q2")last=Object.keys(p)[0]});
@@ -638,22 +786,19 @@ CHN = ['壹', '貳', '參', '肆', '伍', '陸']
 
 def site_fest(s):
     t = s['textos']; k = s['chave']
-    caps_idx = ''.join(f'<a href="#cap-{c["slug"]}">{i + 1}. {e(c["animal"])}</a>' for i, c in enumerate(s['capitulos']))
+    caps_idx = ''.join(f'<a href="#cap-{c["slug"]}">{i + 1}. {e(nome(c["slug"]))}</a>' for i, c in enumerate(s['capitulos']))
     caps = ''
     for i, c in enumerate(s['capitulos']):
-        slug = c['slug']; f = ficha(slug)
-        def dd(v): return f'<dd>{e(v)}</dd>' if v else '<dd class="nd">ver no jogo</dd>'
+        slug = c['slug']; f = ficha(slug); key = ACV.get(slug)
+        def dd(v): return f'<dd>{e(v)}</dd>' if v else '<dd class="nd" title="Dado oficial não conhecido: consulte no jogo">n/d</dd>'
         grade = ' · '.join(x for x in (f.get('grade'), f.get('linhas')) if x)
         fx = (f'<dl class="fx"><div><dt>RTP teórico</dt>{dd(rtp(slug))}</div><div><dt>Ganho máximo</dt>{dd(maxw(slug))}</div>'
               f'<div><dt>Grade</dt>{dd(grade)}</div></dl>')
-        if c.get('arte'):
-            img = reduzida(c['arte'], k, slug, 420)
-            alt = f'{c["personagem"]}, personagem do {nome(slug)}'
-            if c.get('arte_fundo_claro'):
-                art = f'<div class="art"><div class="scroll">{arte(img, alt)}</div>{capa(slug, alt="", cls="cv")}</div>'
-            else:
-                art = f'<div class="art">{arte(img, alt)}{capa(slug, alt="", cls="cv")}</div>'
-        else:
+        char = acv(key, 'char') if key else None
+        if char:  # personagem oficial recortado do acervo + card do jogo
+            img = reduzida(char, k, f'{key}-personagem', 420)
+            art = f'<div class="art">{arte(img, f"Personagem oficial do {nome(slug)}")}{capa(slug, cls="cv")}</div>'
+        else:  # sem personagem no acervo: card com fundo e logo oficiais (Fortune Tiger) ou capa do catálogo
             art = f'<div class="art solo">{capa(slug)}</div>'
         caps += f'''<section class="cap" id="cap-{slug}" aria-labelledby="h-{slug}"><span class="cap-n" aria-hidden="true">{CHN[i]}</span><div class="w">
 <div class="rv"><p class="cap-k">Capítulo {i + 1} · {e(c['animal'])} · {e(nome(slug))}</p><h2 id="h-{slug}">{e(c['titulo'])}</h2><p class="tx">{e(c['texto'])}</p>{fx}
@@ -663,27 +808,27 @@ def site_fest(s):
     for n, p in enumerate(q['perguntas']):
         ops = ''.join(f'<label><input type="radio" name="q{n}" value="{j}" data-p="{e(json.dumps(o["p"]))}"><span>{e(o["t"])}</span></label>' for j, o in enumerate(p['op']))
         qs += f'<fieldset><legend>{n + 1}. {e(p["q"])}</legend><div class="ops">{ops}</div></fieldset>'
-    res = ''.join(f'<div class="res" data-s="{c["slug"]}" tabindex="-1" hidden>{capa(c["slug"], alt="")}<div><p class="cap-k">Seu Fortune é</p><h3>{e(nome(c["slug"]))}</h3>'
-                  f'<p>{e(c["recurso"])}. {e(c["personagem"])} é o seu parceiro de festival.</p>'
+    res = ''.join(f'<div class="res" data-s="{c["slug"]}" tabindex="-1" hidden>{capa(c["slug"])}<div><p class="cap-k">Seu Fortune é</p><h3>{e(nome(c["slug"]))}</h3>'
+                  f'<p>{e(c["recurso"])}.</p>'
                   f'<a class="bt" data-cta="quiz_{c["slug"]}" href="{play(s, c["slug"], "quiz_" + c["slug"])}">Jogar {e(nome(c["slug"]))} {ARROW}</a></div></div>'
                   for c in s['capitulos'])
-    nd = '<span class="nd">ver no jogo</span>'
+    nd = '<span class="nd" title="Dado oficial não conhecido: consulte no jogo">n/d</span>'
     cs = s['capitulos']
     def row(lbl, fn): return f'<tr><th scope="row">{lbl}</th>' + ''.join(f'<td>{fn(c) or nd}</td>' for c in cs) + '</tr>'
     comp = (f'<thead><tr><th scope="col"><span class="sr">Item</span></th>' + ''.join(f'<th scope="col">{e(nome(c["slug"]))}</th>' for c in cs) + '</tr></thead><tbody>'
             + row('Grade', lambda c: ficha(c['slug']).get('grade')) + row('Linhas', lambda c: ficha(c['slug']).get('linhas'))
             + row('Ganho máximo', lambda c: maxw(c['slug'])) + row('RTP teórico', lambda c: rtp(c['slug']))
             + row('Recurso especial', lambda c: None if c['recurso'].startswith('Confira') else e(c['recurso'])) + '</tbody>')
-    outros = ''.join(f'<a class="pgc" data-cta="outros_{i + 1}" href="{play(s, slug, "outros_" + slug)}">{capa(slug, alt="")}'
+    outros = ''.join(f'<a class="pgc" data-cta="outros_{i + 1}" href="{play(s, slug, "outros_" + slug)}">{capa(slug)}'
                      f'<span>{e(nome(slug))}<small>{e(s["outros_textos"].get(slug, ""))}{" RTP teórico " + rtp(slug) + "." if rtp(slug) else ""}</small></span></a>'
                      for i, slug in enumerate(s['outros']))
     lant = ''.join(f'<i style="--x:{x}%;--l:{l}px;--d:-{dl}s"></i>' for x, l, dl in ((5, 40, 0), (16, 70, 1.2), (84, 56, .6), (95, 34, 2)))
-    return head(s, css_min(CSS_FEST), s['hero_img']) + body(s).replace('<body ', '<body class="pat" ') + f'''
-<header class="top"><a class="logo" href="/"><span class="seal" aria-hidden="true">福</span>{e(s['nome'])}</a>
-<a class="bt bt-o" data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">Entrar</a></header>
+    return head(s, css_min(CSS_FEST), colagem(s)) + body(s).replace('<body ', '<body class="pat" ') + f'''
+<header class="top"><a class="logo" href="/"><span class="seal" aria-hidden="true">福</span><span class="nm">{e(s['nome'])}</span></a>
+<span class="acts"><a class="bt bt-o" data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">Entrar</a><a class="bt" data-cta="topo_cadastro" href="{utm(s, P['register'], 'topo')}">Criar conta</a></span></header>
 <main id="conteudo">
 <section class="hero"><div class="lant" aria-hidden="true">{lant}</div><div class="w">
-<div class="moon"><img src="{s['hero_img']}" width="600" height="804" alt="Dragão dourado envolto em nuvens vermelhas" fetchpriority="high" decoding="async"></div>
+<div class="moon" data-topo>{hero(s)}</div>
 <span class="selo">{e(t['selo'])}</span><h1>{e(t['titulo_hero'])}</h1><p class="sub">{e(t['sub_hero'])}</p>
 <div class="ctas"><a class="bt" data-cta="hero_cadastro" href="{utm(s, P['register'], 'hero')}">Criar conta e jogar {ARROW}</a><a class="bt bt-o" href="#quiz">Fazer o quiz</a></div>
 </div></section>
@@ -698,6 +843,7 @@ def site_fest(s):
 <section class="fin"><h2>Que a sorte venha com limite</h2><p>Defina um valor por sessão e aproveite o festival.</p>
 <a class="bt" data-cta="final_cadastro" href="{utm(s, P['register'], 'final')}">Criar conta grátis {ARROW}</a></section>
 </main>
+{dock(s)}
 {footer(s)}
 {script(JS_FEST)}
 </body></html>'''
@@ -706,19 +852,25 @@ def site_fest(s):
 
 CSS_BENTO = '''
 @font-face{font-family:Mont;src:url(assets/fonts/montserrat-Black.woff2) format("woff2");font-weight:900;font-display:swap}
-:root{--bg:#F6F2E8;--ink:#111;--roxo:#7B3FF2;--am:#FFD23F;--ci:#2EE6D6;--rosa:#FF7AB6;--br:#fff;--focus:#7B3FF2}
+:root{--bg:#F6F2E8;--ink:#111;--roxo:#7B3FF2;--am:#FFD23F;--ci:#2EE6D6;--rosa:#FF7AB6;--br:#fff;--focus:#7B3FF2;--dk:#111;--dkt:#fff;--dkb:#FFD23F;--dkbt:#111}
 body{background:var(--bg);color:var(--ink);font:500 17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
 .k{font-family:Mont,"Arial Black",system-ui,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.01em}
 .w{max-width:1200px;margin:0 auto;padding:0 16px}
 .bx{border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);border-radius:14px}
-.top{display:flex;justify-content:space-between;align-items:center;padding:16px}
+.top{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 16px;background:var(--bg);border-bottom:3px solid var(--ink)}
+.top .acts{display:flex;gap:10px}
+.top .btn{min-height:44px;padding:0 14px;font-size:14px;box-shadow:3px 3px 0 var(--ink)}
+.hart{overflow:hidden;background:var(--ink);margin:0}
+.hart img{width:100%}
+.top .logo,.top .btn{white-space:nowrap}
+@media (max-width:420px){.top .logo{font-size:13px;padding:6px 8px}.top .btn{padding:0 10px;font-size:13px}.top .acts{gap:8px}}
 .logo{background:var(--am);padding:8px 12px;text-decoration:none;font-size:18px;transform:rotate(-2deg)}
 .btn{display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:0 20px;text-decoration:none;font-size:16px;background:var(--br);transition:transform .12s,box-shadow .12s}
 .btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
 .btn:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--ink)}
 .btn-r{background:var(--roxo);color:#fff}
 .btn-a{background:var(--am)}
-.hero{padding:10px 0 22px}
+.hero{padding:18px 0 22px;display:grid;gap:22px}
 h1{font-size:clamp(40px,11vw,104px);line-height:.92;margin:12px 0}
 h1 span{background:var(--ci);padding:0 .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .hero p{max-width:34em;font-size:19px}
@@ -738,9 +890,10 @@ h1 span{background:var(--ci);padding:0 .12em;box-decoration-break:clone;-webkit-
 .t-zeus .zeus{position:absolute;right:-6%;bottom:-4px;width:58%;max-width:330px;filter:drop-shadow(6px 6px 0 rgba(0,0,0,.85))}
 .t-cta{grid-column:span 2;background:var(--ink);color:#fff;justify-content:center;align-items:flex-start}
 .t-cta h3{font-size:28px;color:var(--am)}
+.t-cta .btn{background:var(--am);color:var(--ink);border-color:var(--am);box-shadow:4px 4px 0 var(--roxo)}
 .sec{margin:40px 0}
 .sec>h2{font-size:clamp(30px,7vw,56px);line-height:.95;margin-bottom:16px}
-.tabs{display:flex;gap:10px;overflow-x:auto;padding:4px 8px 12px 2px}
+.tabs{display:flex;flex-wrap:wrap;gap:10px;padding:4px 8px 12px 2px}
 .tab{flex:none;min-height:46px;padding:0 16px;background:var(--br);border:3px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--ink);font-family:Mont,"Arial Black",sans-serif;font-weight:900;text-transform:uppercase;font-size:14px}
 .tab[aria-selected="true"]{background:var(--am)}
 .pan{padding:16px;background:var(--br)}
@@ -763,6 +916,7 @@ h1 span{background:var(--ci);padding:0 .12em;box-decoration-break:clone;-webkit-
 .lv img{border:3px solid var(--ink);border-radius:10px}
 .lv h3{font-size:22px}
 .lv .tag{display:inline-block;background:#E8112D;color:#fff;font-size:12px;padding:2px 8px;border-radius:6px;margin-bottom:6px}
+.lv .tag-crash{background:var(--ink);color:var(--am)}
 .fin{background:var(--roxo);color:#fff;padding:30px 20px;text-align:center;margin:40px 0}
 .fin h2{font-size:clamp(28px,6vw,48px);line-height:1}
 .fin p{margin:10px 0 18px}
@@ -771,6 +925,7 @@ h1 span{background:var(--ci);padding:0 .12em;box-decoration-break:clone;-webkit-
 .ft-guias a,.ft-18{border-width:3px;background:#fff;box-shadow:3px 3px 0 var(--ink)}
 @media (min-width:720px){.grid{grid-template-columns:repeat(4,1fr)}.vs,.live{grid-template-columns:1fr 1fr}}
 @media (min-width:1024px){
+.hero{grid-template-columns:1.05fr .95fr;align-items:center}
 .bento{grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(220px,auto)}
 .t-zeus{grid-column:1/3;grid-row:1/3;min-height:0}
 .t-big{grid-column:span 2;min-height:0}
@@ -792,7 +947,7 @@ if(tabs[0])sel(tabs[0]);
 
 def site_bento(s):
     t = s['textos']; k = s['chave']
-    zeus = reduzida(s['hero_img'], k, 'zeus', s.get('hero_largura', 520))
+    zeus = reduzida(s['zeus'], k, 'zeus', s.get('zeus_largura', 520))
     cores = ['#2EE6D6', '#FFD23F', '#FF7AB6', '#FFFFFF', '#2EE6D6', '#FFD23F', '#C9B5FF']
     def meta(slug):
         m = [f'RTP teórico {rtp(slug)}' if rtp(slug) else None, f'até {maxw(slug)}' if maxw(slug) else None, ficha(slug).get('vol') and f'Vol. {ficha(slug)["vol"].lower()}']
@@ -803,35 +958,37 @@ def site_bento(s):
         if i == 0:
             tiles += (f'<a class="t t-zeus bx" style="--c:#C9B5FF" data-cta="bento_{slug}" href="{play(s, slug, "bento_" + slug)}">'
                       f'<div><h3 class="k" style="font-size:clamp(26px,5vw,40px)">{e(nome(slug))}</h3><p>{e(txt)}</p></div><div class="m">{meta(slug)}</div>'
-                      f'{capa(slug, alt="", cls="cv", lazy=False)}{arte(zeus, "Zeus, personagem do Gates of Olympus, apontando para o alto", cls="zeus", lazy=False, eager=True)}</a>')
+                      f'{capa(slug, cls="cv")}{arte(zeus, "Zeus, personagem oficial do Gates of Olympus, apontando para o alto", cls="zeus")}</a>')
         else:
             tiles += (f'<a class="t t-big bx" style="--c:{cores[i]}" data-cta="bento_{slug}" href="{play(s, slug, "bento_" + slug)}">'
-                      f'<div style="display:flex;gap:14px;align-items:flex-start">{capa(slug, alt="", cls="cv", lazy=False)}<div><h3 class="k">{e(nome(slug))}</h3><p>{e(txt)}</p></div></div><div class="m">{meta(slug)}</div></a>')
+                      f'<div style="display:flex;gap:14px;align-items:flex-start">{capa(slug, cls="cv")}<div><h3 class="k">{e(nome(slug))}</h3><p>{e(txt)}</p></div></div><div class="m">{meta(slug)}</div></a>')
     for i, slug in enumerate(s['bento_menores']):
         tiles += (f'<a class="t bx" style="--c:{cores[(i + 3) % len(cores)]}" data-cta="bento_{slug}" href="{play(s, slug, "bento_" + slug)}">'
-                  f'{capa(slug, alt="", cls="cv")}<h3 class="k">{e(nome(slug))}</h3><div class="m">{meta(slug)}</div></a>')
+                  f'{capa(slug, cls="cv")}<h3 class="k">{e(nome(slug))}</h3><div class="m">{meta(slug)}</div></a>')
     tiles += (f'<a class="t t-cta bx" data-cta="bento_cadastro" href="{utm(s, P["register"], "bento")}"><h3 class="k">Crie a conta e gire</h3>'
-              f'<p>Cadastro em cerca de um minuto, Pix na hora e todos esses slots no navegador.</p></a>')
+              f'<p>Cadastro em cerca de um minuto, Pix na hora e todos esses slots no navegador.</p><span class="btn bx k">Criar conta {ARROW}</span></a>')
     tabs = ''; idx = {}
     for i, a in enumerate(s['abas']):
         tabs += (f'<button class="tab" role="tab" type="button" id="tab-{i}" data-i="{i}" data-d="{e(a["texto"])}" aria-controls="tab-p" '
                  f'aria-selected="{"true" if i == 0 else "false"}" tabindex="{0 if i == 0 else -1}">{e(a["nome"])}</button>')
         for slug in a['slugs']: idx.setdefault(slug, []).append(str(i))
     gcs = ''.join(f'<a class="gc" data-t="{" ".join(v)}" data-cta="mecanica_{n + 1}" href="{play(s, slug, "mecanica_" + slug)}"{"" if "0" in v else " hidden"}>'
-                  f'{capa(slug, alt="")}<span>{e(nome(slug))}<small>{e(prov(slug))}{" · RTP " + rtp(slug) if rtp(slug) else ""}</small></span></a>'
+                  f'{capa(slug)}<span>{e(nome(slug))}<small>{e(prov(slug))}{" · RTP " + rtp(slug) if rtp(slug) else ""}</small></span></a>'
                   for n, (slug, v) in enumerate(idx.items()))
     vs = ''
     for i, v in enumerate(s['versoes']):
-        pair = ''.join(f'<a data-cta="versao_{slug}" href="{play(s, slug, "versao_" + slug)}">{capa(slug, alt="")}{e(nome(slug))}</a>' for slug in v['slugs'])
+        pair = ''.join(f'<a data-cta="versao_{slug}" href="{play(s, slug, "versao_" + slug)}">{capa(slug)}{e(nome(slug))}</a>' for slug in v['slugs'])
         vs += f'<article class="v bx" style="--c:{("#FFD23F", "#2EE6D6")[i % 2]}"><h3 class="k">{e(v["nome"])}</h3><p>{e(v["texto"])}</p><div class="pair">{pair}</div></article>'
-    live = ''.join(f'<a class="lv bx" style="--c:{("#FF7AB6", "#C9B5FF")[i % 2]}" data-cta="live_{i + 1}" href="{play(s, x["slug"], "live_" + x["slug"])}">{capa(x["slug"], alt="")}'
-                   f'<div><span class="tag k">Ao vivo</span><h3 class="k">{e(x["nome"])}</h3><p>{e(x["texto"])}</p></div></a>' for i, x in enumerate(s['live']))
+    # selo "Ao vivo" só para jogos da Pragmatic Live; os crash games levam selo próprio (campo selo em sites.json)
+    live = ''.join(f'<a class="lv bx" style="--c:{("#FF7AB6", "#C9B5FF")[i % 2]}" data-cta="live_{i + 1}" href="{play(s, x["slug"], "live_" + x["slug"])}">{capa(x["slug"])}'
+                   f'<div><span class="tag k{" tag-crash" if x.get("selo") == "Crash" else ""}">{e(x.get("selo", "Ao vivo"))}</span><h3 class="k">{e(x["nome"])}</h3><p>{e(x["texto"])}</p></div></a>' for i, x in enumerate(s['live']))
     font = '<link rel="preload" as="font" type="font/woff2" href="assets/fonts/montserrat-Black.woff2" crossorigin>'
-    return head(s, css_min(CSS_BENTO), zeus, font) + body(s) + f'''
-<header class="top"><a class="logo k bx" href="/">Guia Pragmatic</a><a class="btn bx k" data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">Entrar</a></header>
+    return head(s, css_min(CSS_BENTO), colagem(s), font) + body(s) + f'''
+<header class="top"><a class="logo k bx" href="/">Guia Pragmatic</a><span class="acts"><a class="btn bx k" data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">Entrar</a><a class="btn btn-r bx k" data-cta="topo_cadastro" href="{utm(s, P['register'], 'topo')}">Criar conta</a></span></header>
 <main id="conteudo"><div class="w">
-<section class="hero"><span class="stk k bx">{e(t['selo'])}</span><h1 class="k">{e(t['titulo_hero']).replace('sem ', '<span>sem ').replace('enrolação', 'enrolação</span>')}</h1><p>{e(t['sub_hero'])}</p>
-<div class="ctas"><a class="btn btn-r bx k" data-cta="hero_cadastro" href="{utm(s, P['register'], 'hero')}">Criar conta {ARROW}</a><a class="btn btn-a bx k" data-cta="hero_provedor" href="{utm(s, P['pragmatic'], 'hero_provedor')}">Todos os Pragmatic</a></div></section>
+<section class="hero"><div><span class="stk k bx">{e(t['selo'])}</span><h1 class="k">{e(t['titulo_hero']).replace('sem ', '<span>sem ').replace('enrolação', 'enrolação</span>')}</h1><p>{e(t['sub_hero'])}</p>
+<div class="ctas"><a class="btn btn-r bx k" data-cta="hero_cadastro" href="{utm(s, P['register'], 'hero')}">Criar conta {ARROW}</a><a class="btn btn-a bx k" data-cta="hero_provedor" href="{utm(s, P['pragmatic'], 'hero_provedor')}">Todos os Pragmatic</a></div></div>
+<figure class="hart bx" data-topo>{hero(s)}</figure></section>
 <section class="bento" aria-label="Destaques da Pragmatic Play">{tiles}</section>
 <section class="sec" id="mecanicas" aria-labelledby="mc-h"><h2 class="k" id="mc-h">{e(t['abas_titulo'])}</h2>
 <div class="tabs" role="tablist" aria-label="Mecânicas">{tabs}</div>
@@ -841,6 +998,7 @@ def site_bento(s):
 <section class="fin bx"><h2 class="k">Escolha a mecânica. Defina o limite.</h2><p>Os slots da Pragmatic Play rodam direto no navegador do celular.</p>
 <a class="btn btn-a bx k" data-cta="final_cadastro" href="{utm(s, P['register'], 'final')}">Criar conta grátis {ARROW}</a></section>
 </div></main>
+{dock(s)}
 {footer(s)}
 {script(JS_BENTO)}
 </body></html>'''
@@ -848,12 +1006,18 @@ def site_bento(s):
 # ================================================================ 5. HUD / terminal (guiadecrash)
 
 CSS_HUD = '''
-:root{--bg:#050807;--p:#0B1210;--g:#39FF88;--c:#22E4FF;--tx:#D7FFE9;--mu:#86B9A0;--al:#FF4D6D;--ln:rgba(57,255,136,.18);--focus:#22E4FF}
+:root{--bg:#050807;--p:#0B1210;--g:#39FF88;--c:#22E4FF;--tx:#D7FFE9;--mu:#86B9A0;--al:#FF4D6D;--ln:rgba(57,255,136,.18);--focus:#22E4FF;--dk:#0B1210;--dkt:#D7FFE9;--dkb:#39FF88;--dkbt:#031}
 body{background-color:var(--bg);color:var(--tx);font:15px/1.6 ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace}
 body{background-image:linear-gradient(rgba(57,255,136,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,136,.06) 1px,transparent 1px);background-size:32px 32px}
 .w{max-width:1200px;margin:0 auto;padding:0 16px}
-.top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--ln)}
-.logo{color:var(--g);text-decoration:none;font-weight:700}
+.top{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--ln);background:rgba(5,8,7,.94);backdrop-filter:blur(6px)}
+.top .acts{display:flex;gap:8px}
+.top .b{min-height:44px;padding:0 12px;white-space:nowrap;letter-spacing:0}
+@media (max-width:420px){.top .b{padding:0 10px;font-size:13px}.logo{font-size:14px}}
+.logo{color:var(--g);text-decoration:none;font-weight:700;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.dock{border:1px solid var(--g);border-radius:4px}.dock a{border-radius:2px}
+.hart{border:1px solid var(--ln);margin:0 0 16px;background:var(--p)}
+.hart img{width:100%}
 .logo b{display:inline-block;width:9px;height:17px;background:var(--g);vertical-align:-3px;margin-left:4px;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 .b{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border:1px solid var(--g);color:var(--g);background:transparent;text-decoration:none;font:700 14px/1 ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.06em;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
@@ -867,7 +1031,6 @@ body{background-image:linear-gradient(rgba(57,255,136,.06) 1px,transparent 1px),
 h1{font-size:clamp(30px,7.6vw,58px);line-height:1.05;letter-spacing:-.02em;margin:10px 0;color:#fff;text-shadow:0 0 18px rgba(57,255,136,.35)}
 .sub{color:var(--mu);max-width:40em}
 .hl{color:var(--g)}
-.astro{width:120px;float:right;margin:0 0 6px 12px;filter:drop-shadow(0 0 16px rgba(34,228,255,.45))}
 .ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .sim{border:1px solid var(--g);background:rgba(11,18,16,.92);box-shadow:0 0 0 1px rgba(57,255,136,.15),0 0 40px rgba(57,255,136,.12)}
 .sim-h{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-bottom:1px solid var(--ln);font-size:12px;color:var(--mu);letter-spacing:.1em}
@@ -904,7 +1067,7 @@ h2::before{content:"> ";color:var(--g)}
 .ls img{width:64px;border:1px solid var(--ln)}
 .ls b{color:#fff;display:block}
 .ls small{color:var(--mu);font-size:12px}
-.ls .go{color:var(--g);font-weight:700;font-size:13px}
+.ls .go{color:var(--g);font-weight:700;font-size:13px;display:inline-flex;align-items:center;min-height:44px}
 .og{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .ogc{border:1px solid var(--c);text-decoration:none;display:flex;flex-direction:column;background:var(--p)}
 .ogc:hover{box-shadow:0 0 0 1px var(--c),0 0 24px rgba(34,228,255,.25)}
@@ -915,7 +1078,7 @@ h2::before{content:"> ";color:var(--g)}
 .fin p{color:var(--mu);margin:8px 0 18px}
 .ft{border-top:1px solid var(--g);color:var(--mu)}
 .ft a{color:var(--g)}.ft strong{color:var(--tx)}
-@media (min-width:720px){.og{grid-template-columns:repeat(5,1fr)}.ex{grid-template-columns:repeat(3,1fr)}.astro{width:150px}}
+@media (min-width:720px){.og{grid-template-columns:repeat(5,1fr)}.ex{grid-template-columns:repeat(3,1fr)}}
 @media (min-width:1024px){.hero{grid-template-columns:5fr 6fr;align-items:center;padding:48px 0}.ls{columns:2;column-gap:0}.ls li{break-inside:avoid;border-right:1px solid var(--ln)}}
 '''
 
@@ -948,20 +1111,19 @@ w.addEventListener("resize",size);size();
 
 def site_hud(s):
     t = s['textos']; k = s['chave']
-    astro = reduzida(s['hero_img'], k, 'spaceman', s.get('hero_largura', 300))
     ex = ''.join(f'<article class="exc"><h3>[{e(x["t"])}]</h3><p>{e(x["p"])}</p></article>' for x in t['explica'])
     ls = ''
     for i, c in enumerate(s['crash']):
         slug = c['slug']; nm = c.get('nome', nome(slug))
-        ls += (f'<li><a data-cta="crash_{i + 1}" href="{play(s, slug, "crash_" + slug)}">{capa(slug, alt="")}<span><b>{e(nm)}</b>'
-               f'<small>{e(prov(slug))} · {("RTP teórico " + rtp(slug)) if rtp(slug) else "RTP: ver no jogo"}</small></span><span class="go">JOGAR &gt;</span></a></li>')
-    og = ''.join(f'<a class="ogc" data-cta="original_{i + 1}" href="{play(s, o["slug"], "original_" + o["slug"])}">{capa(o["slug"], alt="")}'
+        ls += (f'<li><a data-cta="crash_{i + 1}" href="{play(s, slug, "crash_" + slug)}">{capa(slug, alt=f"Arte do jogo {nm}")}<span><b>{e(nm)}</b>'
+               f'<small>{e(prov(slug))} · RTP teórico {rtp(slug) or "n/d"}</small></span><span class="go">JOGAR &gt;</span></a></li>')
+    og = ''.join(f'<a class="ogc" data-cta="original_{i + 1}" href="{play(s, o["slug"], "original_" + o["slug"])}">{capa(o["slug"])}'
                  f'<span><b>{e(nome(o["slug"]))}</b>{e(o["texto"])}{" RTP teórico " + rtp(o["slug"]) + "." if rtp(o["slug"]) else ""}</span></a>' for i, o in enumerate(s['originais']))
-    return head(s, css_min(CSS_HUD), astro) + body(s) + f'''
-<header class="top"><a class="logo" href="/">&gt; guia_de_crash<b aria-hidden="true"></b></a><a class="b" data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">[ Entrar ]</a></header>
+    return head(s, css_min(CSS_HUD), colagem(s)) + body(s) + f'''
+<header class="top"><a class="logo" href="/">&gt; guia_de_crash<b aria-hidden="true"></b></a><span class="acts"><a class="b" data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">Entrar</a><a class="b b-g" data-cta="topo_cadastro" href="{utm(s, P['register'], 'topo')}">Criar conta</a></span></header>
 <main id="conteudo"><div class="w">
 <section class="hero">
-<div>{arte(astro, "Astronauta do SpaceMan acenando", cls="astro", lazy=False, eager=True)}<p class="tag">// {e(t['selo'])}</p><h1>{e(t['titulo_hero'])}</h1><p class="sub">{e(t['sub_hero'])}</p>
+<div><figure class="hart" data-topo>{hero(s)}</figure><p class="tag">// {e(t['selo'])}</p><h1>{e(t['titulo_hero'])}</h1><p class="sub">{e(t['sub_hero'])}</p>
 <div class="ctas"><a class="b b-g" data-cta="hero_cadastro" href="{utm(s, P['register'], 'hero')}">Criar conta {ARROW}</a><a class="b b-c" data-cta="hero_crash" href="{utm(s, P['crash'], 'hero_crash')}">Crash games</a></div></div>
 <div class="sim" role="group" aria-labelledby="sim-t">
 <div class="sim-h"><span id="sim-t">SIMULADOR // SEM VALOR REAL</span><span id="st" role="status">PRONTO</span></div>
@@ -979,6 +1141,7 @@ def site_hud(s):
 <section class="fin"><h2 style="display:inline-block">Pronto para a rodada real?</h2><p>Defina um limite e um saque automático antes de começar.</p>
 <a class="b b-g" data-cta="final_cadastro" href="{utm(s, P['register'], 'final')}">Criar conta grátis {ARROW}</a></section>
 </div></main>
+{dock(s)}
 {footer(s)}
 {script(JS_HUD)}
 </body></html>'''
@@ -986,12 +1149,15 @@ def site_hud(s):
 # ================================================================ 6. app de conversão / céu (guiaaviator)
 
 CSS_APP = '''
-:root{--ceu:#1E62E0;--ceu2:#7FB6FF;--sol:#FF9A4D;--sol2:#FFC36B;--card:#fff;--ink:#10233F;--mu:#4A5C78;--cta:#C73A08;--focus:#10233F}
-body{background:#EAF2FF;color:var(--ink);font:17px/1.5 ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:96px}
+:root{--ceu:#1E62E0;--ceu2:#7FB6FF;--sol:#FF9A4D;--sol2:#FFC36B;--card:#fff;--ink:#10233F;--mu:#4A5C78;--cta:#C73A08;--focus:#10233F;--dk:rgba(16,35,63,.94);--dkt:#fff;--dkb:#C73A08;--dkbt:#fff}
+body{background:#EAF2FF;color:var(--ink);font:17px/1.5 ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",sans-serif}
 .w{max-width:1080px;margin:0 auto;padding:0 16px}
 .sky{background:linear-gradient(180deg,#1546B8 0%,var(--ceu) 58%,#E07A3E 90%,var(--sol) 100%);color:#fff;position:relative;overflow:hidden;border-radius:0 0 36px 36px}
-.top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;position:relative;z-index:2}
-.logo{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);padding:8px 14px;border-radius:999px;font-weight:800;text-decoration:none}
+.top{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 16px;background:#1546B8;color:#fff}
+.top .acts{display:flex;gap:8px}
+.top .pill{min-height:44px;padding:0 16px}
+.logo{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);padding:8px 14px;border-radius:999px;font-weight:800;text-decoration:none;min-width:0;white-space:nowrap}
+@media (max-width:420px){.logo{padding:8px 10px;font-size:15px}.top .pill{padding:0 12px}}
 .pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:999px;font-weight:800;text-decoration:none}
 .pill-w{background:#fff;color:var(--ink)}
 .pill-c{background:var(--cta);color:#fff;box-shadow:0 10px 24px -8px rgba(226,71,15,.7)}
@@ -1005,11 +1171,13 @@ h1{font-size:clamp(38px,10vw,72px);line-height:1;letter-spacing:-.02em;margin:12
 .sun{position:absolute;right:-60px;bottom:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#FFE6A8,#FFB867 60%,rgba(255,154,77,0) 70%)}
 .cl{position:absolute;background:#fff;border-radius:999px;opacity:.75;height:26px}
 .cl::before{content:"";position:absolute;width:50%;height:200%;left:20%;bottom:0;background:inherit;border-radius:50%}
-.plane{position:absolute;left:0;top:0;width:86px;z-index:1;offset-path:path("M -100 260 C 120 200, 260 80, 520 120 S 900 40, 1300 20");animation:fly 9s linear infinite}
+.ilu{position:relative;justify-self:center;max-width:360px;width:100%}
+.plane{position:absolute;left:0;top:0;width:64px;z-index:3;pointer-events:none;offset-path:path("M -60 150 C 40 90, 140 40, 420 -20");animation:fly 7s linear infinite}
 @keyframes fly{from{offset-distance:0%}to{offset-distance:100%}}
-@supports not (offset-path:path("M0 0")){.plane{animation:fly2 9s linear infinite;top:30%}@keyframes fly2{from{transform:translateX(-120px) rotate(-8deg)}to{transform:translateX(110vw) rotate(-8deg)}}}
-@media (prefers-reduced-motion:reduce){.plane{offset-path:none;left:auto;right:120px;top:18px;width:56px}}
-.phone{background:#fff;color:var(--ink);border-radius:32px;padding:16px;box-shadow:0 30px 60px -20px rgba(16,35,63,.5);max-width:360px;width:100%;justify-self:center}
+@supports not (offset-path:path("M0 0")){.plane{animation:fly2 7s linear infinite;top:-10px}@keyframes fly2{from{transform:translateX(-40px) rotate(-8deg)}to{transform:translateX(320px) rotate(-8deg)}}}
+@media (prefers-reduced-motion:reduce){.plane{offset-path:none;left:auto;right:-8px;top:-18px;width:56px}}
+@media (max-width:639px){.plane,.cl{display:none}}
+.phone{background:#fff;color:var(--ink);border-radius:32px;padding:16px;box-shadow:0 30px 60px -20px rgba(16,35,63,.5);width:100%}
 .phone .scr{border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(#0E1C3A,#253F78)}
 .phone .scr img{width:100%;aspect-ratio:240/280;object-fit:cover;opacity:.92}
 .phone .mx{position:absolute;left:12px;bottom:12px;background:#fff;color:var(--ink);border-radius:14px;padding:6px 12px;font-weight:900;font-size:22px}
@@ -1031,20 +1199,18 @@ h1{font-size:clamp(38px,10vw,72px);line-height:1;letter-spacing:-.02em;margin:12
 .g img{width:84px;border-radius:16px}
 .g b{font-size:18px;display:block}
 .g small{display:block;color:var(--mu);font-size:14px;line-height:1.35}
-.g .go{display:inline-flex;margin-top:8px;background:var(--cta);color:#fff;border-radius:999px;padding:6px 14px;font-weight:800;font-size:14px}
+.g .go{display:inline-flex;align-items:center;min-height:44px;margin-top:8px;background:var(--cta);color:#fff;border-radius:999px;padding:0 18px;font-weight:800;font-size:14px}
 details{border-top:1px solid #E1E8F5}
 summary{cursor:pointer;padding:16px 0;font-weight:800;list-style:none}
 summary::-webkit-details-marker{display:none}
 summary::after{content:"+";float:right;color:var(--ceu);font-size:22px;line-height:1}
 details[open] summary::after{content:"\\2212"}
 details p{padding-bottom:16px;color:var(--mu)}
-.dock{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:20;display:flex;gap:10px;align-items:center;background:rgba(16,35,63,.92);backdrop-filter:blur(8px);padding:10px 10px 10px 18px;border-radius:999px;color:#fff;box-shadow:0 10px 30px rgba(16,35,63,.4)}
-.dock span{flex:1;font-size:14px;line-height:1.2}
-.dock b{display:block;font-size:16px}
+.dock{border-radius:999px;backdrop-filter:blur(8px)}.dock a{border-radius:999px}
 .ft{background:var(--ink);color:#C7D3E8;border-radius:36px 36px 0 0;margin-top:30px}
 .ft a{color:#fff}.ft strong{color:#fff}
 @media (min-width:720px){.steps{grid-template-columns:repeat(3,1fr)}.st{grid-template-columns:1fr}.gl{grid-template-columns:1fr 1fr}}
-@media (min-width:960px){body{padding-bottom:0}.dock{display:none}.hero{grid-template-columns:1.2fr .8fr;padding:30px 0 70px}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.two .card{margin:18px 0 0}}
+@media (min-width:960px){.hero{grid-template-columns:1.2fr .8fr;padding:30px 0 70px}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.two .card{margin:18px 0 0}}
 '''
 
 PLANE = ('<svg class="plane" viewBox="0 0 120 60" aria-hidden="true"><path d="M8 34 L46 30 L70 8 L80 8 L66 30 L100 28 C112 28 116 32 112 36 C108 38 104 38 100 38 '
@@ -1056,22 +1222,21 @@ ICONES = {
 
 def site_app(s):
     t = s['textos']; k = s['chave']
-    g0 = s['jogos'][0]['slug']
     how = ''.join(f'<li>{e(x)}</li>' for x in t['oque'])
     steps = ''.join(f'<div class="st"><i>{ICONES[p["icone"]]}</i><div><h3>{e(p["t"])}</h3><p>{e(p["p"])}</p></div></div>' for p in t['passos'])
-    gl = ''.join(f'<a class="g" data-cta="jogo_{i + 1}" href="{play(s, j["slug"], "jogo_" + j["slug"])}">{capa(j["slug"], alt="")}<span><b>{e(nome(j["slug"]))}</b>'
+    gl = ''.join(f'<a class="g" data-cta="jogo_{i + 1}" href="{play(s, j["slug"], "jogo_" + j["slug"])}">{capa(j["slug"])}<span><b>{e(nome(j["slug"]))}</b>'
                  f'<small>{e(prov(j["slug"]))}{" · RTP teórico " + rtp(j["slug"]) if rtp(j["slug"]) else ""}</small><small>{e(j["texto"])}</small><span class="go">Jogar</span></span></a>'
                  for i, j in enumerate(s['jogos']))
     clouds = ''.join(f'<span class="cl" style="left:{x}%;top:{y}px;width:{wd}px" aria-hidden="true"></span>' for x, y, wd in ((6, 90, 90), (62, 60, 120), (40, 220, 70), (80, 300, 100)))
     info = '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#E2470F" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8h.01M11 12h1v5h1"/></svg>'
-    return head(s, css_min(CSS_APP), web(g0)) + body(s) + f'''
-<div class="sky"><div class="sun" aria-hidden="true"></div>{clouds}{PLANE}
-<header class="top"><a class="logo" href="/">✈ {e(s['nome'])}</a><a class="pill pill-w" data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">Entrar</a></header>
+    return head(s, css_min(CSS_APP), colagem(s)) + body(s) + f'''
+<header class="top"><a class="logo" href="/">✈ {e(s['nome'])}</a><span class="acts"><a class="pill pill-w" data-cta="topo_entrar" href="{utm(s, P['login'], 'topo_entrar')}">Entrar</a><a class="pill pill-c" data-cta="topo_cadastro" href="{utm(s, P['register'], 'topo')}">Criar conta</a></span></header>
+<div class="sky"><div class="sun" aria-hidden="true"></div>{clouds}
 <div class="w"><section class="hero">
 <div><span class="selo">{e(t['selo'])}</span><h1>{e(t['titulo_hero'])}</h1><p>{e(t['sub_hero'])}</p>
 <div class="chips"><span>Pix na hora</span><span>No navegador</span><span>18+</span></div>
 <p style="margin-top:20px"><a class="pill pill-c" data-cta="hero_cadastro" href="{utm(s, P['register'], 'hero')}">Criar conta e decolar {ARROW}</a></p></div>
-<div class="phone" aria-hidden="true"><div class="scr">{capa(g0, alt="", lazy=False, eager=True)}<span class="mx">2,37x</span></div><p>Ilustração. Multiplicador de exemplo, sem valor real.</p></div>
+<div class="ilu" data-topo>{PLANE}<div class="phone"><div class="scr">{hero(s)}<span class="mx" aria-hidden="true">2,37x</span></div><p>Ilustração. Multiplicador de exemplo, sem valor real.</p></div></div>
 </section></div></div>
 <main id="conteudo" class="w">
 <section class="card warn" aria-label="Aviso">{info}<p><strong>Importante:</strong> {e(t['aviso_aviator'])}</p></section>
@@ -1084,7 +1249,7 @@ def site_app(s):
 <p style="margin-top:16px"><a class="pill pill-w" style="box-shadow:0 0 0 2px var(--ink) inset" data-cta="lista_crash" href="{utm(s, P['crash'], 'lista_crash')}">Ver todos os crash games</a></p></section>
 <section class="card" aria-labelledby="fq-h"><h2 id="fq-h">Perguntas rápidas</h2>{faq(t['faq'])}</section>
 </main>
-<div class="dock"><span>Jogos de voo<b>Cadastro em 1 minuto</b></span><a class="pill pill-c" data-cta="dock_cadastro" href="{utm(s, P['register'], 'dock')}">Criar conta</a></div>
+{dock(s)}
 {footer(s)}
 {script()}
 </body></html>'''
@@ -1141,6 +1306,7 @@ if __name__ == '__main__':
             if not os.path.exists(src): continue  # o verificador acusa o que faltar
             os.makedirs(os.path.dirname(os.path.join(dst, ref)), exist_ok=True)
             shutil.copy2(src, os.path.join(dst, ref))
+        shutil.copy2(os.path.join(R, og_image(s)), os.path.join(dst, 'og.jpg'))
         open(os.path.join(dst, '404.html'), 'w', encoding='utf-8').write(page_404(s))
         open(os.path.join(dst, 'CNAME'), 'w').write(s['dominio'] + '\n')
         open(os.path.join(dst, '.nojekyll'), 'w').write('')
