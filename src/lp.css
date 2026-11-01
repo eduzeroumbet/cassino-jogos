@@ -74,6 +74,17 @@ h2 .hl{color:var(--acc)}
 .lv i.f{background:var(--acc)}
 .m-text strong{font-size:clamp(18px,4.6vw,24px);line-height:1.15}
 .note{font-size:12px;color:var(--muted);margin-top:12px}
+/* personagem */
+.ch{display:grid;gap:26px;align-items:center}
+.ch-art{position:relative;width:min(100%,420px);margin:0 auto;border-radius:28px;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 80px -24px color-mix(in srgb,var(--acc) 45%,transparent)}
+.ch-art img{width:100%;height:auto}
+.ch-art.cut{border:0;box-shadow:none;background:radial-gradient(closest-side,color-mix(in srgb,var(--acc) 34%,transparent),transparent)}
+.ch-art.cut img{width:auto;max-height:min(70svh,560px);margin:0 auto;filter:drop-shadow(0 24px 30px rgba(0,0,0,.45))}
+.ch-crop img{position:absolute;max-width:none}
+.ch-x{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.ch-x img{width:84px;height:84px;object-fit:contain;padding:4px;border-radius:14px;background:var(--bg2);border:1px solid rgba(255,255,255,.1)}
+.hero-ch{display:none}
+.more{margin-top:22px;text-align:center}.more a{color:var(--muted)}
 /* expanded cards */
 .xcards{display:flex;flex-direction:column;gap:10px;margin-top:26px}
 .xcard{position:relative;text-align:left;border:1px solid rgba(255,255,255,.1);background:var(--bg2);color:inherit;font:inherit;border-radius:var(--r);padding:18px 18px 18px 64px;cursor:pointer;overflow:hidden;transition:background .3s ease,border-color .3s ease}
@@ -157,6 +168,14 @@ footer nav a{text-decoration:none;font-weight:700;color:var(--cream);min-height:
   .grid{grid-template-columns:repeat(4,1fr)}
   .hero-in{padding-bottom:64px}
   .collage{grid-template-columns:repeat(6,1fr);transform:rotate(-8deg) scale(1.15)}
+  .ch{grid-template-columns:5fr 7fr;gap:40px}
+  .ch-x img{width:96px;height:96px}
+}
+@media (min-width:960px){
+  .hero-ch{display:block;position:absolute;z-index:0;right:max(2vw,calc(50% - 620px));bottom:0;height:min(86svh,780px);pointer-events:none;
+    filter:drop-shadow(0 30px 40px rgba(0,0,0,.5));-webkit-mask-image:linear-gradient(180deg,#000 82%,transparent);mask-image:linear-gradient(180deg,#000 82%,transparent)}
+  .hero-ch img{height:100%;width:auto;max-width:none}
+  .has-ch .hero-in{position:relative;z-index:1}.has-ch .hero-in>*{max-width:560px}
 }
 @media (min-width:1024px){
   .hero{align-items:center}
