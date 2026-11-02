@@ -10,6 +10,7 @@ Para cada docs/*.html e dist-dominios/<dominio>/*.html:
     (Tigrinho, Tourinho, Coelhinho, Dragãozinho, Ratinho); nomes de arquivo e de domínio não contam
   - as landings têm og:image (arquivo 1200x630 existente na pasta), twitter:card e robots igual ao de site.indexar,
     aviso 18+ e UTMs em todos os links para a plataforma
+  - em src/lp.css, o texto auxiliar cinza (--muted e hex cinza em color:) tem contraste >= 4,5 sobre os fundos escuros
 Sai com código 1 e lista os problemas se algo falhar.
 Uso (da raiz do repositório): python3 tools/checar_landings.py
 """
@@ -83,6 +84,41 @@ def checar_arquivo(f, pasta, rel, landing):
             if u.rstrip('/') != BASE and 'utm_campaign=' not in u: erros.append(f'{rel}: link da plataforma sem UTM: {u}')
     return erros
 
+HEX_RE = re.compile(r'#[0-9A-Fa-f]{6}\b')
+
+def lum(h):
+    """Luminância relativa (WCAG) de uma cor #RRGGBB."""
+    c = [int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    c = [v / 12.92 if v <= .04045 else ((v + .055) / 1.055) ** 2.4 for v in c]
+    return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]
+
+def razao(a, b):
+    la, lb = sorted((lum(a), lum(b)), reverse=True)
+    return (la + .05) / (lb + .05)
+
+def mistura(a, b, p):
+    """color-mix(in srgb, a p, b)."""
+    return '#' + ''.join(f'{round(int(a[i:i + 2], 16) * p + int(b[i:i + 2], 16) * (1 - p)):02X}' for i in (1, 3, 5))
+
+def checar_contraste():
+    """Texto auxiliar cinza de src/lp.css (--muted e os hex cinza usados em color:) sobre os fundos escuros
+    (--bg, --bg2, --bg3 e o cartão de promoção da index, com 22% de roxo): razão mínima de 4,5 (WCAG AA)."""
+    css = open(os.path.join(ROOT, 'src/lp.css'), encoding='utf-8').read()
+    var = dict(re.findall(r'--([\w-]+):(#[0-9A-Fa-f]{6})\b', re.search(r':root\{[^}]*\}', css).group(0)))
+    roxo = re.search(r'\.promos-hub\{[^}]*--acc2:(#[0-9A-Fa-f]{6})', css)
+    fundos = {f'--{k}': var[k] for k in ('bg', 'bg2', 'bg3')}
+    if roxo: fundos['cartão de promoção da index'] = mistura(roxo.group(1), var['bg3'], .22)
+    cinzas = {'--muted': var['muted']}
+    for h in set(HEX_RE.findall(' '.join(re.findall(r'(?<![\w-])color:([^;}]*)', css)))):
+        c = [int(h[i:i + 2], 16) for i in (1, 3, 5)]
+        if max(c) - min(c) <= 40 and h.upper() != '#FFFFFF': cinzas[h] = h  # cinza: pouca saturação
+    erros = []
+    for nc, c in sorted(cinzas.items()):
+        for nf, f in fundos.items():
+            r = razao(c, f)
+            if r < 4.5: erros.append(f'src/lp.css: contraste {r:.2f} de {nc} ({c}) sobre {nf} ({f}), mínimo 4,5')
+    return erros
+
 def checar(pasta, nome, landings):
     erros = []
     for f in sorted(glob.glob(os.path.join(pasta, '*.html'))):
@@ -104,5 +140,7 @@ if __name__ == '__main__':
     for pasta, nome, landings in alvos:
         e = checar(pasta, nome, landings); erros += e
         print(f'{nome}: {"ok" if not e else str(len(e)) + " problema(s)"}')
+    e = checar_contraste(); erros += e
+    print(f'contraste do texto auxiliar: {"ok" if not e else str(len(e)) + " problema(s)"}')
     for x in erros: print(' -', x)
     sys.exit(1 if erros else 0)

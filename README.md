@@ -8,7 +8,11 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
     Sem ela, nome, provedor e lede até 150 caracteres, no fim da última frase completa ou na última palavra inteira, com ponto.
   - `faq`: de 5 a 6 perguntas (o build para se não cumprir), incluindo "Qual o valor mínimo de aposta?", "Como sacar?", "Funciona no celular?"
     e "O que é RTP?"; vira também o JSON-LD FAQPage.
-  - `promo` (opcional): `text`, `url` (link "Ver campanha") e `note`; com `note_url`, a nota vira link (ex.: `/promocoes`).
+  - `site.promos`: campanhas da plataforma (`badge`, `title`, `text`, `details`, `cta`, `url` completa em cassino.b7bet7.bet), renderizadas na seção
+    "Promoções ativas" (id `promocoes`): na index logo depois da seção da grade de jogos (vermelho e roxo), nas landings logo depois de "O que esperar"
+    (cor do jogo). Grade de 3 colunas no desktop, carrossel com snap no celular, nota "18+ · Regras completas em cada campanha...". A pergunta
+    "Quais promoções estão ativas?" de cada FAQ resume as campanhas: ao trocar `site.promos`, atualize também essa resposta nos 8 jogos.
+  - `vitrine_promos` (opcional, hoje só no Fortune Tiger): link "Ver promoções ativas" na vitrine, que rola até a seção.
   - Textos descrevem a mecânica do jogo; nada de promessa de ganho.
 - SEO: cada landing tem um h1 em texto ("<jogo>: como jogar, RTP e recursos") abaixo do logo, maior que a frase de apoio (subtítulo); a index tem o h1
   exatamente "Os jogos de cassino mais jogados: guias e RTP" no HTML (caixa alta e quebras em CSS), um parágrafo de 80 a 120 palavras sobre o que cada
@@ -36,7 +40,9 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
 - Indexação: `site.indexar=false` (hoje, testes; ligar só com operação licenciada): robots index,follow e robots.txt Allow (com a linha Sitemap no `docs/`); `false` coloca noindex e Disallow.
   O banco de personagens (uso interno) é sempre noindex.
 - Todos os links para a plataforma levam UTM e `rel="sponsored noopener"`: utm_source=landing, utm_medium=guia, utm_campaign=<jogo> (`hub` na index),
-  utm_content=<posição: header, hero, vitrine ou final>; barra fixa e rodapé contam como final. O botão exato vai no evento `lp_cta` do GA4 (`data-cta`).
+  utm_content=<posição: header, hero, vitrine ou final; promo-<n> nos cartões de promoção>; barra fixa e rodapé contam como final. O botão exato vai no evento `lp_cta` do GA4 (`data-cta`);
+  os cartões de promoção mandam também `posicao` (promo-<n>, de `data-pos`).
+  `python3 tools/checar_landings.py` também confere o contraste (>= 4,5) do texto auxiliar cinza de `src/lp.css` sobre os fundos escuros.
 
 ## Personagens
 

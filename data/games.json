@@ -7,7 +7,12 @@
     "indexar": false,
     "pages_url": "https://eduzeroumbet.github.io/cassino-jogos",
     "domains": {"fortune-tiger": "guiadotigrinho.win", "fortune-rabbit": "guiadocoelhinho.win", "fortune-ox": "guiadotourinho.win", "fortune-dragon": "guiadodragaozinho.win", "gates-of-olympus": "guiadozeus.win", "sweet-bonanza": "guiadosdoces.win", "big-bass-splash": "guiadapescaria.win", "mines": "guiadasminas.win"},
-    "domains_active": false
+    "domains_active": false,
+    "promos": [
+      {"badge": "Roleta grátis", "title": "100 giros no Fortune Tiger", "text": "Deposite a partir de R$ 50 e receba 100 giros grátis. Gire a roleta da campanha e veja seu prêmio antes de criar a conta.", "details": "Giros válidos por 7 dias · ganhos sem rollover · uma vez por CPF", "cta": "Girar a roleta", "url": "https://cassino.b7bet7.bet/campanha/deposite-r-50-e-ganhe-100-giros-no-fortune-tiger"},
+      {"badge": "Exclusivo app", "title": "Bônus do app: 50 giros", "text": "Instale o app do site no celular e ganhe 50 giros no Fortune Tiger no depósito a partir de R$ 10, via Pix.", "details": "Uma vez por jogador e por CPF · giros válidos por 7 dias · ganhos sem rollover", "cta": "Ver bônus do app", "url": "https://cassino.b7bet7.bet/campanha/app-50-giros-fortune-tiger"},
+      {"badge": "Grátis", "title": "Mini games grátis todo dia", "text": "8 mini games (roleta, baú, raspadinha, plinko e mais) com uma jogada grátis por dia. Os prêmios em bônus caem direto na carteira.", "details": "Sem depósito para jogar · uma jogada por dia em cada jogo", "cta": "Jogar mini games", "url": "https://cassino.b7bet7.bet/vip/mini-jogos"}
+    ]
   },
   "games": [
     {
@@ -41,9 +46,10 @@
         {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,81% no Fortune Tiger. Não é garantia de resultado numa sessão; confira o valor na tela de regras dentro do jogo."},
         {"q": "Como deposito para jogar?", "a": "Depois de criar a conta, escolha o valor e pague o Pix pelo app do seu banco. O saldo cai em segundos."},
         {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Tiger. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
-        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
+        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."},
+        {"q": "Quais promoções estão ativas?", "a": "Hoje são três: 100 giros no Fortune Tiger com depósito a partir de R$ 50, 50 giros no Fortune Tiger para quem instala o app e deposita a partir de R$ 10 via Pix, e mini games grátis com uma jogada por dia, sem depósito. Os detalhes estão na seção Promoções ativas desta página e as regras completas, em cada campanha."}
       ],
-      "promo": {"text": "Campanha ativa na plataforma: 100 giros no Fortune Tiger com depósito de R$ 50.", "note": "Regras completas na página de promoções da plataforma", "note_url": "/promocoes", "url": "/campanha/deposite-r-50-e-ganhe-100-giros-no-fortune-tiger"}
+      "vitrine_promos": true
     },
     {
       "key": "fortune-rabbit",
@@ -76,7 +82,8 @@
         {"q": "Funciona no celular?", "a": "Sim. O jogo roda no navegador do Android e do iPhone (no Safari): entre na sua conta e toque no jogo. Funciona em tela cheia na vertical."},
         {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,75% no Fortune Rabbit. Não é garantido; cada giro é independente."},
         {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Rabbit. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
-        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
+        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."},
+        {"q": "Quais promoções estão ativas?", "a": "Hoje são três: 100 giros no Fortune Tiger com depósito a partir de R$ 50, 50 giros no Fortune Tiger para quem instala o app e deposita a partir de R$ 10 via Pix, e mini games grátis com uma jogada por dia, sem depósito. Os detalhes estão na seção Promoções ativas desta página e as regras completas, em cada campanha."}
       ]
     },
     {
@@ -108,7 +115,7 @@
       "faq": [
         {"q": "Qual a diferença entre Fortune Ox e Fortune Tiger?", "a": "O Ox tem grade 3-4-3 com dez linhas e o recurso que trava os rolos laterais; o Tiger é 3x3 com cinco linhas. O ganho máximo informado é de 2.000x no Ox e 2.500x no Tiger, e o RTP teórico dos dois é parecido."},
         {"q": "Funciona no celular?", "a": "Sim. O jogo abre no navegador do celular, sem baixar aplicativo. Se preferir, dá para adicionar o site à tela de início."},
-        {"q": "Quanto tempo leva para o depósito cair?", "a": "No Pix o saldo costuma aparecer em segundos depois do pagamento no app do banco."},
+        {"q": "Quais promoções estão ativas?", "a": "Hoje são três: 100 giros no Fortune Tiger com depósito a partir de R$ 50, 50 giros no Fortune Tiger para quem instala o app e deposita a partir de R$ 10 via Pix, e mini games grátis com uma jogada por dia, sem depósito. Os detalhes estão na seção Promoções ativas desta página e as regras completas, em cada campanha."},
         {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,75% no Fortune Ox. Não é uma previsão para a sua sessão; cada giro é independente."},
         {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Ox. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
         {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
@@ -144,7 +151,7 @@
         {"q": "Fortune Dragon é fácil de entender?", "a": "Sim. É um dos slots mais simples: 3x3, cinco linhas e um recurso principal."},
         {"q": "Funciona no celular?", "a": "Sim. A grade 3x3 cabe na tela em pé e o jogo roda no navegador do Android e do iPhone, sem baixar aplicativo."},
         {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,74% no Fortune Dragon. O valor configurado e a tabela de pagamentos ficam no menu de informações dentro do jogo."},
-        {"q": "Como começo?", "a": "Crie sua conta (o cadastro leva poucos minutos), deposite via Pix e toque em Fortune Dragon."},
+        {"q": "Quais promoções estão ativas?", "a": "Hoje são três: 100 giros no Fortune Tiger com depósito a partir de R$ 50, 50 giros no Fortune Tiger para quem instala o app e deposita a partir de R$ 10 via Pix, e mini games grátis com uma jogada por dia, sem depósito. Os detalhes estão na seção Promoções ativas desta página e as regras completas, em cada campanha."},
         {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Dragon. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
         {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
@@ -179,7 +186,7 @@
       "faq": [
         {"q": "O que quer dizer volatilidade alta?", "a": "Os prêmios tendem a ser menos frequentes e maiores. É bom definir um valor por sessão antes de começar."},
         {"q": "Funciona no celular?", "a": "Sim. A grade se ajusta à tela vertical e as animações podem ser aceleradas no menu do jogo."},
-        {"q": "Os multiplicadores se somam?", "a": "Sim. Todos os multiplicadores que caem durante a sequência de cascatas são somados e aplicados ao prêmio total."},
+        {"q": "Quais promoções estão ativas?", "a": "Hoje são três: 100 giros no Fortune Tiger com depósito a partir de R$ 50, 50 giros no Fortune Tiger para quem instala o app e deposita a partir de R$ 10 via Pix, e mini games grátis com uma jogada por dia, sem depósito. Os detalhes estão na seção Promoções ativas desta página e as regras completas, em cada campanha."},
         {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,50% no Gates of Olympus. Com volatilidade alta, o resultado de uma sessão pode ficar longe dessa média."},
         {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Gates of Olympus. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
         {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
@@ -217,7 +224,8 @@
         {"q": "Funciona no celular?", "a": "Sim. O jogo abre no navegador do celular ou do computador, sem instalar nada, e a versão mobile reorganiza a grade para a tela em pé."},
         {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,48% no Sweet Bonanza. Não é uma previsão para a sua sessão; confira o valor na tela de regras dentro do jogo."},
         {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Sweet Bonanza. O depósito mínimo via Pix é exibido na tela de depósito."},
-        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
+        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."},
+        {"q": "Quais promoções estão ativas?", "a": "Hoje são três: 100 giros no Fortune Tiger com depósito a partir de R$ 50, 50 giros no Fortune Tiger para quem instala o app e deposita a partir de R$ 10 via Pix, e mini games grátis com uma jogada por dia, sem depósito. Os detalhes estão na seção Promoções ativas desta página e as regras completas, em cada campanha."}
       ]
     },
     {
@@ -247,7 +255,7 @@
         {"title": "Níveis do pescador", "text": "A cada quatro pescadores coletados, o recurso avança de nível e ganha giros extras com multiplicador maior."}
       ],
       "faq": [
-        {"q": "Como funcionam os giros grátis?", "a": "O pescador entra como curinga e coleta o valor de todos os peixes visíveis. Acumular pescadores sobe o multiplicador."},
+        {"q": "Quais promoções estão ativas?", "a": "Hoje são três: 100 giros no Fortune Tiger com depósito a partir de R$ 50, 50 giros no Fortune Tiger para quem instala o app e deposita a partir de R$ 10 via Pix, e mini games grátis com uma jogada por dia, sem depósito. Os detalhes estão na seção Promoções ativas desta página e as regras completas, em cada campanha."},
         {"q": "Big Bass Splash é o mesmo que Big Bass Bonanza?", "a": "É da mesma série, com grade 5x3 e dez linhas, mas com recursos aleatórios extras antes dos giros grátis."},
         {"q": "Funciona no celular?", "a": "Sim. O jogo roda no navegador do celular, sem baixar aplicativo, e é leve o bastante para o 4G."},
         {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,71% no Big Bass Splash. Não é uma previsão para a sua sessão; cada giro é independente."},
@@ -286,7 +294,8 @@
         {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas. No Turbo Mines, o provedor informa uma faixa que pode chegar a 98,89% conforme a configuração. Confira o valor nas regras dentro do jogo."},
         {"q": "Funciona no celular?", "a": "Sim. A grade 5x5 ocupa a tela em pé e cada casa abre com um toque."},
         {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Turbo Mines. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
-        {"q": "Como sacar?", "a": "O botão de saque dentro do Turbo Mines só encerra a rodada e leva o valor para o seu saldo. Para retirar o saldo da conta, use a carteira da plataforma: o saque é feito via Pix. Condições e prazos estão nos Termos e Condições."}
+        {"q": "Como sacar?", "a": "O botão de saque dentro do Turbo Mines só encerra a rodada e leva o valor para o seu saldo. Para retirar o saldo da conta, use a carteira da plataforma: o saque é feito via Pix. Condições e prazos estão nos Termos e Condições."},
+        {"q": "Quais promoções estão ativas?", "a": "Hoje são três: 100 giros no Fortune Tiger com depósito a partir de R$ 50, 50 giros no Fortune Tiger para quem instala o app e deposita a partir de R$ 10 via Pix, e mini games grátis com uma jogada por dia, sem depósito. Os detalhes estão na seção Promoções ativas desta página e as regras completas, em cada campanha."}
       ]
     }
   ]

@@ -53,8 +53,8 @@ $$('.ch-x button').forEach(function(b){b.addEventListener('click',function(){if(
   if(b.dataset.img)chi.setAttribute('style',b.dataset.img);else chi.removeAttribute('style');
   chi.width=+b.dataset.w;chi.height=+b.dataset.h;chi.alt=b.dataset.alt;chi.src=b.dataset.src;
   $$('.ch-x button').forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false')});ev('lp_personagem',{arte:b.dataset.src.split('/').pop()})})});
-/* cliques nos CTAs */
-$$('[data-cta]').forEach(function(a){a.addEventListener('click',function(){ev('lp_cta',{cta:a.dataset.cta,page:d.body.dataset.page})})});
+/* cliques nos CTAs (cartões de promoção mandam também posicao: promo-<n>) */
+$$('[data-cta]').forEach(function(a){a.addEventListener('click',function(){var p={cta:a.dataset.cta,page:d.body.dataset.page};if(a.dataset.pos)p.posicao=a.dataset.pos;ev('lp_cta',p)})});
 $$('.faq details').forEach(function(x){x.addEventListener('toggle',function(){if(x.open)ev('lp_faq',{q:x.querySelector('summary').textContent})})});
 /* GA4 carregado depois da interação ou do ocioso, para não pesar no LCP */
 var GA=d.body.dataset.ga;
