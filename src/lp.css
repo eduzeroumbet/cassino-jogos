@@ -3,20 +3,26 @@
 @font-face{font-family:M;src:url(../assets/fonts/montserrat-ExtraBold.woff2) format("woff2");font-weight:800;font-display:swap}
 @font-face{font-family:M;src:url(../assets/fonts/montserrat-Black.woff2) format("woff2");font-weight:900;font-display:swap}
 @font-face{font-family:MF;src:local("Arial"),local("ArialMT"),local("Helvetica"),local("Roboto");size-adjust:113%;ascent-override:86%;descent-override:22%;line-gap-override:0%;font-display:swap}
-:root{--bg:#0B1430;--bg2:#13224A;--bg3:#1B2D5C;--cream:#F4EEE6;--muted:#C3CBE3;--coral:#FF3D5A;--cta:#E62E4D;--gold:#F5B942;--acc:var(--gold);--acc2:var(--coral);--r:18px;--pad:20px;--sb:72px}
+:root{--bg:#0B1430;--bg2:#13224A;--bg3:#1B2D5C;--cream:#F4EEE6;--muted:#C3CBE3;--coral:#FF3D5A;--cta:#E62E4D;--gold:#F5B942;--acc:var(--gold);--acc2:var(--coral);--r:18px;--pad:20px;--sb:72px;--hh:72px}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-body,button,input,select,textarea{font-family:M,MF,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-body{background:var(--bg);color:var(--cream);line-height:1.5;font-size:16px;overflow-x:hidden}
+body{font-family:M,MF,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--cream);line-height:1.5;font-size:16px;overflow-x:hidden}
+button,input,select,textarea,summary{font:inherit}
 img,video{display:block;max-width:100%}
 a{color:inherit}
 .wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 var(--pad)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-/* topo */
-.top{position:absolute;z-index:6;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:14px var(--pad);background:rgba(11,20,48,.82);border-bottom:1px solid rgba(255,255,255,.06);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+/* âncoras não ficam sob o cabeçalho fixo */
+[id]{scroll-margin-top:calc(var(--hh) + 12px)}
+/* topo: fixo ao rolar (sticky); a margem negativa mantém o hero por baixo dele, como antes */
+.top{position:sticky;z-index:30;top:0;height:var(--hh);margin-bottom:calc(var(--hh) * -1);display:flex;align-items:center;justify-content:space-between;padding:14px var(--pad);background:rgba(11,20,48,.82);border-bottom:1px solid rgba(255,255,255,.06);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .logo{font-weight:900;letter-spacing:.14em;font-size:14px;text-decoration:none;text-transform:uppercase;display:flex;align-items:center;gap:8px}
 .logo i{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--coral),var(--gold));display:inline-block}
-.top .btn-sm{font-size:13px;font-weight:800;text-decoration:none;padding:10px 16px;border-radius:999px;border:1.5px solid rgba(244,238,230,.5);min-height:44px;display:inline-flex;align-items:center}
+.top-nav{display:flex;align-items:center;gap:8px}
+.top-jogos{display:none;font-size:14px;font-weight:800;text-decoration:none;min-height:44px;align-items:center;padding:0 10px}
+.top .btn-sm{font-size:13px;font-weight:800;text-decoration:none;padding:10px 14px;border-radius:999px;border:1.5px solid rgba(244,238,230,.5);min-height:44px;display:inline-flex;align-items:center;white-space:nowrap}
+.top .btn-acc{background:var(--cta);border-color:var(--cta);color:#fff}
+@media (max-width:379px){.logo span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
 /* hero */
 .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;overflow:clip;isolation:isolate}
 .hero-art{position:absolute;inset:0;z-index:-2;overflow:hidden}
@@ -79,9 +85,11 @@ h2 .hl{color:var(--acc)}
 .note{font-size:13px;color:var(--muted);margin-top:12px}
 /* personagem */
 .ch{display:grid;gap:26px;align-items:center}
-.ch-art{position:relative;width:min(100%,420px);margin:0 auto;border-radius:28px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:#fff;box-shadow:0 30px 80px -24px color-mix(in srgb,var(--acc) 45%,transparent)}
+/* sem cartão branco: fundo transparente com brilho na cor do jogo; só os recortes de board (ch-crop) mantêm moldura */
+.ch-art{position:relative;width:min(100%,420px);margin:0 auto;border-radius:28px;overflow:hidden;background:radial-gradient(closest-side,color-mix(in srgb,var(--acc) 34%,transparent),transparent)}
+.ch-crop{border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 80px -24px color-mix(in srgb,var(--acc) 45%,transparent)}
 .ch-art img{width:100%;height:auto}
-.ch-art.cut{border:0;box-shadow:none;background:radial-gradient(closest-side,color-mix(in srgb,var(--acc) 34%,transparent),transparent)}
+.ch-art.cut{border-radius:0}
 .ch-art.cut img{width:auto;max-height:min(70svh,560px);margin:0 auto;filter:drop-shadow(0 24px 30px rgba(0,0,0,.45))}
 .ch-crop img{position:absolute;max-width:none}
 .ch-x{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
@@ -95,12 +103,13 @@ h2 .hl{color:var(--acc)}
 .hero-acv .hero-art img{object-position:50% 50%;filter:brightness(.82)}
 .h1-logo{line-height:0;margin:14px 0 10px}
 .h1-logo img{width:auto;height:auto;max-width:min(80vw,380px);max-height:min(24svh,220px);filter:drop-shadow(0 10px 24px rgba(0,0,0,.6))}
-/* h1 em texto das landings: pequeno, entre o logo (ou o nome grande) e o subtítulo */
-.hero .h1-txt{font-size:clamp(14px,3.8vw,17px);font-weight:800;line-height:1.3;letter-spacing:.02em;text-transform:none;margin:0 0 10px;color:var(--cream)}
+/* h1 em texto das landings: entre o logo (ou o nome grande) e a frase de apoio, maior que ela (a frase vira subtítulo) */
+.hero .h1-txt{font-size:clamp(24px,6.6vw,36px);font-weight:900;line-height:1.1;letter-spacing:-.01em;text-transform:none;margin:0 0 10px;color:var(--cream)}
+.h1-txt~.headline{font-size:clamp(16px,4.4vw,21px);font-weight:700;line-height:1.3;max-width:34ch}
 .hname+.h1-txt{margin-top:-2px}
-/* h1 da index: "Os jogos de cassino mais jogados: guias e RTP", com "mais jogados" em destaque */
-.h1-hub small{display:block;font-size:clamp(14px,3.8vw,18px);font-weight:800;line-height:1.3;letter-spacing:.12em;color:var(--cream)}
-.h1-hub small:first-child{margin-bottom:6px}.h1-hub small:last-child{margin-top:8px}
+/* h1 da index: no HTML "Os jogos de cassino mais jogados: guias e RTP"; caixa alta e quebras em CSS, com "mais jogados" em destaque */
+.h1-hub .h1-l{display:block;font-size:clamp(14px,3.8vw,18px);font-weight:800;line-height:1.3;letter-spacing:.12em;color:var(--cream)}
+.h1-hub .h1-l:first-child{margin-bottom:6px}.h1-hub .h1-l:last-child{margin-top:8px}
 /* sem filter:drop-shadow: com a máscara, a sombra é cortada na caixa da imagem e marca uma faixa sobre o fundo */
 .hero-ch{position:absolute;z-index:0;top:62px;left:50%;height:min(40svh,380px);width:auto;max-width:none;transform:translateX(-50%);pointer-events:none;
   -webkit-mask-image:linear-gradient(180deg,#000 74%,transparent);mask-image:linear-gradient(180deg,#000 74%,transparent)}
@@ -124,9 +133,9 @@ h2 .hl{color:var(--acc)}
 .phone img.kb{animation:kb 14s ease-in-out infinite alternate}
 @keyframes kb{to{transform:scale(1.12) translate(-3%,-2%)}}
 .phone .tag{position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:800;padding:7px 12px;border-radius:999px;background:rgba(11,20,48,.75);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.promo{margin-top:18px;padding:16px 18px;border-radius:var(--r);border:1px dashed color-mix(in srgb,var(--acc) 60%,transparent);background:rgba(245,185,66,.06);font-size:14px}
+.promo{margin-top:18px;padding:16px 18px;border-radius:var(--r);border:1px dashed color-mix(in srgb,var(--acc) 60%,transparent);background:rgba(245,185,66,.06);font-size:15px}
 .promo a{font-weight:800;color:var(--acc)}
-.promo small{display:block;margin-top:8px;font-size:13px;color:var(--muted)}
+.promo small{display:block;margin-top:8px;font-size:14px;color:var(--muted)}
 /* step path */
 .steps{position:relative;margin-top:30px;padding-left:58px}
 .steps svg{position:absolute;left:18px;top:8px;height:calc(100% - 16px);width:12px;overflow:visible}
@@ -145,6 +154,7 @@ h2 .hl{color:var(--acc)}
 .card img{width:100%;height:auto;aspect-ratio:300/350;object-fit:contain;background:color-mix(in srgb,var(--ca,var(--acc)) 28%,var(--bg))}
 .card span{display:block;padding:10px 12px 12px;font-weight:800;font-size:14px}
 .card small{display:block;color:var(--muted);font-weight:600;font-size:13px}
+.card .rtp{color:var(--cream);font-weight:800;margin-top:2px}
 /* faq */
 .faq{margin-top:22px;display:grid;gap:10px}
 .faq details{background:var(--bg2);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:0 18px}
@@ -161,7 +171,8 @@ h2 .hl{color:var(--acc)}
 footer{padding:48px 0;color:var(--muted);font-size:13px}
 footer .rg{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
 footer .age{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:2px solid var(--coral);display:grid;place-items:center;font-weight:900;color:var(--cream)}
-footer nav{display:flex;flex-wrap:wrap;gap:6px 18px;margin:18px 0}
+/* rodapé no celular: links em grade de 2 colunas (número par de links por bloco, nenhum sozinho na linha) */
+footer nav{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin:18px 0}
 footer nav.docs{margin-top:-10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08)}
 footer nav.docs a{font-weight:600;color:#D0D4E0}
 footer nav a{text-decoration:none;font-weight:700;color:var(--cream);min-height:44px;display:inline-flex;align-items:center}
@@ -192,12 +203,14 @@ footer nav a{text-decoration:none;font-weight:700;color:var(--cream);min-height:
   .collage{grid-template-columns:repeat(6,1fr);transform:rotate(-8deg) scale(1.15)}
   .ch{grid-template-columns:5fr 7fr;gap:40px}.ch.no-art{grid-template-columns:1fr}
   .ch-x button{width:96px;height:96px}
+  footer nav{display:flex;flex-wrap:wrap;gap:6px 18px}
 }
 @media (min-width:960px){
   .hero-ch{top:auto;left:auto;right:max(2vw,calc(50% - 620px));bottom:0;height:min(86svh,780px);transform:none;
     -webkit-mask-image:linear-gradient(180deg,#000 82%,transparent);mask-image:linear-gradient(180deg,#000 82%,transparent)}
   .has-ch .hero-in{padding-top:96px}.has-ch .hero-in>*{max-width:560px}
   .h1-logo img{max-width:420px;max-height:260px}
+  .top-jogos{display:inline-flex}
 }
 @media (min-width:1024px){
   .hero{align-items:center}

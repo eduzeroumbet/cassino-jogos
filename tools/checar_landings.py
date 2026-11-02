@@ -3,7 +3,8 @@
 
 Para cada docs/*.html e dist-dominios/<dominio>/*.html:
   - todo src, href, srcset, poster, data-src e url() local aponta para um arquivo que existe dentro da própria pasta publicada
-  - toda <img> tem alt, width e height; nas landings, as imagens com arte (hero, logo, personagem, cards) têm alt preenchido
+  - toda <img> tem alt, width e height; nas landings, as imagens com arte (logo, personagem, cards) têm alt preenchido
+    (alt vazio só nas decorativas, com aria-hidden="true", como o fundo do hero)
   - só a arte do topo e o logo/personagem do hero ficam sem loading="lazy"; nenhum <img> depende de JS para aparecer (data-src)
   - nas landings e na index, nenhum texto visível nem alt/aria-label/title/meta contém os diminutivos
     (Tigrinho, Tourinho, Coelhinho, Dragãozinho, Ratinho); nomes de arquivo e de domínio não contam
@@ -50,7 +51,7 @@ def checar_arquivo(f, pasta, rel, landing):
         if not (re.search(r'\bwidth="\d+"', tag) and re.search(r'\bheight="\d+"', tag)):
             erros.append(f'{rel}: <img> sem width/height: {tag[:100]}')
         if 'data-src=' in tag: erros.append(f'{rel}: <img> que depende de JS para carregar: {tag[:100]}')
-        if landing and ('assets/acervo/' in tag or 'assets/sites/cards/' in tag) and re.search(r'\balt=""', tag):
+        if landing and ('assets/acervo/' in tag or 'assets/sites/cards/' in tag) and re.search(r'\balt=""', tag) and 'aria-hidden="true"' not in tag:
             erros.append(f'{rel}: arte sem alt descritivo: {tag[:100]}')
         if landing and 'fetchpriority="high"' in tag and 'loading="lazy"' in tag:
             erros.append(f'{rel}: arte do topo com loading="lazy": {tag[:100]}')

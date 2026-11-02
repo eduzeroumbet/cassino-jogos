@@ -6,12 +6,19 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
 - Conteúdo: `data/games.json` (um bloco por jogo: textos, métricas, recursos, FAQ, cores, efeito do hero, personagem).
   - `description` (opcional): meta description própria, até 150 caracteres e terminando em frase completa (o build para se não cumprir).
     Sem ela, nome, provedor e lede até 150 caracteres, no fim da última frase completa ou na última palavra inteira, com ponto.
-  - `faq`: pelo menos 5 perguntas (o build para se faltar), incluindo "Qual a aposta mínima?" e "Como faço saque?"; vira também o JSON-LD FAQPage.
+  - `faq`: de 5 a 6 perguntas (o build para se não cumprir), incluindo "Qual o valor mínimo de aposta?", "Como sacar?", "Funciona no celular?"
+    e "O que é RTP?"; vira também o JSON-LD FAQPage.
+  - `promo` (opcional): `text`, `url` (link "Ver campanha") e `note`; com `note_url`, a nota vira link (ex.: `/promocoes`).
   - Textos descrevem a mecânica do jogo; nada de promessa de ganho.
-- SEO: cada landing tem um h1 em texto ("<jogo>: como jogar, RTP e recursos"), pequeno, abaixo do logo e acima do subtítulo; a index tem o h1
-  "Os jogos de cassino mais jogados: guias e RTP" e JSON-LD ItemList com os jogos. Capas e cards têm alt "Nome do jogo, Provedor"; imagens decorativas, alt="".
+- SEO: cada landing tem um h1 em texto ("<jogo>: como jogar, RTP e recursos") abaixo do logo, maior que a frase de apoio (subtítulo); a index tem o h1
+  exatamente "Os jogos de cassino mais jogados: guias e RTP" no HTML (caixa alta e quebras em CSS), um parágrafo de 80 a 120 palavras sobre o que cada
+  guia traz (o build confere), cards com RTP e JSON-LD ItemList com os jogos. Capas e cards têm alt "Nome do jogo, Provedor"; personagens, descrição curta;
+  imagens decorativas (fundo do hero, colagem, miniaturas dentro de botões com aria-label), alt="" e aria-hidden="true".
+  `docs/sitemap.xml` lista a index e as 8 landings.
+- Cabeçalho fixo (sticky, com `scroll-margin-top` nas âncoras): logo, "Jogos" (só a partir de 960 px), "Entrar" e "Criar conta".
 - Estilo e comportamento: `src/lp.css`, `src/lp.js` (CSS e JS entram inline no HTML: 1 requisição a menos). O banco de personagens usa também `src/personagens.js`.
-- Gerar: `python3 build.py` grava em `docs/` (publicado pelo GitHub Pages) e em `dist-dominios/` (um site por jogo). Ao limpar `docs/`, preserva `docs/previa-r4/` (de outra demanda; lista `MANTER` no build). No fim, o verificador confere que todo asset citado no HTML existe e que não há travessão em texto.
+- Gerar: `python3 build.py` grava em `docs/` (publicado pelo GitHub Pages) e em `dist-dominios/` (um site por jogo). Ao limpar `docs/`, preserva `docs/previa-r4/` (de outra demanda; lista `MANTER` no build). No fim, o verificador confere que todo asset citado no HTML existe, que não há travessão, que toda `<img>` tem alt,
+  que há um h1 por página, que não há "teste" em texto visível e que o carrossel "Outros favoritos" não usa loading="lazy".
   Depois: `python3 tools/checar_landings.py` confere em `docs/` e em cada `dist-dominios/<dominio>/` que todo src/href/srcset/poster local existe,
   `<img>` com alt, width e height, hero sem lazy, nenhuma imagem dependente de JS, og:image 1200x630, twitter:card, robots, 18+, UTMs e
   nenhum diminutivo (Tigrinho, Tourinho, Coelhinho, Dragãozinho, Ratinho) em texto visível, alt ou meta das landings e da index.
@@ -26,8 +33,10 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
     sem logo, a arte inteira (banner sem a faixa legal, ou a indicada em `og_arte` no `games.json`) sobre ela mesma desfocada. Mines continua com `assets/img/mines-og.jpg`.
   - O build copia para `docs/` e para cada domínio só os arquivos de `assets/acervo/` e `assets/sites/` que as páginas usam.
 - Imagens: `tools_imgs.py` gera hero WebP 600/896, miniatura e OG 1200x630 (hoje usados só pelo Mines e como reserva das capas).
-- Indexação: `site.indexar=false` coloca noindex e robots Disallow (páginas de teste). Troque para true quando houver domínio próprio e operação licenciada.
-- Todos os links para a plataforma levam UTM: utm_source=lp, utm_medium=landing, utm_campaign=<jogo>, utm_content=<posição do botão>.
+- Indexação: `site.indexar=true` (hoje): robots index,follow e robots.txt Allow (com a linha Sitemap no `docs/`); `false` coloca noindex e Disallow.
+  O banco de personagens (uso interno) é sempre noindex.
+- Todos os links para a plataforma levam UTM e `rel="sponsored noopener"`: utm_source=landing, utm_medium=guia, utm_campaign=<jogo> (`hub` na index),
+  utm_content=<posição: header, hero, vitrine ou final>; barra fixa e rodapé contam como final. O botão exato vai no evento `lp_cta` do GA4 (`data-cta`).
 
 ## Personagens
 
@@ -37,14 +46,15 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
   `{"main": caminho, "extras": [até 3 caminhos], "name": nome, "alt": texto alternativo, "bio": 2 frases, "crop": [x, y, w, h] opcional}`.
   `crop` (em px da versão web) mostra só um recorte da arte, em CSS; serve para os boards do elenco da casa, que trazem texto.
 - Na landing: bloco "Conheça o personagem" logo depois das métricas (arte no HTML com src real, sem loading lazy
-  e sem decoding="async", com fetchpriority baixo e width/height reais, lidos do cabeçalho do WebP; arte de fundo branco fica num cartão branco
-  de cantos arredondados). Com decoding="async" o Chrome adiava a decodificação fora da tela e capturas de página inteira mostravam só a moldura
+  e sem decoding="async", com fetchpriority baixo e width/height reais, lidos do cabeçalho do WebP; sem cartão branco: fundo transparente com brilho na cor do jogo;
+  só os recortes de board, com `crop`, têm moldura). Fortune Tiger usa as artes recortadas `personagens-cassino-copa-site/pg/fortune-tiger/`. Com decoding="async" o Chrome adiava a decodificação fora da tela e capturas de página inteira mostravam só a moldura
   vazia. Se a arte falhar (onerror), o cartão mostra a capa do jogo (`assets/img/<jogo>-thumb.webp`); se nenhuma arte do personagem for válida
   (fora do catálogo ou arquivo ausente), o bloco fica só com o texto, sem o espaço da imagem. As miniaturas (principal + extras, 76 px no celular, 96 px no desktop) são botões
   que trocam a arte grande; abaixo, link "Ver todos os personagens" (personagens.html; no domínio próprio, a do GitHub Pages).
-  Personagem no hero (celular e desktop): o recortado oficial do acervo; sem ele, a arte principal se tiver fundo transparente (Zeus).
+  Personagem no hero (celular e desktop): o recortado oficial do acervo; sem ele, a arte principal se tiver fundo transparente (Zeus),
+  a menos que o `character` tenha `"hero": false` (Fortune Tiger, para manter o hero só com fundo e logo).
   Se o hero usa a própria arte principal, o bloco abre com a primeira extra, para não repetir a arte do hero.
-- Carrossel "Outros favoritos": os 3 primeiros cards sem lazy; os demais com `loading="lazy"` nativo (sem IntersectionObserver).
+- Carrossel "Outros favoritos": nenhum card com lazy nem decoding async (no desktop, cards sem rolar apareciam como bloco de cor vazio).
   No celular e no tablet rola na horizontal; a partir de 1024 px vira grade de 4 colunas, com todos os cards inteiros.
 - Escolhas atuais: Tigre da Sorte, Coelho da Fortuna, Touro da Sorte, Dragão da Fortuna (nomes dos logos oficiais em PT) e Zeus (artes dos jogos);
   nos textos visíveis não se usam diminutivos. Sweet Bonanza, Big Bass Splash e Mines não têm
