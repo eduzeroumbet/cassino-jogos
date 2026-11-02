@@ -66,6 +66,11 @@ def play_url(g):
 
 ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>'
+GRADE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>'
+
+def com18(btn):
+    """Botão principal (hero e CTA final) com o selo 18+ pequeno ao lado."""
+    return f'<span class="cta18">{btn}<span class="age18" title="Proibido para menores de 18 anos">18+</span></span>'
 
 def head(title, desc, og, canonical, accent, preload=None, extra='', noindex=False, og_alt=None):
     """preload: (src, srcset, sizes) da imagem do hero."""
@@ -87,9 +92,9 @@ def head(title, desc, og, canonical, accent, preload=None, extra='', noindex=Fal
 <style>{CSS}:root{{--acc:{accent}}}</style>{extra}</head>'''
 
 def top(key, hub='./'):
-    """Cabeçalho fixo (sticky): logo, "Jogos" (só no desktop), "Entrar" e "Criar conta"."""
+    """Cabeçalho fixo (sticky): logo, "Jogos" (ícone de grade + texto, em todas as telas), "Entrar" e "Criar conta"."""
     return (f'<header class="top"><a class="logo" href="{hub}" aria-label="{e(S["brand"])}: todos os jogos"><i></i><span>{e(S["brand"])}</span></a>'
-            f'<nav class="top-nav" aria-label="Conta"><a class="top-jogos" href="{hub}">Jogos</a>'
+            f'<nav class="top-nav" aria-label="Conta"><a class="top-jogos" href="{hub}">{GRADE}Jogos</a>'
             f'<a class="btn-sm" data-cta="topo_entrar" href="{utm("/login", key, "header")}">Entrar</a>'
             f'<a class="btn-sm btn-acc" data-cta="topo_cadastro" href="{utm(S["register"], key, "header")}">Criar conta</a></nav></header>')
 
@@ -97,7 +102,7 @@ def footer(key, hub='./'):
     return f'''<footer><div class="wrap"><div class="rg"><span class="age">18+</span><p>Proibido para menores de 18 anos. Jogue com responsabilidade: defina um valor por sessão, faça pausas e não trate o jogo como fonte de renda. Os valores de RTP são teóricos, informados pelos provedores, e não garantem resultado.</p></div>
 <nav><a href="{hub}">Todos os jogos</a><a data-cta="rodape_cassino" href="{utm("/cassino", key, "final")}">Cassino</a><a data-cta="rodape_cadastro" href="{utm(S["register"], key, "final")}">Criar conta</a><a href="{utm("/usuario/carteira", key, "final")}">Depósito Pix</a></nav>
 <nav class="docs" aria-label="Documentos da plataforma"><a href="{utm("/pagina/terms", key, "final")}">Termos e Condições</a><a href="{utm("/pagina/privacy", key, "final")}">Política de Privacidade</a><a href="{utm("/pagina/responsible-gaming", key, "final")}">Jogo Responsável</a><a href="{utm("/faq", key, "final")}">Central de Ajuda</a></nav>
-<p>Página informativa de {e(S["brand"])}. Os jogos citados pertencem aos respectivos provedores.</p></div></footer>'''
+<p>Guia informativo. Os jogos citados pertencem aos respectivos provedores.</p></div></footer>'''
 
 def pic(k, cls='', eager=False):
     """Arte de fundo do hero sem acervo (Mines): decorativa, alt vazio e aria-hidden."""
@@ -331,6 +336,9 @@ def game_page(g, mode='pages'):
     assert not falta, f'FAQ de {k}: faltam {sorted(falta)}'
     faq_ld = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
         {"@type": "Question", "name": f['q'], "acceptedAnswer": {"@type": "Answer", "text": f['a']}} for f in g['faq']]}, ensure_ascii=False)
+    trilha_ld = json.dumps({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Jogos", "item": f'{PAGES}/'},
+        {"@type": "ListItem", "position": 2, "name": n, "item": canonical}]}, ensure_ascii=False)
     if g.get('video'):
         media = (f'<video muted loop playsinline preload="none" poster="assets/img/{k}-thumb.webp" data-src="assets/video/{g["video"]}.mp4" '
                  f'width="300" height="375" aria-label="Prévia do {e(n)}"></video>')
@@ -350,7 +358,8 @@ def game_page(g, mode='pages'):
     style = f'<style>:root{{--acc:{g["accent"]};--acc2:{g.get("accent2", "#FF3D5A")}}}</style>'
     cls = ' has-ch' if hc else ''
     if hero_bg(k): cls += ' hero-acv'
-    return saida(head(title, desc, og, canonical, g['accent'], hero_preload(k), style + f'<script type="application/ld+json">{faq_ld}</script>',
+    return saida(head(title, desc, og, canonical, g['accent'], hero_preload(k),
+                style + f'<script type="application/ld+json">{faq_ld}</script><script type="application/ld+json">{trilha_ld}</script>',
                 og_alt=f'Arte oficial do {n}' if k in ACJ else f'{n}: guia do jogo') + f'''
 <body data-page="{k}" data-ga="{S.get('ga4', '')}">
 {top(k, hub)}
@@ -359,12 +368,13 @@ def game_page(g, mode='pages'):
 <div class="veil l" aria-hidden="true"></div><div class="veil r" aria-hidden="true"></div>
 <div class="hero-art">{hero_art(g)}</div>
 <div class="fx fx-{g['effect']}" aria-hidden="true"></div>{hc}
+<nav class="crumbs" aria-label="Você está em"><a href="{hub}">Jogos</a><span aria-hidden="true">›</span><span aria-current="page">{e(n)}</span></nav>
 <div class="hero-in">
 <span class="kicker"><b></b>{e(g['kicker'])}</span>
 {hero_title(g)}
 <p class="headline focus">{words(g['headline'])}</p>
 <p class="lede">{e(g['lede'])}</p>
-<div class="ctas"><a class="btn btn-main" data-cta="hero_cadastro" href="{reg}">Criar conta e jogar {ARROW}</a><a class="btn btn-ghost" href="#recursos">Ver como funciona</a></div>
+<div class="ctas">{com18(f'<a class="btn btn-main" data-cta="hero_cadastro" href="{reg}">Criar conta e jogar {ARROW}</a>')}<a class="btn btn-ghost" href="#recursos">Ver como funciona</a></div>
 <div class="trust"><span>Pix na hora</span><span>Joga no navegador</span><span>Sem baixar app</span></div>
 </div></section>
 
@@ -407,7 +417,7 @@ def game_page(g, mode='pages'):
 
 <section class="final"><p class="eyebrow">Pronto para jogar</p><h2>{e(n)} está a um toque</h2>
 <p class="sub" style="margin:0 auto">Crie a conta, faça o Pix e abra o jogo direto no celular.</p>
-<div class="ctas"><a class="btn btn-main" data-cta="final_cadastro" href="{utm(S['register'], k, 'final')}">Criar conta grátis {ARROW}</a><a class="btn btn-ghost" data-cta="final_entrar" href="{utm('/login', k, 'final')}">Já tenho conta</a></div>
+<div class="ctas">{com18(f'<a class="btn btn-main" data-cta="final_cadastro" href="{utm(S["register"], k, "final")}">Criar conta e jogar {ARROW}</a>')}<a class="btn btn-ghost" data-cta="final_entrar" href="{utm('/login', k, 'final')}">Já tenho conta</a></div>
 </section>
 </main>
 {footer(k, hub)}
@@ -416,7 +426,7 @@ def game_page(g, mode='pages'):
 </body></html>''')
 
 LZ = 'loading="lazy"'
-# parágrafo abaixo de "Escolha o seu jogo" (80 a 120 palavras; o build confere)
+# parágrafo de "Como ler os guias", abaixo da grade de jogos (80 a 120 palavras; o build confere)
 HUB_INTRO = ('Cada guia reúne o que vale saber antes de abrir o jogo. Você encontra o RTP teórico informado pelo provedor, o ganho máximo '
              'em vezes a aposta e a volatilidade, que indica se os prêmios tendem a ser mais frequentes e menores ou mais raros e maiores. '
              'Também explicamos como o jogo paga: grade, linhas ou pagamento em qualquer posição, curingas, multiplicadores e giros grátis. '
@@ -442,17 +452,19 @@ def hub():
 <div class="veil l" aria-hidden="true"></div><div class="veil r" aria-hidden="true"></div>
 <div class="cbox" aria-hidden="true"><div class="collage">{col}</div></div>
 <div class="fx fx-coins" aria-hidden="true"></div>
-<div class="hero-in"><span class="kicker"><b></b>Guia dos jogos</span>
-<h1 class="h1-hub"><span class="h1-l">Os jogos de cassino</span> mais <em>jogados:</em> <span class="h1-l">guias e RTP</span></h1>
+<div class="hero-in"><p class="kickers"><span class="kicker"><b></b>Guia dos jogos</span><span class="kicker"><b></b>Guias e RTP</span></p>
+<h1 class="h1-hub"><span class="h1-l">Os jogos de cassino</span> mais <em>jogados</em></h1>
 <p class="headline focus">{words('Escolha o seu e entenda o jogo antes do primeiro giro')}</p>
 <p class="lede">RTP, recursos e como jogar no celular, jogo por jogo. Tudo no navegador, com depósito via Pix.</p>
-<div class="ctas"><a class="btn btn-main" data-cta="hub_cadastro" href="{utm(S['register'], 'hub', 'hero')}">Criar conta {ARROW}</a><a class="btn btn-ghost" href="#jogos">Ver os jogos</a></div>
+<div class="ctas">{com18(f'<a class="btn btn-main" data-cta="hub_cadastro" href="{utm(S["register"], "hub", "hero")}">Criar conta e jogar {ARROW}</a>')}<a class="btn btn-ghost" href="#jogos">Ver os jogos</a></div>
 </div></section>
 <section class="s" id="jogos"><div class="wrap"><p class="eyebrow">{len(G)} guias</p><h2>Escolha o <span class="hl">seu jogo</span></h2>
-<p class="sub">{e(HUB_INTRO)}</p>
-<div class="grid">{grid}</div><p class="note more"><a href="personagens.html">Personagens dos jogos</a></p></div></section>
+<p class="sub">RTP, ganho máximo, volatilidade e passo a passo de cada jogo.</p>
+<div class="grid">{grid}</div>
+<h3 class="ler">Como ler os guias</h3><p class="sub">{e(HUB_INTRO)}</p>
+<p class="note more"><a href="personagens.html">Personagens dos jogos</a></p></div></section>
 <section class="final"><h2>Cadastro em poucos minutos</h2><p class="sub" style="margin:0 auto">Cadastro rápido, Pix na hora e centenas de jogos.</p>
-<div class="ctas"><a class="btn btn-main" data-cta="hub_final" href="{utm(S['register'], 'hub', 'final')}">Criar conta grátis {ARROW}</a></div></section>
+<div class="ctas">{com18(f'<a class="btn btn-main" data-cta="hub_final" href="{utm(S["register"], "hub", "final")}">Criar conta e jogar {ARROW}</a>')}</div></section>
 </main>
 {footer('hub')}
 <div class="sticky"><a class="btn btn-main" data-cta="sticky_cadastro" href="{utm(S['register'], 'hub', 'final')}">Jogar agora {ARROW}</a></div>
