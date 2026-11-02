@@ -2,12 +2,16 @@
 """Gera as landing pages estáticas a partir de data/games.json:
 - docs/: site do GitHub Pages (hub, uma página por jogo e o banco de personagens)
 - dist-dominios/<dominio>/: uma landing por jogo, pronta para o domínio próprio de cada jogo
-Uso: python3 build.py   (sem dependências externas)"""
-import json, os, shutil, html, re
+Artes oficiais do acervo (data/acervo.json): fundo, logo PT e personagem no hero, cards de assets/sites/cards/ (build_sites.py)
+e og:image 1200x630 em assets/og/<jogo>.jpg (Pillow, só quando falta ou com --imagens).
+Uso: python3 build.py [--imagens]"""
+import json, os, shutil, html, re, sys
 R = os.path.dirname(os.path.abspath(__file__))
 D = json.load(open(os.path.join(R, 'data/games.json'), encoding='utf-8'))
 S = D['site']; G = D['games']
 CAT = json.load(open(os.path.join(R, 'data/personagens.json'), encoding='utf-8'))
+ACJ = json.load(open(os.path.join(R, 'data/acervo.json'), encoding='utf-8'))['jogos']  # chave do jogo -> bg, banner, square, logo, char
+FORCE = '--imagens' in sys.argv
 OUT = os.path.join(R, 'docs')
 DIST = os.path.join(R, 'dist-dominios')
 CSS = open(os.path.join(R, 'src/lp.css'), encoding='utf-8').read().replace('../assets/', 'assets/')
@@ -54,19 +58,20 @@ def play_url(g):
 ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
 PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>'
 
-def head(title, desc, og, canonical, accent, preload=None, extra='', noindex=False):
+def head(title, desc, og, canonical, accent, preload=None, extra='', noindex=False, og_alt=None):
+    """preload: (src, srcset, sizes) da imagem do hero."""
     robots = 'index,follow' if S.get('indexar') and not noindex else 'noindex,nofollow'
     pl = ''
     if preload:
-        pl = (f'<link rel="preload" as="image" href="{preload}-600.webp" imagesrcset="{preload}-600.webp 600w, {preload}-896.webp 896w" '
-              f'imagesizes="(min-width:1024px) 58vw, 100vw" fetchpriority="high">')
+        pl = f'<link rel="preload" as="image" href="{preload[0]}" imagesrcset="{preload[1]}" imagesizes="{preload[2]}" fetchpriority="high">'
+    oa = f'<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{e(og_alt)}">' if og_alt else ''
     return f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>{e(title)}</title><meta name="description" content="{e(desc)}"><meta name="robots" content="{robots}">
 <meta name="theme-color" content="#0B1430"><link rel="canonical" href="{canonical}">
 <meta property="og:type" content="website"><meta property="og:locale" content="pt_BR"><meta property="og:title" content="{e(title)}">
-<meta property="og:description" content="{e(desc)}"><meta property="og:image" content="{og}"><meta property="og:url" content="{canonical}">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:description" content="{e(desc)}"><meta property="og:image" content="{og}">{oa}<meta property="og:url" content="{canonical}">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{og}">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/montserrat-Black.woff2" crossorigin>
 <link rel="preconnect" href="{BASE}">{pl}
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23FF3D5A'/%3E%3C/svg%3E">
@@ -86,6 +91,90 @@ def pic(k, alt, cls='', eager=False):
     pr = 'fetchpriority="high"' if eager else 'loading="lazy" decoding="async"'
     return (f'<img class="{cls}" src="assets/img/{k}-hero-600.webp" srcset="assets/img/{k}-hero-600.webp 600w, assets/img/{k}-hero-896.webp 896w" '
             f'sizes="(min-width:1024px) 58vw, 100vw" width="896" height="1200" alt="{e(alt)}" {pr}>')
+
+# ---------------------------------------------------------------- artes oficiais do acervo
+
+def acv(k, tipo):
+    """Arquivos de um tipo (bg, banner, square, logo, char) do acervo do jogo, do maior para o menor; [] se não houver."""
+    return ACJ.get(k, {}).get(tipo) or []
+
+def hero_bg(k):
+    """Fundo do hero: o fundo oficial do jogo; sem ele, a arte quadrada (os banners trazem faixa legal e, no Sweet Bonanza, são de outra versão)."""
+    return acv(k, 'bg') or acv(k, 'square')
+
+HERO_SIZES = '(orientation:portrait) 140vh, 100vw'  # no celular em pé a arte larga cobre a altura da tela
+
+def hero_preload(k):
+    bg = hero_bg(k)
+    if not bg: return (f'assets/img/{k}-hero-600.webp', f'assets/img/{k}-hero-600.webp 600w, assets/img/{k}-hero-896.webp 896w', '(min-width:1024px) 58vw, 100vw')
+    return bg[-1]['arquivo'], ', '.join(f'{i["arquivo"]} {i["w"]}w' for i in reversed(bg)), HERO_SIZES
+
+def hero_art(g):
+    """Fundo do topo: arte oficial do acervo (WebP até 1600 px, carregada antes de tudo, sem lazy); o escurecimento vem do .hero:after.
+    Jogo sem acervo (Mines) mantém a arte própria."""
+    k = g['key']; bg = hero_bg(k)
+    if not bg: return pic(k, 'Arte do ' + g['name'], eager=True)
+    src, srcset, sizes = hero_preload(k)
+    return (f'<img src="{src}" srcset="{srcset}" sizes="{sizes}" width="{bg[0]["w"]}" height="{bg[0]["h"]}" '
+            f'alt="Cenário oficial do {e(g["name"])}" fetchpriority="high">')
+
+def hero_title(g):
+    """Título do hero: o logo oficial em português do acervo (o alt é o nome do jogo, que vira o texto do h1); sem logo, o nome em texto."""
+    lg = acv(g['key'], 'logo')
+    if not lg: return f'<h1>{h1name(g["name"])}</h1>'
+    l = lg[0]
+    return f'<h1 class="h1-logo"><img src="{l["arquivo"]}" width="{l["w"]}" height="{l["h"]}" alt="{e(g["name"])}" decoding="async"></h1>'
+
+def thumb(k):
+    """Imagem do card: composição oficial do acervo (assets/sites/cards/<jogo>.webp, do build_sites.py); sem ela, a capa do catálogo."""
+    p = f'assets/sites/cards/{k}.webp'
+    return p if os.path.exists(os.path.join(R, p)) else f'assets/img/{k}-thumb.webp'
+
+OG_FEITAS = set()  # com --imagens, cada OG é refeita uma vez por execução
+
+def og_image(g):
+    """og:image 1200x630 com as artes oficiais do acervo em assets/og/<jogo>.jpg (Pillow, só quando falta ou com --imagens).
+    Com logo: fundo do jogo, escurecido à esquerda, logo PT à esquerda e personagem à direita (sem personagem, logo ao centro).
+    Sem logo: composição do build_sites.py (banner sem a faixa legal ou a arte indicada em og_arte). Sem acervo (Mines): a OG antiga."""
+    k = g['key']
+    if k not in ACJ: return f'assets/img/{k}-og.jpg'
+    p = f'assets/og/{k}.jpg'
+    if (not FORCE or p in OG_FEITAS) and os.path.exists(os.path.join(R, p)): return p
+    OG_FEITAS.add(p)
+    from PIL import Image, ImageFilter, ImageOps
+    import build_sites
+    W, H = 1200, 630
+    abre = lambda i: Image.open(os.path.join(R, i[0]['arquivo'])).convert('RGBA')
+    bg, logo, char = hero_bg(k), acv(k, 'logo'), acv(k, 'char')
+    if bg and logo:
+        im = ImageOps.fit(abre(bg), (W, H), Image.LANCZOS)
+        mask = Image.linear_gradient('L').rotate(90).resize((W, H))  # 255 à esquerda, 0 à direita
+        dark = Image.new('RGBA', (W, H), (11, 20, 48, 255)); dark.putalpha(mask.point(lambda v: 60 + v * 150 // 255 if char else 110))
+        im = Image.alpha_composite(im, dark)
+        if char:
+            c = abre(char); h = 600; c = c.resize((round(c.width * h / c.height), h), Image.LANCZOS)
+            if c.width > 520: c = c.resize((520, round(c.height * 520 / c.width)), Image.LANCZOS)
+            x = W - c.width - 50; y = H - c.height
+            sh = Image.new('RGBA', (W, H), (0, 0, 0, 0)); sh.paste((0, 0, 0, 140), (x + 14, y + 10), c.split()[3])
+            im = Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(16)))
+            im.alpha_composite(c, (x, y))
+        lg = abre(logo); bw, bh = (600, 470) if char else (760, 520)
+        s = min(bw / lg.width, bh / lg.height); lg = lg.resize((round(lg.width * s), round(lg.height * s)), Image.LANCZOS)
+        x = (60 + (640 - lg.width) // 2) if char else (W - lg.width) // 2; y = (H - lg.height) // 2
+        sh = Image.new('RGBA', (W, H), (0, 0, 0, 0)); sh.paste((0, 0, 0, 160), (x, y + 8), lg.split()[3])
+        im = Image.alpha_composite(im, sh.filter(ImageFilter.GaussianBlur(12)))
+        im.alpha_composite(lg, (x, y))
+    else:  # arte inteira (banner sem a faixa legal, ou a de og_arte) sobre ela mesma desfocada, sem cortar o logo
+        t = g.get('og_arte') or next(t for t in ('banner', 'square', 'bg') if acv(k, t))
+        src = abre(acv(k, t))
+        if t == 'banner': src = build_sites.sem_faixa(src)
+        im = ImageOps.fit(src, (W, H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(18))
+        im = Image.alpha_composite(im, Image.new('RGBA', (W, H), (11, 20, 48, 90)))
+        s = min(W / src.width, H / src.height); a = src.resize((round(src.width * s), round(src.height * s)), Image.LANCZOS)
+        im.alpha_composite(a, ((W - a.width) // 2, (H - a.height) // 2))
+    os.makedirs(os.path.dirname(os.path.join(R, p)), exist_ok=True)
+    im.convert('RGB').save(os.path.join(R, p), 'JPEG', quality=84, optimize=True, progressive=True)
+    return p
 
 def words(t):
     return ' '.join(f'<span class="w" style="--i:{i}">{e(x)}</span>' for i, x in enumerate(t.split()))
@@ -110,7 +199,9 @@ def metric(m):
 def card(g, href, sub, lazy=True):
     """Card de jogo. lazy=False nos primeiros do carrossel: a miniatura carrega mesmo sem rolar a página."""
     lz = 'loading="lazy" ' if lazy else ''
-    return (f'<a class="card" href="{href}" style="--ca:{g["accent"]}"><img src="assets/img/{g["key"]}-thumb.webp" width="300" height="350" {lz}decoding="async" alt="{e(g["name"])}">'
+    t = thumb(g['key']); w, h = webp_size(t)
+    alt = f'Arte oficial do jogo {g["name"]}' if t.startswith('assets/sites/') else f'Capa do jogo {g["name"]}'
+    return (f'<a class="card" href="{href}" style="--ca:{g["accent"]}"><img src="{t}" width="{w}" height="{h}" {lz}decoding="async" alt="{e(alt)}">'
             f'<span>{e(g["name"])}<small>{e(sub)}</small></span></a>')
 
 def art_view(p, crop=None):
@@ -131,7 +222,8 @@ def char_section(g, mode='pages'):
     if not c: return ''
     k = g['key']
     arts = [(c['main'], c.get('crop'), c['alt'])] + [(p, None, f'{c["name"]}, outra pose') for p in c.get('extras', [])]
-    if hero_char(g) and len(arts) > 1: arts = arts[1:] + arts[:1]
+    hc = hero_char_art(g)
+    if hc and hc[0] == c['main'] and len(arts) > 1: arts = arts[1:] + arts[:1]
     p, crop, alt = arts[0]
     w, h, cls, box, ist = art_view(p, crop)
     fb = (f"this.onerror=null;var a=this.parentNode;a.className='ch-art';a.style.aspectRatio='300/350';this.removeAttribute('style');"
@@ -155,21 +247,30 @@ def char_section(g, mode='pages'):
 </div></section>
 '''
 
+def hero_char_art(g):
+    """(caminho, alt) do personagem recortado do hero: o oficial do acervo (char-1); sem ele, a arte principal do jogo
+    se tiver fundo transparente (Zeus); senão None (Fortune Tiger, cujo pacote não traz personagem, e os jogos do elenco da casa)."""
+    ch = acv(g['key'], 'char')
+    c = g.get('character') or {}
+    nome = c.get('name') or 'Personagem'
+    if ch: return ch[0]['arquivo'], f'{nome}, personagem oficial do {g["name"]}'
+    if c and not c.get('crop') and TRANSP.get(c['main']): return c['main'], c['alt']
+    return None
+
 def hero_char(g):
-    """Personagem sobreposto no hero, só no desktop (>= 960 px) e só com arte de fundo transparente.
-    O <source> com media evita o download no celular; o <img> fica com um GIF vazio."""
-    c = g.get('character')
-    if not c or c.get('crop') or not TRANSP.get(c['main']): return ''
-    w, h = webp_size(c['main'])
-    return (f'<picture class="hero-ch" aria-hidden="true"><source media="(min-width:960px)" srcset="{c["main"]}" width="{w}" height="{h}">'
-            f'<img src="{GIF}" width="{w}" height="{h}" alt="" fetchpriority="low" decoding="async"></picture>')
+    """Personagem em destaque no hero, em todas as telas: no celular no alto, acima do texto; no desktop (>= 960 px) à direita.
+    Sem lazy (está na primeira dobra) e com width/height reais."""
+    a = hero_char_art(g)
+    if not a: return ''
+    w, h = webp_size(a[0])
+    return f'<img class="hero-ch" src="{a[0]}" width="{w}" height="{h}" alt="{e(a[1])}" decoding="async">'
 
 def game_page(g, mode='pages'):
     k = g['key']; n = g['name']
     reg = utm(S['register'], k, 'hero'); play = utm(play_url(g), k, 'vitrine')
     title = f'{n}: como jogar, RTP e recursos | {S["brand"]}'
     desc = f'{n} ({g["provider"]}): {g["lede"]}'[:158]
-    canonical = game_url(k); og = f'{game_root(k)}/assets/img/{k}-og.jpg'
+    canonical = game_url(k); og = f'{game_root(k)}/{og_image(g)}'
     hub = hub_href(mode); hc = hero_char(g)
     faq_ld = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
         {"@type": "Question", "name": f['q'], "acceptedAnswer": {"@type": "Answer", "text": f['a']}} for f in g['faq']]}, ensure_ascii=False)
@@ -187,17 +288,20 @@ def game_page(g, mode='pages'):
     others = ''.join(card(o, game_href(o['key'], mode), o['provider'], lazy=i >= 3) for i, o in enumerate(o for o in G if o['key'] != k))
     faqs = ''.join(f'<details><summary>{e(f["q"])}</summary><p>{e(f["a"])}</p></details>' for f in g['faq'])
     style = f'<style>:root{{--acc:{g["accent"]};--acc2:{g.get("accent2", "#FF3D5A")}}}</style>'
-    return head(title, desc, og, canonical, g['accent'], f'assets/img/{k}-hero', style + f'<script type="application/ld+json">{faq_ld}</script>') + f'''
+    cls = ' has-ch' if hc else ''
+    if hero_bg(k): cls += ' hero-acv'
+    return head(title, desc, og, canonical, g['accent'], hero_preload(k), style + f'<script type="application/ld+json">{faq_ld}</script>',
+                og_alt=f'Arte oficial do {n}' if k in ACJ else f'{n}: guia do jogo') + f'''
 <body data-page="{k}" data-ga="{S.get('ga4', '')}">
 {top(hub)}
 <main>
-<section class="hero{" has-ch" if hc else ""}" aria-label="{e(n)}">
+<section class="hero{cls}" aria-label="{e(n)}">
 <div class="veil l" aria-hidden="true"></div><div class="veil r" aria-hidden="true"></div>
-<div class="hero-art">{pic(k, "Arte do " + n, eager=True)}</div>
+<div class="hero-art">{hero_art(g)}</div>
 <div class="fx fx-{g['effect']}" aria-hidden="true"></div>{hc}
 <div class="hero-in">
 <span class="kicker"><b></b>{e(g['kicker'])}</span>
-<h1>{h1name(n)}</h1>
+{hero_title(g)}
 <p class="headline focus">{words(g['headline'])}</p>
 <p class="lede">{e(g['lede'])}</p>
 <div class="ctas"><a class="btn btn-main" data-cta="hero_cadastro" href="{reg}">Criar conta e jogar {ARROW}</a><a class="btn btn-ghost" href="#recursos">Ver como funciona</a></div>
@@ -254,7 +358,8 @@ def game_page(g, mode='pages'):
 LZ = 'loading="lazy"'
 
 def hub():
-    col = ''.join(f'<img src="assets/img/{g["key"]}-thumb.webp" width="300" height="350" alt="" {LZ if i >= 6 else str()} decoding="async">' for i, g in enumerate(G + G[:4]))
+    col = ''.join(f'<img src="{thumb(g["key"])}" width="{webp_size(thumb(g["key"]))[0]}" height="{webp_size(thumb(g["key"]))[1]}" alt="" {LZ if i >= 6 else str()} decoding="async">'
+                  for i, g in enumerate(G + G[:4]))
     grid = ''.join(card(g, game_href(g['key'], 'pages'), g['kicker'].split('·')[-1].strip()) for g in G)
     title = f'Os jogos mais jogados: guias, RTP e recursos | {S["brand"]}'
     desc = 'Fortune Tiger, Gates of Olympus, Sweet Bonanza, Mines e mais: como cada jogo funciona, RTP e recursos, para jogar no celular.'
@@ -357,10 +462,13 @@ def robots():
     return 'User-agent: *\n' + ('Allow: /\n' if S.get('indexar') else 'Disallow: /\n')
 
 if __name__ == '__main__':
+    for g in G: og_image(g)  # antes da cópia de assets/ (as OG ficam em assets/og/)
     if os.path.exists(OUT): shutil.rmtree(OUT)
-    # assets/personagens não entra inteiro: só os arquivos que o banco de personagens referencia (copiados abaixo).
-    # catalogo, catalogo-web e sites são dos sites .win (build_sites.py) e não entram no docs/.
-    FORA = ['personagens', 'catalogo', 'catalogo-web', 'sites']
+    # assets/personagens, assets/acervo e assets/sites não entram inteiros: só os arquivos que as páginas referenciam (copiados abaixo),
+    # como o banco de personagens, as artes do acervo no hero e os cards de assets/sites/cards.
+    # catalogo e catalogo-web são dos sites .win (build_sites.py) e não entram no docs/.
+    FORA = ['personagens', 'acervo', 'catalogo', 'catalogo-web', 'sites']
+    PARCIAIS = tuple(f'assets/{d}/' for d in ('personagens', 'acervo', 'sites'))
     shutil.copytree(os.path.join(R, 'assets'), os.path.join(OUT, 'assets'),
                     ignore=lambda d, names: FORA if os.path.abspath(d) == os.path.join(R, 'assets') else [])
     pages = {g['key'] + '.html': game_page(g) for g in G}
@@ -369,7 +477,7 @@ if __name__ == '__main__':
     for f, t in pages.items():
         open(os.path.join(OUT, f), 'w', encoding='utf-8').write(t)
     for ref in sorted(set().union(*(refs(t) for t in pages.values()))):
-        if ref.startswith('assets/personagens/'):
+        if ref.startswith(PARCIAIS):
             os.makedirs(os.path.dirname(os.path.join(OUT, ref)), exist_ok=True)
             shutil.copy2(os.path.join(R, ref), os.path.join(OUT, ref))
     open(os.path.join(OUT, '.nojekyll'), 'w').write('')
@@ -383,7 +491,7 @@ if __name__ == '__main__':
         dst = os.path.join(DIST, DOM[k]); os.makedirs(dst)
         t = game_page(g, 'domain')
         open(os.path.join(dst, 'index.html'), 'w', encoding='utf-8').write(t)
-        for ref in sorted(refs(t) | {f'assets/img/{k}-og.jpg'}):
+        for ref in sorted(refs(t) | {og_image(g)}):
             src = os.path.join(R, ref)
             if not os.path.exists(src): continue  # o verificador abaixo acusa o que faltar
             os.makedirs(os.path.dirname(os.path.join(dst, ref)), exist_ok=True)

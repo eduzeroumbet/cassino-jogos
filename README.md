@@ -6,7 +6,20 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
 - Conteúdo: `data/games.json` (um bloco por jogo: textos, métricas, recursos, FAQ, cores, efeito do hero, personagem).
 - Estilo e comportamento: `src/lp.css`, `src/lp.js` (CSS e JS entram inline no HTML: 1 requisição a menos). O banco de personagens usa também `src/personagens.js`.
 - Gerar: `python3 build.py` grava em `docs/` (publicado pelo GitHub Pages) e em `dist-dominios/` (um site por jogo). No fim, o verificador confere que todo asset citado no HTML existe e que não há travessão em texto.
-- Imagens: `tools_imgs.py` gera hero WebP 600/896, miniatura e OG 1200x630.
+  Depois: `python3 tools/checar_landings.py` confere em `docs/` e em cada `dist-dominios/<dominio>/` que todo src/href/srcset/poster local existe,
+  `<img>` com alt, width e height, hero sem lazy, nenhuma imagem dependente de JS, og:image 1200x630, twitter:card, robots, 18+, UTMs e
+  nenhum diminutivo (Tigrinho, Tourinho, Coelhinho, Dragãozinho, Ratinho) em texto visível, alt ou meta das landings e da index.
+- Artes oficiais do acervo (`data/acervo.json`, `assets/acervo/<jogo>/`) nas landings:
+  - Hero: fundo oficial do jogo (`bg-800`/`bg-1600` em srcset, pré-carregado; sem fundo, a arte quadrada, caso do Sweet Bonanza) cobrindo o topo,
+    escurecido pelo overlay do `.hero`; logo PT do acervo no lugar do título (o alt do logo é o nome do jogo, que vira o texto do h1);
+    personagem recortado oficial (`char-1`) em destaque, no celular no alto e no desktop à direita. Fortune Tiger: o pacote traz só fundos e logo,
+    então o hero fica sem personagem recortado (o personagem atual segue no bloco "Conheça o personagem"). Mines não tem arte no acervo e mantém o hero antigo.
+  - Cards de "Outros favoritos" e da index (grade e colagem do topo): `assets/sites/cards/<jogo>.webp` (360x420, do `build_sites.py`) quando existe;
+    senão a capa `assets/img/<jogo>-thumb.webp`.
+  - og:image 1200x630 em `assets/og/<jogo>.jpg` (Pillow, só quando falta; `python3 build.py --imagens` refaz): fundo + logo PT + personagem;
+    sem logo, a arte inteira (banner sem a faixa legal, ou a indicada em `og_arte` no `games.json`) sobre ela mesma desfocada. Mines continua com `assets/img/mines-og.jpg`.
+  - O build copia para `docs/` e para cada domínio só os arquivos de `assets/acervo/` e `assets/sites/` que as páginas usam.
+- Imagens: `tools_imgs.py` gera hero WebP 600/896, miniatura e OG 1200x630 (hoje usados só pelo Mines e como reserva das capas).
 - Indexação: `site.indexar=false` coloca noindex e robots Disallow (páginas de teste). Troque para true quando houver domínio próprio e operação licenciada.
 - Todos os links para a plataforma levam UTM: utm_source=lp, utm_medium=landing, utm_campaign=<jogo>, utm_content=<posição do botão>.
 
@@ -21,10 +34,11 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
   lidos do cabeçalho do WebP; arte de fundo branco fica num cartão branco de cantos arredondados). Se a arte falhar (onerror), o cartão
   mostra a capa do jogo (`assets/img/<jogo>-thumb.webp`). As miniaturas (principal + extras, 76 px no celular, 96 px no desktop) são botões
   que trocam a arte grande; abaixo, link "Ver todos os personagens" (personagens.html; no domínio próprio, a do GitHub Pages).
-  No desktop (>= 960 px), se a arte principal tiver fundo transparente, o personagem aparece sobreposto no hero com fetchpriority baixo;
-  no celular a imagem nem é baixada (`<picture>` com `media`). Nesse caso o bloco abre com a primeira extra, para não repetir a arte do hero.
+  Personagem no hero (celular e desktop): o recortado oficial do acervo; sem ele, a arte principal se tiver fundo transparente (Zeus).
+  Se o hero usa a própria arte principal, o bloco abre com a primeira extra, para não repetir a arte do hero.
 - Carrossel "Outros favoritos": os 3 primeiros cards sem lazy; os demais com `loading="lazy"` nativo (sem IntersectionObserver).
-- Escolhas atuais: Tigrinho, Coelhinho, Tourinho, Dragãozinho e Zeus (artes dos jogos); Sweet Bonanza, Big Bass Splash e Mines não têm
+- Escolhas atuais: Tigre da Sorte, Coelho da Fortuna, Touro da Sorte, Dragão da Fortuna (nomes dos logos oficiais em PT) e Zeus (artes dos jogos);
+  nos textos visíveis não se usam diminutivos. Sweet Bonanza, Big Bass Splash e Mines não têm
   personagem adequado no catálogo, então usam o elenco da casa: Lu (arara), Capi (capivara) e Mr. Bit.
 - `docs/personagens.html` (noindex): banco com todas as miniaturas, filtro por grupo e por marca/tema, busca por texto; o clique abre a versão
   grande e o link do original no Drive. Título "Personagens dos jogos"; link com esse nome no fim da grade da index.

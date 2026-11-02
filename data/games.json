@@ -23,7 +23,7 @@
       "kicker": "PG Soft · Slot 3x3",
       "headline": "O tigre que vira a rodada num giro",
       "lede": "Três rolos, cinco linhas e um recurso que pode encher a tela com o mesmo símbolo. Rápido de entender, feito para jogar no celular.",
-      "character": {"main": "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/freepik-ultradetailed-3d-character-model-pixaranimation-st-23284.webp", "extras": ["assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/tigrinho.webp", "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/fortune-tiger-character-tiger1.webp", "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/freepik-ultradetailed-3d-character-model-pixaranimation-st-23286.webp"], "name": "Tigrinho", "alt": "Tigrinho do Fortune Tiger pulando com envelopes vermelhos da sorte", "bio": "O Tigrinho é o curinga do Fortune Tiger: substitui todos os símbolos e também paga sozinho quando forma linha. É ele quem pode ativar o recurso Fortune Tiger a qualquer giro, com os rolos girando de novo e um único símbolo em jogo até sair um prêmio."},
+      "character": {"main": "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/freepik-ultradetailed-3d-character-model-pixaranimation-st-23284.webp", "extras": ["assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/tigrinho.webp", "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/fortune-tiger-character-tiger1.webp", "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/freepik-ultradetailed-3d-character-model-pixaranimation-st-23286.webp"], "name": "Tigre da Sorte", "alt": "Tigre da Sorte do Fortune Tiger pulando com envelopes vermelhos da sorte", "bio": "O Tigre da Sorte é o curinga do Fortune Tiger: substitui todos os símbolos e também paga sozinho quando forma linha. É ele quem pode ativar o recurso Fortune Tiger a qualquer giro, com os rolos girando de novo e um único símbolo em jogo até sair um prêmio."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.81, "suffix": "%", "type": "bar", "max": 100},
         {"label": "Ganho máximo", "value": 2500, "suffix": "x", "type": "count"},
@@ -55,7 +55,7 @@
       "kicker": "PG Soft · Slot 3-4-3",
       "headline": "Símbolos de prêmio que pagam na hora",
       "lede": "O coelho espalha símbolos de prêmio pela grade e, no recurso especial, só eles aparecem. Leve, colorido e com o maior teto da família Fortune.",
-      "character": {"main": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character3.webp", "extras": ["assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character1.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character2.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character4.webp"], "name": "Coelhinho", "alt": "Coelhinho do Fortune Rabbit de boné e jaqueta vermelha, corpo inteiro", "bio": "O Coelhinho é o curinga do Fortune Rabbit e substitui os símbolos comuns para ajudar a fechar as dez linhas. Ele também espalha os símbolos de prêmio pela grade e, no recurso especial, deixa em jogo só esses símbolos e espaços vazios."},
+      "character": {"main": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character3.webp", "extras": ["assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character1.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character2.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character4.webp"], "name": "Coelho da Fortuna", "alt": "Coelho da Fortuna do Fortune Rabbit de boné e jaqueta vermelha, corpo inteiro", "bio": "O Coelho da Fortuna é o curinga do Fortune Rabbit e substitui os símbolos comuns para ajudar a fechar as dez linhas. Ele também espalha os símbolos de prêmio pela grade e, no recurso especial, deixa em jogo só esses símbolos e espaços vazios."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.75, "suffix": "%", "type": "bar", "max": 100},
         {"label": "Ganho máximo", "value": 5000, "suffix": "x", "type": "count"},
@@ -86,7 +86,7 @@
       "kicker": "PG Soft · Slot 3-4-3",
       "headline": "Força, sorte e rodadas que repetem",
       "lede": "O touro dourado ativa giros repetidos até sair prêmio e multiplica por dez quando a grade enche. Ritmo constante, ótimo para sessões curtas.",
-      "character": {"main": "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-ox/fortune-ox-7.webp", "extras": ["assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-ox/fortune-ox-3.webp", "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-ox/fortune-ox-1.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-ox/fortune-ox-2.webp"], "name": "Tourinho", "alt": "Tourinho do Fortune Ox de jaqueta vermelha equilibrando um lingote de ouro", "bio": "O Tourinho é o curinga do Fortune Ox: substitui os demais símbolos e completa linhas nos três rolos. No recurso Fortune Ox, os rolos laterais travam um símbolo e o rolo do meio gira de novo até formar um prêmio."},
+      "character": {"main": "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-ox/fortune-ox-7.webp", "extras": ["assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-ox/fortune-ox-3.webp", "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-ox/fortune-ox-1.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-ox/fortune-ox-2.webp"], "name": "Touro da Sorte", "alt": "Touro da Sorte do Fortune Ox de jaqueta vermelha equilibrando um lingote de ouro", "bio": "O Touro da Sorte é o curinga do Fortune Ox: substitui os demais símbolos e completa linhas nos três rolos. No recurso Fortune Ox, os rolos laterais travam um símbolo e o rolo do meio gira de novo até formar um prêmio."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.75, "suffix": "%", "type": "bar", "max": 100},
         {"label": "Ganho máximo", "value": 2000, "suffix": "x", "type": "count"},
@@ -117,7 +117,7 @@
       "kicker": "PG Soft · Slot 3x3",
       "headline": "O dragão traz multiplicadores ao giro",
       "lede": "Grade enxuta de 3x3 com multiplicadores que entram durante o recurso do dragão. Um dos lançamentos mais recentes da família Fortune.",
-      "character": {"main": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon3.webp", "extras": ["assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon4.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon-gold-dragon.webp"], "name": "Dragãozinho", "alt": "Dragãozinho verde e dourado do Fortune Dragon envolto em fitas vermelhas", "bio": "O Dragãozinho é o curinga do Fortune Dragon e completa as cinco linhas de pagamento. É ele quem pode ativar os giros especiais com multiplicadores de 2x, 5x ou 10x, que se somam e valem sobre o prêmio total do giro."},
+      "character": {"main": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon3.webp", "extras": ["assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon4.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon-gold-dragon.webp"], "name": "Dragão da Fortuna", "alt": "Dragão da Fortuna verde e dourado do Fortune Dragon envolto em fitas vermelhas", "bio": "O Dragão da Fortuna é o curinga do Fortune Dragon e completa as cinco linhas de pagamento. É ele quem pode ativar os giros especiais com multiplicadores de 2x, 5x ou 10x, que se somam e valem sobre o prêmio total do giro."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.74, "suffix": "%", "type": "bar", "max": 100},
         {"label": "Ganho máximo", "value": 2500, "suffix": "x", "type": "count"},
@@ -169,6 +169,7 @@
     },
     {
       "key": "sweet-bonanza",
+      "og_arte": "square",
       "name": "Sweet Bonanza",
       "provider": "Pragmatic Play",
       "provider_code": "pragmatic",

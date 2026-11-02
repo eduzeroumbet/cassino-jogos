@@ -46,8 +46,9 @@ h1{font-weight:900;font-size:clamp(44px,13vw,104px);line-height:.92;letter-spaci
 h1 em{font-style:normal;display:block;background:linear-gradient(180deg,#fff 10%,var(--acc) 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .headline{font-size:clamp(20px,5.4vw,30px);font-weight:800;line-height:1.15;max-width:22ch}
 .lede{color:#D0D4E0;font-size:16px;max-width:52ch;margin-top:12px}
-.focus .w{display:inline-block;filter:blur(7px);opacity:.25;transition:filter .5s ease,opacity .5s ease;transition-delay:calc(var(--i) * 45ms)}
-.focus.on .w{filter:none;opacity:1}
+/* Focus Reveal só em CSS: o texto fica visível por padrão e não depende de JS */
+.focus .w{display:inline-block;animation:foco .5s ease calc(.9s + var(--i) * 45ms) backwards}
+@keyframes foco{from{filter:blur(7px);opacity:.25}}
 .ctas{display:flex;flex-direction:column;gap:12px;margin-top:22px}
 .btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 24px;border-radius:16px;font-weight:900;font-size:16px;letter-spacing:.02em;text-decoration:none;text-transform:uppercase;white-space:nowrap;transition:transform .15s ease,box-shadow .2s ease}
 .btn:active{transform:scale(.98)}
@@ -89,7 +90,14 @@ h2 .hl{color:var(--acc)}
 .ch-x button:active{transform:scale(.96)}
 .ch-x img{width:100%;height:100%;object-fit:contain}
 .ch-all{margin-top:18px;font-size:14px;font-weight:800}.ch-all a{color:var(--acc);display:inline-flex;align-items:center;min-height:44px}
-.hero-ch{display:none}
+/* hero com as artes oficiais do acervo: fundo do jogo escurecido, logo PT no lugar do título e personagem recortado em destaque */
+.hero-acv .hero-art img{object-position:50% 50%;filter:brightness(.82)}
+.h1-logo{line-height:0;margin:14px 0 10px}
+.h1-logo img{width:auto;height:auto;max-width:min(80vw,380px);max-height:min(24svh,220px);filter:drop-shadow(0 10px 24px rgba(0,0,0,.6))}
+/* sem filter:drop-shadow: com a máscara, a sombra é cortada na caixa da imagem e marca uma faixa sobre o fundo */
+.hero-ch{position:absolute;z-index:0;top:62px;left:50%;height:min(40svh,380px);width:auto;max-width:none;transform:translateX(-50%);pointer-events:none;
+  -webkit-mask-image:linear-gradient(180deg,#000 74%,transparent);mask-image:linear-gradient(180deg,#000 74%,transparent)}
+.has-ch .hero-in{position:relative;z-index:1;padding-top:calc(62px + min(40svh,380px) - 56px)}
 .more{margin-top:22px;text-align:center}.more a{color:var(--muted)}
 /* expanded cards */
 .xcards{display:flex;flex-direction:column;gap:10px;margin-top:26px}
@@ -179,16 +187,17 @@ footer nav a{text-decoration:none;font-weight:700;color:var(--cream);min-height:
   .ch-x button{width:96px;height:96px}
 }
 @media (min-width:960px){
-  .hero-ch{display:block;position:absolute;z-index:0;right:max(2vw,calc(50% - 620px));bottom:0;height:min(86svh,780px);pointer-events:none;
-    filter:drop-shadow(0 30px 40px rgba(0,0,0,.5));-webkit-mask-image:linear-gradient(180deg,#000 82%,transparent);mask-image:linear-gradient(180deg,#000 82%,transparent)}
-  .hero-ch img{height:100%;width:auto;max-width:none}
-  .has-ch .hero-in{position:relative;z-index:1}.has-ch .hero-in>*{max-width:560px}
+  .hero-ch{top:auto;left:auto;right:max(2vw,calc(50% - 620px));bottom:0;height:min(86svh,780px);transform:none;
+    -webkit-mask-image:linear-gradient(180deg,#000 82%,transparent);mask-image:linear-gradient(180deg,#000 82%,transparent)}
+  .has-ch .hero-in{padding-top:96px}.has-ch .hero-in>*{max-width:560px}
+  .h1-logo img{max-width:420px;max-height:260px}
 }
 @media (min-width:1024px){
   .hero{align-items:center}
   .hero-art{left:42%;-webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.35) 14%,#000 42%);mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.35) 14%,#000 42%)}
   .hero:after{background:linear-gradient(90deg,var(--bg) 0%,rgba(11,20,48,.9) 38%,rgba(11,20,48,.75) 52%,rgba(11,20,48,0) 70%),linear-gradient(180deg,rgba(11,20,48,.3) 0%,rgba(11,20,48,0) 30%,rgba(11,20,48,0) 70%,var(--bg) 100%)}
   .hero-in{max-width:1120px}.hero-in>*{max-width:560px}
+  .hero-acv .hero-art{left:0;-webkit-mask-image:none;mask-image:none}
   .xcards{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:16px}
   .xcard,.xcard[aria-expanded]{display:flex;flex-direction:column;justify-content:flex-start;padding:28px 24px;cursor:default;background:linear-gradient(160deg,var(--bg3),var(--bg2));border-color:color-mix(in srgb,var(--acc) 40%,transparent);border-top:3px solid var(--acc)}
   .xcard .n,.xcard[aria-expanded] .n{position:static;display:block;width:auto;height:auto;background:none;color:var(--acc);font-size:56px;line-height:1;margin-bottom:18px;text-shadow:0 0 28px color-mix(in srgb,var(--acc) 45%,transparent)}
