@@ -13,8 +13,6 @@ $$('.fx').forEach(function(fx){
   }
   if(!RM)fx.innerHTML=h;
 });
-/* foco das palavras (Focus Reveal) */
-setTimeout(function(){$$('.focus').forEach(function(e){e.classList.add('on')})},RM?0:900);
 /* barra fixa: só aparece quando o CTA do hero saiu da tela e o CTA final não está visível */
 var sticky=d.querySelector('.sticky');
 if(sticky){var heroCta=d.querySelector('.hero .btn-main'),fin=d.querySelector('.final'),vis={hero:true,fin:false};
