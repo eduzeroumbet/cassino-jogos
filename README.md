@@ -4,14 +4,20 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
 (Intro Loader, Focus Reveal, Lime Metrics, Expanded Cards, Reel, Step Path).
 
 - Conteúdo: `data/games.json` (um bloco por jogo: textos, métricas, recursos, FAQ, cores, efeito do hero, personagem).
+  - `description` (opcional): meta description própria, até 150 caracteres e terminando em frase completa (o build para se não cumprir).
+    Sem ela, nome, provedor e lede até 150 caracteres, no fim da última frase completa ou na última palavra inteira, com ponto.
+  - `faq`: pelo menos 5 perguntas (o build para se faltar), incluindo "Qual a aposta mínima?" e "Como faço saque?"; vira também o JSON-LD FAQPage.
+  - Textos descrevem a mecânica do jogo; nada de promessa de ganho.
+- SEO: cada landing tem um h1 em texto ("<jogo>: como jogar, RTP e recursos"), pequeno, abaixo do logo e acima do subtítulo; a index tem o h1
+  "Os jogos de cassino mais jogados: guias e RTP" e JSON-LD ItemList com os jogos. Capas e cards têm alt "Nome do jogo, Provedor"; imagens decorativas, alt="".
 - Estilo e comportamento: `src/lp.css`, `src/lp.js` (CSS e JS entram inline no HTML: 1 requisição a menos). O banco de personagens usa também `src/personagens.js`.
-- Gerar: `python3 build.py` grava em `docs/` (publicado pelo GitHub Pages) e em `dist-dominios/` (um site por jogo). No fim, o verificador confere que todo asset citado no HTML existe e que não há travessão em texto.
+- Gerar: `python3 build.py` grava em `docs/` (publicado pelo GitHub Pages) e em `dist-dominios/` (um site por jogo). Ao limpar `docs/`, preserva `docs/previa-r4/` (de outra demanda; lista `MANTER` no build). No fim, o verificador confere que todo asset citado no HTML existe e que não há travessão em texto.
   Depois: `python3 tools/checar_landings.py` confere em `docs/` e em cada `dist-dominios/<dominio>/` que todo src/href/srcset/poster local existe,
   `<img>` com alt, width e height, hero sem lazy, nenhuma imagem dependente de JS, og:image 1200x630, twitter:card, robots, 18+, UTMs e
   nenhum diminutivo (Tigrinho, Tourinho, Coelhinho, Dragãozinho, Ratinho) em texto visível, alt ou meta das landings e da index.
 - Artes oficiais do acervo (`data/acervo.json`, `assets/acervo/<jogo>/`) nas landings:
   - Hero: fundo oficial do jogo (`bg-800`/`bg-1600` em srcset, pré-carregado; sem fundo, a arte quadrada, caso do Sweet Bonanza) cobrindo o topo,
-    escurecido pelo overlay do `.hero`; logo PT do acervo no lugar do título (o alt do logo é o nome do jogo, que vira o texto do h1);
+    escurecido pelo overlay do `.hero`; logo PT do acervo no lugar do nome grande (alt do logo = nome do jogo; o h1 em texto vem logo abaixo);
     personagem recortado oficial (`char-1`) em destaque, no celular no alto e no desktop à direita. Fortune Tiger: o pacote traz só fundos e logo,
     então o hero fica sem personagem recortado (o personagem atual segue no bloco "Conheça o personagem"). Mines não tem arte no acervo e mantém o hero antigo.
   - Cards de "Outros favoritos" e da index (grade e colagem do topo): `assets/sites/cards/<jogo>.webp` (360x420, do `build_sites.py`) quando existe;
@@ -30,13 +36,16 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
 - Cada jogo tem em `games.json` o campo `character`:
   `{"main": caminho, "extras": [até 3 caminhos], "name": nome, "alt": texto alternativo, "bio": 2 frases, "crop": [x, y, w, h] opcional}`.
   `crop` (em px da versão web) mostra só um recorte da arte, em CSS; serve para os boards do elenco da casa, que trazem texto.
-- Na landing: bloco "Conheça o personagem" logo depois das métricas (arte sem loading lazy, com fetchpriority baixo e width/height reais,
-  lidos do cabeçalho do WebP; arte de fundo branco fica num cartão branco de cantos arredondados). Se a arte falhar (onerror), o cartão
-  mostra a capa do jogo (`assets/img/<jogo>-thumb.webp`). As miniaturas (principal + extras, 76 px no celular, 96 px no desktop) são botões
+- Na landing: bloco "Conheça o personagem" logo depois das métricas (arte no HTML com src real, sem loading lazy
+  e sem decoding="async", com fetchpriority baixo e width/height reais, lidos do cabeçalho do WebP; arte de fundo branco fica num cartão branco
+  de cantos arredondados). Com decoding="async" o Chrome adiava a decodificação fora da tela e capturas de página inteira mostravam só a moldura
+  vazia. Se a arte falhar (onerror), o cartão mostra a capa do jogo (`assets/img/<jogo>-thumb.webp`); se nenhuma arte do personagem for válida
+  (fora do catálogo ou arquivo ausente), o bloco fica só com o texto, sem o espaço da imagem. As miniaturas (principal + extras, 76 px no celular, 96 px no desktop) são botões
   que trocam a arte grande; abaixo, link "Ver todos os personagens" (personagens.html; no domínio próprio, a do GitHub Pages).
   Personagem no hero (celular e desktop): o recortado oficial do acervo; sem ele, a arte principal se tiver fundo transparente (Zeus).
   Se o hero usa a própria arte principal, o bloco abre com a primeira extra, para não repetir a arte do hero.
 - Carrossel "Outros favoritos": os 3 primeiros cards sem lazy; os demais com `loading="lazy"` nativo (sem IntersectionObserver).
+  No celular e no tablet rola na horizontal; a partir de 1024 px vira grade de 4 colunas, com todos os cards inteiros.
 - Escolhas atuais: Tigre da Sorte, Coelho da Fortuna, Touro da Sorte, Dragão da Fortuna (nomes dos logos oficiais em PT) e Zeus (artes dos jogos);
   nos textos visíveis não se usam diminutivos. Sweet Bonanza, Big Bass Splash e Mines não têm
   personagem adequado no catálogo, então usam o elenco da casa: Lu (arara), Capi (capivara) e Mr. Bit.

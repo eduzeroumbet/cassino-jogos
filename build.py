@@ -119,11 +119,32 @@ def hero_art(g):
             f'alt="Cenário oficial do {e(g["name"])}" fetchpriority="high">')
 
 def hero_title(g):
-    """Título do hero: o logo oficial em português do acervo (o alt é o nome do jogo, que vira o texto do h1); sem logo, o nome em texto."""
+    """Título do hero: o logo oficial em português do acervo (alt = nome do jogo); sem logo, o nome em letras grandes.
+    O h1 é texto ("<jogo>: como jogar, RTP e recursos"), pequeno, logo abaixo, acima do subtítulo."""
     lg = acv(g['key'], 'logo')
-    if not lg: return f'<h1>{h1name(g["name"])}</h1>'
+    h1 = f'<h1 class="h1-txt">{e(g["name"])}: como jogar, RTP e recursos</h1>'
+    if not lg: return f'<p class="hname">{h1name(g["name"])}</p>{h1}'
     l = lg[0]
-    return f'<h1 class="h1-logo"><img src="{l["arquivo"]}" width="{l["w"]}" height="{l["h"]}" alt="{e(g["name"])}" decoding="async"></h1>'
+    return f'<p class="h1-logo"><img src="{l["arquivo"]}" width="{l["w"]}" height="{l["h"]}" alt="{e(g["name"])}" decoding="async"></p>{h1}'
+
+def meta_desc(g):
+    """Meta description: o campo "description" do jogo (até 150 caracteres, frase completa); sem ele, nome, provedor e lede
+    até 150 caracteres: no fim da última frase completa, se houver uma com pelo menos 80; senão na última palavra inteira, com ponto."""
+    if g.get('description'):
+        d = g['description']
+        assert len(d) <= 150 and d.endswith(('.', '!', '?')), f'description de {g["key"]}: até 150 caracteres e frase completa'
+        return d
+    d = f'{g["name"]} ({g["provider"]}): {g["lede"]}'
+    if len(d) <= 150: return d
+    fim = max(d.rfind(x, 0, 150) for x in ('. ', '! ', '? '))
+    if fim >= 79: return d[:fim + 1]
+    c = d[:149]  # 149 + o ponto final
+    if d[149] != ' ': c = c[:c.rfind(' ')]
+    return c.rstrip(' ,;:.!?') + '.'
+
+def cover_alt(g):
+    """Alt das capas e artes de card: "Nome do jogo, Provedor"."""
+    return f'{g["name"]}, {g["provider"]}'
 
 def thumb(k):
     """Imagem do card: composição oficial do acervo (assets/sites/cards/<jogo>.webp, do build_sites.py); sem ela, a capa do catálogo."""
@@ -200,8 +221,7 @@ def card(g, href, sub, lazy=True):
     """Card de jogo. lazy=False nos primeiros do carrossel: a miniatura carrega mesmo sem rolar a página."""
     lz = 'loading="lazy" ' if lazy else ''
     t = thumb(g['key']); w, h = webp_size(t)
-    alt = f'Arte oficial do jogo {g["name"]}' if t.startswith('assets/sites/') else f'Capa do jogo {g["name"]}'
-    return (f'<a class="card" href="{href}" style="--ca:{g["accent"]}"><img src="{t}" width="{w}" height="{h}" {lz}decoding="async" alt="{e(alt)}">'
+    return (f'<a class="card" href="{href}" style="--ca:{g["accent"]}"><img src="{t}" width="{w}" height="{h}" {lz}decoding="async" alt="{e(cover_alt(g))}">'
             f'<span>{e(g["name"])}<small>{e(sub)}</small></span></a>')
 
 def art_view(p, crop=None):
@@ -214,23 +234,35 @@ def art_view(p, crop=None):
     if TRANSP.get(p): return w, h, 'ch-art cut', '', ''
     return w, h, 'ch-art', f'aspect-ratio:{w}/{h}', ''
 
+def art_ok(p):
+    """Arte de personagem válida: está no catálogo (com miniatura), o arquivo e a miniatura existem e o cabeçalho WebP é legível."""
+    try:
+        return bool(p) and p in THUMB and os.path.isfile(os.path.join(R, THUMB[p])) and webp_size(p)[0] > 1
+    except (OSError, AssertionError):
+        return False
+
 def char_section(g, mode='pages'):
-    """Bloco "Conheça o personagem". A arte grande não usa loading lazy (com lazy ela ficava vazia em capturas e rolagens
-    rápidas) e, se falhar, troca pela capa do jogo. Quando a arte principal já aparece no hero, o bloco abre com outra pose.
+    """Bloco "Conheça o personagem". A arte grande está no HTML com src real e width/height, sem loading lazy e sem
+    decoding="async": com async, o Chrome adia a decodificação de imagens fora da tela e capturas de página inteira e rolagens
+    rápidas mostravam só a moldura (retângulo branco ou a mancha do fundo). Se falhar, troca pela capa do jogo.
+    Sem nenhuma arte válida, o bloco fica só com o texto. Quando a arte principal já aparece no hero, o bloco abre com outra pose.
     As miniaturas são botões: ao tocar, trocam a arte grande (src/lp.js)."""
     c = g.get('character')
     if not c: return ''
     k = g['key']
-    arts = [(c['main'], c.get('crop'), c['alt'])] + [(p, None, f'{c["name"]}, outra pose') for p in c.get('extras', [])]
+    arts = [(c.get('main'), c.get('crop'), c.get('alt') or c['name'])] + [(p, None, f'{c["name"]}, outra pose') for p in c.get('extras', [])]
+    arts = [a for a in arts if art_ok(a[0])]
     hc = hero_char_art(g)
-    if hc and hc[0] == c['main'] and len(arts) > 1: arts = arts[1:] + arts[:1]
-    p, crop, alt = arts[0]
-    w, h, cls, box, ist = art_view(p, crop)
-    fb = (f"this.onerror=null;var a=this.parentNode;a.className='ch-art';a.style.aspectRatio='300/350';this.removeAttribute('style');"
-          f"this.width=300;this.height=350;this.src='assets/img/{k}-thumb.webp'")
-    sty = f' style="{ist}"' if ist else ''
-    art = (f'<div class="{cls}" style="{box}"><img id="ch-img" src="{p}" width="{w}" height="{h}" alt="{e(alt)}" decoding="async" fetchpriority="low" '
-           f'onerror="{fb}"{sty}></div>')
+    if hc and arts and hc[0] == arts[0][0] and len(arts) > 1: arts = arts[1:] + arts[:1]
+    art = ''
+    if arts:
+        p, crop, alt = arts[0]
+        w, h, cls, box, ist = art_view(p, crop)
+        fb = (f"this.onerror=null;var a=this.parentNode;a.className='ch-art';a.style.aspectRatio='300/350';this.removeAttribute('style');"
+              f"this.width=300;this.height=350;this.src='assets/img/{k}-thumb.webp'")
+        sty = f' style="{ist}"' if ist else ''
+        art = (f'<div class="{cls}" style="{box}"><img id="ch-img" src="{p}" width="{w}" height="{h}" alt="{e(alt)}" fetchpriority="low" '
+               f'onerror="{fb}"{sty}></div>')
     xs = ''
     if len(arts) > 1:
         for i, (p, crop, alt) in enumerate(arts):
@@ -240,7 +272,7 @@ def char_section(g, mode='pages'):
         xs = f'<div class="ch-x" aria-label="Outras artes do personagem">{xs}</div>'
     todos = 'personagens.html' if mode == 'pages' else f'{PAGES}/personagens.html'
     return f'''
-<section class="s" id="personagem"><div class="wrap ch">
+<section class="s" id="personagem"><div class="wrap ch{"" if art else " no-art"}">
 {art}
 <div><p class="eyebrow">Conheça o personagem</p><h2><span class="hl">{e(c['name'])}</span></h2>
 <p class="sub">{e(c['bio'])}</p>{xs}<p class="ch-all"><a href="{todos}">Ver todos os personagens</a></p></div>
@@ -269,16 +301,17 @@ def game_page(g, mode='pages'):
     k = g['key']; n = g['name']
     reg = utm(S['register'], k, 'hero'); play = utm(play_url(g), k, 'vitrine')
     title = f'{n}: como jogar, RTP e recursos | {S["brand"]}'
-    desc = f'{n} ({g["provider"]}): {g["lede"]}'[:158]
+    desc = meta_desc(g)
     canonical = game_url(k); og = f'{game_root(k)}/{og_image(g)}'
     hub = hub_href(mode); hc = hero_char(g)
+    assert len(g['faq']) >= 5, f'FAQ de {k}: pelo menos 5 perguntas'
     faq_ld = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
         {"@type": "Question", "name": f['q'], "acceptedAnswer": {"@type": "Answer", "text": f['a']}} for f in g['faq']]}, ensure_ascii=False)
     if g.get('video'):
         media = (f'<video muted loop playsinline preload="none" poster="assets/img/{k}-thumb.webp" data-src="assets/video/{g["video"]}.mp4" '
                  f'width="300" height="375" aria-label="Prévia do {e(n)}"></video>')
     else:
-        media = f'<img class="kb" src="assets/img/{k}-thumb.webp" width="300" height="350" loading="lazy" decoding="async" alt="Capa do {e(n)}">'
+        media = f'<img class="kb" src="assets/img/{k}-thumb.webp" width="300" height="350" loading="lazy" decoding="async" alt="{e(cover_alt(g))}">'
     promo = ''
     if g.get('promo'):
         note = f'<small>{e(g["promo"]["note"])}</small>' if g['promo'].get('note') else ''
@@ -363,7 +396,11 @@ def hub():
     grid = ''.join(card(g, game_href(g['key'], 'pages'), g['kicker'].split('·')[-1].strip()) for g in G)
     title = f'Os jogos mais jogados: guias, RTP e recursos | {S["brand"]}'
     desc = 'Fortune Tiger, Gates of Olympus, Sweet Bonanza, Mines e mais: como cada jogo funciona, RTP e recursos, para jogar no celular.'
-    return head(title, desc, f'{PAGES}/assets/img/fortune-tiger-og.jpg', f'{PAGES}/', '#F5B942') + f'''
+    lista = json.dumps({"@context": "https://schema.org", "@type": "ItemList", "name": "Os jogos de cassino mais jogados", "numberOfItems": len(G),
+                        "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": g['name'], "url": game_url(g['key'])} for i, g in enumerate(G)]},
+                       ensure_ascii=False)
+    return head(title, desc, f'{PAGES}/assets/img/fortune-tiger-og.jpg', f'{PAGES}/', '#F5B942',
+                extra=f'<script type="application/ld+json">{lista}</script>') + f'''
 <body data-page="hub" data-ga="{S.get('ga4', '')}">
 {top()}
 <main>
@@ -372,7 +409,7 @@ def hub():
 <div class="cbox" aria-hidden="true"><div class="collage">{col}</div></div>
 <div class="fx fx-coins" aria-hidden="true"></div>
 <div class="hero-in"><span class="kicker"><b></b>Guia dos jogos</span>
-<h1>Os mais<em>jogados</em></h1>
+<h1 class="h1-hub"><small>Os jogos de cassino </small>mais<em> jogados<span class="sr">:</span></em><small> guias e RTP</small></h1>
 <p class="headline focus">{words('Escolha o seu e entenda o jogo antes do primeiro giro')}</p>
 <p class="lede">RTP, recursos e como jogar no celular, jogo por jogo. Tudo no navegador, com depósito via Pix.</p>
 <div class="ctas"><a class="btn btn-main" data-cta="hub_cadastro" href="{utm(S['register'], 'hub', 'hero')}">Criar conta {ARROW}</a><a class="btn btn-ghost" href="#jogos">Ver os jogos</a></div>
@@ -439,7 +476,7 @@ def personagens():
 def domain_404(k):
     return f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Página não encontrada | {e(S["brand"])}</title><meta name="robots" content="noindex,nofollow"><meta http-equiv="refresh" content="3;url=/">
-<style>body{{margin:0;min-height:100vh;display:grid;place-items:center;text-align:center;font-family:system-ui,sans-serif;background:#0B1430;color:#F4EEE6;padding:24px}}a{{color:#F5B942;font-weight:800}}</style></head>
+<style>body{{margin:0;min-height:100vh;display:grid;place-items:center;text-align:center;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#0B1430;color:#F4EEE6;padding:24px}}a{{color:#F5B942;font-weight:800}}</style></head>
 <body><main><h1>Página não encontrada</h1><p>Você vai voltar para o guia do {e(next(g["name"] for g in G if g["key"] == k))} em instantes.</p><p><a href="/">Ir para a página inicial</a></p></main></body></html>'''
 
 ASSET_RE = re.compile(r'assets/[A-Za-z0-9_./-]+?\.(?:webp|jpe?g|png|mp4|woff2|svg|gif)')
@@ -463,7 +500,13 @@ def robots():
 
 if __name__ == '__main__':
     for g in G: og_image(g)  # antes da cópia de assets/ (as OG ficam em assets/og/)
-    if os.path.exists(OUT): shutil.rmtree(OUT)
+    # limpa docs/ menos as pastas de outras demandas publicadas pelo mesmo Pages (ex.: docs/previa-r4/)
+    MANTER = {'previa-r4'}
+    if os.path.exists(OUT):
+        for f in os.listdir(OUT):
+            if f in MANTER: continue
+            p = os.path.join(OUT, f)
+            shutil.rmtree(p) if os.path.isdir(p) and not os.path.islink(p) else os.remove(p)
     # assets/personagens, assets/acervo e assets/sites não entram inteiros: só os arquivos que as páginas referenciam (copiados abaixo),
     # como o banco de personagens, as artes do acervo no hero e os cards de assets/sites/cards.
     # catalogo e catalogo-web são dos sites .win (build_sites.py) e não entram no docs/.

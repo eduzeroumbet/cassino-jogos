@@ -12,6 +12,7 @@
   "games": [
     {
       "key": "fortune-tiger",
+      "description": "Fortune Tiger (PG Soft): grade 3x3, cinco linhas, RTP teórico de 96,81% e o recurso que repete o giro com um único símbolo.",
       "name": "Fortune Tiger",
       "provider": "PG Soft",
       "provider_code": "pgsoft",
@@ -21,8 +22,8 @@
       "effect": "coins",
       "video": "pgsoft-126",
       "kicker": "PG Soft · Slot 3x3",
-      "headline": "O tigre que vira a rodada num giro",
-      "lede": "Três rolos, cinco linhas e um recurso que pode encher a tela com o mesmo símbolo. Rápido de entender, feito para jogar no celular.",
+      "headline": "Três rolos, cinco linhas e um recurso que pode encher a tela",
+      "lede": "O tigre é o curinga. No recurso Fortune Tiger os rolos giram de novo com um único símbolo em jogo e, com a grade cheia, o prêmio do giro é multiplicado por dez.",
       "character": {"main": "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/freepik-ultradetailed-3d-character-model-pixaranimation-st-23284.webp", "extras": ["assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/tigrinho.webp", "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/fortune-tiger-character-tiger1.webp", "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/freepik-ultradetailed-3d-character-model-pixaranimation-st-23286.webp"], "name": "Tigre da Sorte", "alt": "Tigre da Sorte do Fortune Tiger pulando com envelopes vermelhos da sorte", "bio": "O Tigre da Sorte é o curinga do Fortune Tiger: substitui todos os símbolos e também paga sozinho quando forma linha. É ele quem pode ativar o recurso Fortune Tiger a qualquer giro, com os rolos girando de novo e um único símbolo em jogo até sair um prêmio."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.81, "suffix": "%", "type": "bar", "max": 100},
@@ -38,12 +39,15 @@
       "faq": [
         {"q": "Fortune Tiger funciona no celular?", "a": "Sim. O jogo foi feito em formato vertical e roda direto no navegador do Android e do iPhone, sem baixar nada."},
         {"q": "O que é o RTP de 96,81%?", "a": "É o retorno teórico ao jogador informado pelo provedor, calculado em milhões de rodadas. Não é garantia de resultado numa sessão; confira o valor na tela de regras dentro do jogo."},
-        {"q": "Como deposito para jogar?", "a": "Depois de criar a conta, escolha o valor e pague o Pix pelo app do seu banco. O saldo cai em segundos."}
+        {"q": "Como deposito para jogar?", "a": "Depois de criar a conta, escolha o valor e pague o Pix pelo app do seu banco. O saldo cai em segundos."},
+        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Tiger. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ],
       "promo": {"text": "Campanha ativa na plataforma: 100 giros no Fortune Tiger com depósito de R$ 50. Regras completas na página da campanha.", "note": "Campanha de teste da plataforma. Condições, prazo e rollover na página da campanha.", "url": "/campanha/deposite-r-50-e-ganhe-100-giros-no-fortune-tiger"}
     },
     {
       "key": "fortune-rabbit",
+      "description": "Fortune Rabbit (PG Soft): grade 3-4-3, dez linhas, símbolos de prêmio com valor próprio e RTP teórico de 96,75%.",
       "name": "Fortune Rabbit",
       "provider": "PG Soft",
       "provider_code": "pgsoft",
@@ -53,8 +57,8 @@
       "effect": "sparkles",
       "video": "pgsoft-1543462",
       "kicker": "PG Soft · Slot 3-4-3",
-      "headline": "Símbolos de prêmio que pagam na hora",
-      "lede": "O coelho espalha símbolos de prêmio pela grade e, no recurso especial, só eles aparecem. Leve, colorido e com o maior teto da família Fortune.",
+      "headline": "Símbolos de prêmio com valor próprio na grade",
+      "lede": "O coelho espalha símbolos de prêmio pela grade 3-4-3 e, no recurso especial, só eles e espaços vazios aparecem. Ganho máximo informado de 5.000x.",
       "character": {"main": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character3.webp", "extras": ["assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character1.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character2.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-rabbit/fortune-rabbit-character4.webp"], "name": "Coelho da Fortuna", "alt": "Coelho da Fortuna do Fortune Rabbit de boné e jaqueta vermelha, corpo inteiro", "bio": "O Coelho da Fortuna é o curinga do Fortune Rabbit e substitui os símbolos comuns para ajudar a fechar as dez linhas. Ele também espalha os símbolos de prêmio pela grade e, no recurso especial, deixa em jogo só esses símbolos e espaços vazios."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.75, "suffix": "%", "type": "bar", "max": 100},
@@ -70,11 +74,14 @@
       "faq": [
         {"q": "Qual a diferença entre Fortune Rabbit e Fortune Tiger?", "a": "O Rabbit tem grade 3-4-3 com dez linhas e símbolos de prêmio com valor; o Tiger é 3x3 com cinco linhas e multiplicador x10."},
         {"q": "Dá para jogar no iPhone?", "a": "Sim. Abra o site no Safari, entre na sua conta e toque no jogo. Funciona em tela cheia na vertical."},
-        {"q": "O RTP é garantido?", "a": "Não. O RTP é uma média teórica informada pelo provedor para milhões de rodadas; cada giro é independente."}
+        {"q": "O RTP é garantido?", "a": "Não. O RTP é uma média teórica informada pelo provedor para milhões de rodadas; cada giro é independente."},
+        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Rabbit. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
     },
     {
       "key": "fortune-ox",
+      "description": "Fortune Ox (PG Soft): grade 3-4-3, dez linhas e um recurso que trava os rolos laterais e gira o do meio de novo. RTP teórico de 96,75%.",
       "name": "Fortune Ox",
       "provider": "PG Soft",
       "provider_code": "pgsoft",
@@ -84,8 +91,8 @@
       "effect": "coins",
       "video": "pgsoft-98",
       "kicker": "PG Soft · Slot 3-4-3",
-      "headline": "Força, sorte e rodadas que repetem",
-      "lede": "O touro dourado ativa giros repetidos até sair prêmio e multiplica por dez quando a grade enche. Ritmo constante, ótimo para sessões curtas.",
+      "headline": "Rolos laterais travados e o do meio girando de novo",
+      "lede": "O touro é o curinga. No recurso Fortune Ox os rolos laterais travam um símbolo e o do meio gira de novo até formar prêmio; com a grade cheia, o prêmio vale dez vezes.",
       "character": {"main": "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-ox/fortune-ox-7.webp", "extras": ["assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-ox/fortune-ox-3.webp", "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-ox/fortune-ox-1.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-ox/fortune-ox-2.webp"], "name": "Touro da Sorte", "alt": "Touro da Sorte do Fortune Ox de jaqueta vermelha equilibrando um lingote de ouro", "bio": "O Touro da Sorte é o curinga do Fortune Ox: substitui os demais símbolos e completa linhas nos três rolos. No recurso Fortune Ox, os rolos laterais travam um símbolo e o rolo do meio gira de novo até formar um prêmio."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.75, "suffix": "%", "type": "bar", "max": 100},
@@ -99,13 +106,16 @@
         {"title": "Wild do touro", "text": "O touro substitui os demais símbolos e completa linhas nos três rolos."}
       ],
       "faq": [
-        {"q": "Fortune Ox paga mais que o Tiger?", "a": "O teto de ganho informado pelo provedor é de 2.000x no Ox e 2.500x no Tiger. O RTP teórico dos dois é parecido."},
+        {"q": "Qual a diferença entre Fortune Ox e Fortune Tiger?", "a": "O Ox tem grade 3-4-3 com dez linhas e o recurso que trava os rolos laterais; o Tiger é 3x3 com cinco linhas. O ganho máximo informado é de 2.000x no Ox e 2.500x no Tiger, e o RTP teórico dos dois é parecido."},
         {"q": "Preciso baixar aplicativo?", "a": "Não. O jogo abre no navegador. Se preferir, dá para adicionar o site à tela de início do celular."},
-        {"q": "Quanto tempo leva para o depósito cair?", "a": "No Pix o saldo costuma aparecer em segundos depois do pagamento no app do banco."}
+        {"q": "Quanto tempo leva para o depósito cair?", "a": "No Pix o saldo costuma aparecer em segundos depois do pagamento no app do banco."},
+        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Ox. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
     },
     {
       "key": "fortune-dragon",
+      "description": "Fortune Dragon (PG Soft): grade 3x3, cinco linhas e giros especiais com multiplicadores de 2x, 5x ou 10x. RTP teórico de 96,74%.",
       "name": "Fortune Dragon",
       "provider": "PG Soft",
       "provider_code": "pgsoft",
@@ -115,8 +125,8 @@
       "effect": "embers",
       "video": "",
       "kicker": "PG Soft · Slot 3x3",
-      "headline": "O dragão traz multiplicadores ao giro",
-      "lede": "Grade enxuta de 3x3 com multiplicadores que entram durante o recurso do dragão. Um dos lançamentos mais recentes da família Fortune.",
+      "headline": "Giros especiais com multiplicadores de 2x, 5x ou 10x",
+      "lede": "Grade 3x3 com cinco linhas. No recurso do dragão, os multiplicadores que caem se somam e valem sobre o prêmio total do giro.",
       "character": {"main": "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon3.webp", "extras": ["assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon4.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon.webp", "assets/personagens/04-oficiais-provedores/pgsoft-fortune-dragon/fortune-dragon-gold-dragon.webp"], "name": "Dragão da Fortuna", "alt": "Dragão da Fortuna verde e dourado do Fortune Dragon envolto em fitas vermelhas", "bio": "O Dragão da Fortuna é o curinga do Fortune Dragon e completa as cinco linhas de pagamento. É ele quem pode ativar os giros especiais com multiplicadores de 2x, 5x ou 10x, que se somam e valem sobre o prêmio total do giro."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.74, "suffix": "%", "type": "bar", "max": 100},
@@ -130,13 +140,16 @@
         {"title": "Wild do dragão", "text": "O dragão é o curinga do jogo e completa as cinco linhas de pagamento."}
       ],
       "faq": [
-        {"q": "Fortune Dragon é bom para iniciantes?", "a": "É um dos slots mais simples de entender: 3x3, cinco linhas e um recurso principal."},
+        {"q": "Fortune Dragon é fácil de entender?", "a": "Sim. É um dos slots mais simples: 3x3, cinco linhas e um recurso principal."},
         {"q": "Onde vejo as regras completas?", "a": "Dentro do jogo, no menu de informações. Lá estão a tabela de pagamentos e o RTP configurado."},
-        {"q": "Como começo?", "a": "Crie sua conta em cerca de um minuto, deposite via Pix e toque em Fortune Dragon."}
+        {"q": "Como começo?", "a": "Crie sua conta em cerca de um minuto, deposite via Pix e toque em Fortune Dragon."},
+        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Dragon. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
     },
     {
       "key": "gates-of-olympus",
+      "description": "Gates of Olympus (Pragmatic Play): grade 6x5 que paga em qualquer posição, cascatas e multiplicadores de 2x a 500x.",
       "name": "Gates of Olympus",
       "provider": "Pragmatic Play",
       "provider_code": "pragmatic",
@@ -146,8 +159,8 @@
       "effect": "gates",
       "video": "",
       "kicker": "Pragmatic Play · Slot 6x5",
-      "headline": "Os portões se abrem para multiplicadores de até 500x",
-      "lede": "Zeus derruba multiplicadores na grade, os símbolos caem em cascata e o pagamento vale em qualquer posição. Alta volatilidade, alto teto.",
+      "headline": "Grade 6x5, cascatas e multiplicadores de 2x a 500x",
+      "lede": "Zeus derruba orbes multiplicadores na grade, os símbolos caem em cascata e o pagamento vale em qualquer posição. Volatilidade alta: prêmios menos frequentes e maiores.",
       "character": {"main": "assets/personagens/04-oficiais-provedores/pragmatic-gates-of-olympus/pose-1.webp", "extras": ["assets/personagens/04-oficiais-provedores/pragmatic-gates-of-olympus/zeus-pose.webp", "assets/personagens/04-oficiais-provedores/pragmatic-gates-of-olympus/zeus-idle-thunder.webp", "assets/personagens/04-oficiais-provedores/pragmatic-gates-of-olympus/character.webp"], "name": "Zeus", "alt": "Zeus do Gates of Olympus de túnica branca apontando para o alto", "bio": "Zeus comanda a grade do Gates of Olympus e derruba orbes com multiplicadores de 2x a 500x a qualquer momento. Nos giros grátis, os multiplicadores que ele lança se acumulam ao longo do recurso."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.50, "suffix": "%", "type": "bar", "max": 100},
@@ -164,11 +177,14 @@
       "faq": [
         {"q": "O que quer dizer volatilidade alta?", "a": "Os prêmios tendem a ser menos frequentes e maiores. É bom definir um valor por sessão antes de começar."},
         {"q": "Gates of Olympus roda bem no celular?", "a": "Sim. A grade se ajusta à tela vertical e as animações podem ser aceleradas no menu do jogo."},
-        {"q": "Os multiplicadores se somam?", "a": "Sim. Todos os multiplicadores que caem durante a sequência de cascatas são somados e aplicados ao prêmio total."}
+        {"q": "Os multiplicadores se somam?", "a": "Sim. Todos os multiplicadores que caem durante a sequência de cascatas são somados e aplicados ao prêmio total."},
+        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Gates of Olympus. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
     },
     {
       "key": "sweet-bonanza",
+      "description": "Sweet Bonanza (Pragmatic Play): grade 6x5 com cascatas, pagamento em qualquer posição e bombas multiplicadoras nos giros grátis.",
       "og_arte": "square",
       "name": "Sweet Bonanza",
       "provider": "Pragmatic Play",
@@ -180,7 +196,7 @@
       "video": "",
       "kicker": "Pragmatic Play · Slot 6x5",
       "headline": "Doces em cascata e bombas multiplicadoras",
-      "lede": "Frutas e balas caem sem parar, o pagamento vale em qualquer lugar da grade e, nos giros grátis, as bombas multiplicam o prêmio.",
+      "lede": "Frutas e balas caem em cascata, o pagamento vale em qualquer lugar da grade e, nos giros grátis, bombas trazem multiplicadores que se somam.",
       "character": {"main": "assets/personagens/01-proprias/b7-cassino/elenco-branded/cassino-elenco-09-lu-board.webp", "crop": [694, 76, 292, 298], "extras": ["assets/personagens/01-proprias/b7-cassino/mr-bit/cassino-mascote-mr-bit-board-original.webp", "assets/personagens/01-proprias/b7-cassino/elenco-branded/cassino-elenco-02-pulo-board.webp", "assets/personagens/01-proprias/b7-cassino/elenco-branded/cassino-elenco-04-miudo-board.webp"], "name": "Lu", "alt": "Lu, a arara do elenco do Cassino, com megafone e ficha na mão", "bio": "A Lu é a arara do elenco do Cassino e apresenta o Sweet Bonanza para quem chega agora: frutas e balas caem em cascata e o prêmio vale em qualquer lugar da grade. O recado dela é curto: nos giros grátis entram as bombas multiplicadoras, então vale definir o valor da sessão antes de começar."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.48, "suffix": "%", "type": "bar", "max": 100},
@@ -195,12 +211,15 @@
       ],
       "faq": [
         {"q": "Sweet Bonanza é parecido com Gates of Olympus?", "a": "Usam a mesma mecânica de grade 6x5 com cascatas. No Sweet Bonanza os multiplicadores aparecem só nos giros grátis."},
-        {"q": "Qual o valor mínimo para jogar?", "a": "A aposta mínima aparece no próprio jogo. O depósito mínimo via Pix é exibido na tela de depósito."},
-        {"q": "Posso jogar na vertical?", "a": "Sim. A versão mobile reorganiza a grade para a tela em pé."}
+        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Sweet Bonanza. O depósito mínimo via Pix é exibido na tela de depósito."},
+        {"q": "Posso jogar na vertical?", "a": "Sim. A versão mobile reorganiza a grade para a tela em pé."},
+        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."},
+        {"q": "Preciso baixar aplicativo?", "a": "Não. O jogo abre no navegador do celular ou do computador, sem instalar nada."}
       ]
     },
     {
       "key": "big-bass-splash",
+      "description": "Big Bass Splash (Pragmatic Play): grade 5x3, dez linhas e giros grátis em que o pescador coleta o valor dos peixes na tela.",
       "name": "Big Bass Splash",
       "provider": "Pragmatic Play",
       "provider_code": "pragmatic",
@@ -210,8 +229,8 @@
       "effect": "bubbles",
       "video": "",
       "kicker": "Pragmatic Play · Slot 5x3",
-      "headline": "Jogue a isca e pesque os peixes de dinheiro",
-      "lede": "Nos giros grátis, o pescador coleta o valor de cada peixe na tela. Quanto mais pescadores, maior o multiplicador.",
+      "headline": "Peixes com valor em dinheiro e um pescador que coleta",
+      "lede": "Nos giros grátis, o pescador coleta o valor de cada peixe na tela. A cada quatro pescadores, o recurso sobe de nível e o multiplicador aumenta.",
       "character": {"main": "assets/personagens/01-proprias/b7-cassino/elenco-branded/cassino-elenco-10-capi-board.webp", "crop": [670, 62, 300, 334], "extras": ["assets/personagens/01-proprias/b7-cassino/mr-bit/cassino-mascote-mr-bit-board-original.webp", "assets/personagens/01-proprias/b7-cassino/elenco-branded/cassino-elenco-07-bambu-board.webp", "assets/personagens/01-proprias/b7-cassino/elenco-branded/cassino-elenco-09-lu-board.webp"], "name": "Capi", "alt": "Capi, a capivara do elenco do Cassino, com ampulheta e ficha", "bio": "A Capi é a capivara do elenco do Cassino e acompanha quem vai pescar no Big Bass Splash. Ela lembra como a pescaria funciona: nos giros grátis o pescador coleta o valor de cada peixe na tela e, quanto mais pescadores, maior o multiplicador."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.71, "suffix": "%", "type": "bar", "max": 100},
@@ -227,11 +246,14 @@
       "faq": [
         {"q": "Como funcionam os giros grátis?", "a": "O pescador entra como curinga e coleta o valor de todos os peixes visíveis. Acumular pescadores sobe o multiplicador."},
         {"q": "Big Bass Splash é o mesmo que Big Bass Bonanza?", "a": "É da mesma série, com grade 5x3 e dez linhas, mas com recursos aleatórios extras antes dos giros grátis."},
-        {"q": "Precisa de internet rápida?", "a": "Não. O jogo é leve e funciona bem em 4G."}
+        {"q": "Precisa de internet rápida?", "a": "Não. O jogo é leve e funciona bem em 4G."},
+        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Big Bass Splash. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
     },
     {
       "key": "mines",
+      "description": "Turbo Mines (Galaxsys): grade 5x5 com 1 a 24 minas. Cada casa segura sobe o multiplicador e você decide quando encerrar a rodada.",
       "name": "Turbo Mines",
       "provider": "Galaxsys",
       "provider_code": "galaxsys-original",
@@ -241,8 +263,8 @@
       "effect": "grid",
       "video": "",
       "kicker": "Galaxsys · Jogo de minas 5x5",
-      "headline": "Você escolhe o risco. Você decide quando parar",
-      "lede": "Uma grade 5x5, de 1 a 24 minas escondidas. Cada casa segura aumenta o multiplicador e você pode sacar quando quiser.",
+      "headline": "Grade 5x5: você escolhe as minas e a hora de encerrar",
+      "lede": "De 1 a 24 minas escondidas em 25 casas. Cada casa segura aumenta o multiplicador, e o botão de saque encerra a rodada depois do primeiro acerto.",
       "character": {"main": "assets/personagens/01-proprias/b7-cassino/mr-bit/cassino-mascote-mr-bit-board-original.webp", "crop": [45, 102, 445, 420], "extras": ["assets/personagens/01-proprias/b7-cassino/mr-bit/cassino-mascote-mr-bit-board-livro-de-ouro.webp", "assets/personagens/01-proprias/b7-cassino/elenco-branded/cassino-elenco-03-seu-firme-board.webp", "assets/personagens/01-proprias/b7-cassino/elenco-branded/cassino-elenco-10-capi-board.webp"], "name": "Mr. Bit", "alt": "Mr. Bit, o mascote do Cassino feito de blocos, de terno azul e gravata vermelha", "bio": "Mr. Bit é o mascote do Cassino e, feito de blocos como a grade 5x5, é o guia do Turbo Mines. Ele lembra a regra de ouro do jogo: cada casa segura sobe o multiplicador e você decide a hora de sacar."},
       "metrics": [
         {"label": "RTP informado", "value": 98.89, "suffix": "%", "type": "bar", "max": 100, "prefix": "até "},
@@ -258,7 +280,9 @@
       "faq": [
         {"q": "Qual a melhor quantidade de minas?", "a": "Não existe configuração vencedora. Poucas minas dão acertos mais frequentes com multiplicador menor; muitas minas, o contrário."},
         {"q": "O RTP é fixo?", "a": "O provedor informa uma faixa que pode chegar a 98,89% conforme a configuração. Confira o valor nas regras dentro do jogo."},
-        {"q": "Funciona no celular?", "a": "Sim. A grade é grande, com toques simples, ideal para jogar com uma mão."}
+        {"q": "Funciona no celular?", "a": "Sim. A grade é grande, com toques simples, ideal para jogar com uma mão."},
+        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Turbo Mines. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como faço saque?", "a": "O botão de saque dentro do Turbo Mines só encerra a rodada e leva o valor para o seu saldo. Para retirar o saldo da conta, use a carteira da plataforma: o saque é feito via Pix. Condições e prazos estão nos Termos e Condições."}
       ]
     }
   ]
