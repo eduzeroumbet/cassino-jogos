@@ -33,7 +33,7 @@ Landing pages estáticas dos principais jogos de cassino.b7bet7.bet, mobile firs
     sem logo, a arte inteira (banner sem a faixa legal, ou a indicada em `og_arte` no `games.json`) sobre ela mesma desfocada. Mines continua com `assets/img/mines-og.jpg`.
   - O build copia para `docs/` e para cada domínio só os arquivos de `assets/acervo/` e `assets/sites/` que as páginas usam.
 - Imagens: `tools_imgs.py` gera hero WebP 600/896, miniatura e OG 1200x630 (hoje usados só pelo Mines e como reserva das capas).
-- Indexação: `site.indexar=true` (hoje): robots index,follow e robots.txt Allow (com a linha Sitemap no `docs/`); `false` coloca noindex e Disallow.
+- Indexação: `site.indexar=false` (hoje, testes; ligar só com operação licenciada): robots index,follow e robots.txt Allow (com a linha Sitemap no `docs/`); `false` coloca noindex e Disallow.
   O banco de personagens (uso interno) é sempre noindex.
 - Todos os links para a plataforma levam UTM e `rel="sponsored noopener"`: utm_source=landing, utm_medium=guia, utm_campaign=<jogo> (`hub` na index),
   utm_content=<posição: header, hero, vitrine ou final>; barra fixa e rodapé contam como final. O botão exato vai no evento `lp_cta` do GA4 (`data-cta`).

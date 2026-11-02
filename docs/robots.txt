@@ -1,3 +1,2 @@
 User-agent: *
-Allow: /
-Sitemap: https://eduzeroumbet.github.io/cassino-jogos/sitemap.xml
+Disallow: /

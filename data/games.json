@@ -4,7 +4,7 @@
     "register": "/register",
     "brand": "Cassino",
     "ga4": "G-K23B4D0N14",
-    "indexar": true,
+    "indexar": false,
     "pages_url": "https://eduzeroumbet.github.io/cassino-jogos",
     "domains": {"fortune-tiger": "guiadotigrinho.win", "fortune-rabbit": "guiadocoelhinho.win", "fortune-ox": "guiadotourinho.win", "fortune-dragon": "guiadodragaozinho.win", "gates-of-olympus": "guiadozeus.win", "sweet-bonanza": "guiadosdoces.win", "big-bass-splash": "guiadapescaria.win", "mines": "guiadasminas.win"},
     "domains_active": false
