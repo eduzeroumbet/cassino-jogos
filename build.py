@@ -282,7 +282,7 @@ def game_page(g, mode='pages'):
     promo = ''
     if g.get('promo'):
         note = f'<small>{e(g["promo"]["note"])}</small>' if g['promo'].get('note') else ''
-        promo = f'<p class="promo">{e(g["promo"]["text"])} <a data-cta="promo" href="{utm(g["promo"]["url"], k, "promo")}">Ver campanha</a>{note}</p>'
+        promo = f'<p class="promo">{e(g["promo"]["text"])} <a data-cta="promo" href="{utm(g["promo"]["url"], k, "promo")}">Ver promoções</a>{note}</p>'
     feats = ''.join(f'<button class="xcard" type="button" data-k="{e(f["title"])}" aria-expanded="{"true" if i == 0 else "false"}"><span class="n">0{i + 1}</span><h3>{e(f["title"])}</h3><p>{e(f["text"])}</p></button>'
                     for i, f in enumerate(g['features']))
     others = ''.join(card(o, game_href(o['key'], mode), o['provider'], lazy=i >= 3) for i, o in enumerate(o for o in G if o['key'] != k))

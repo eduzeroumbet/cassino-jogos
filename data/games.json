@@ -40,7 +40,7 @@
         {"q": "O que é o RTP de 96,81%?", "a": "É o retorno teórico ao jogador informado pelo provedor, calculado em milhões de rodadas. Não é garantia de resultado numa sessão; confira o valor na tela de regras dentro do jogo."},
         {"q": "Como deposito para jogar?", "a": "Depois de criar a conta, escolha o valor e pague o Pix pelo app do seu banco. O saldo cai em segundos."}
       ],
-      "promo": {"text": "Campanha ativa na plataforma: 100 giros no Fortune Tiger com depósito de R$ 50. Regras completas na página da campanha.", "note": "Campanha de teste da plataforma. Condições, prazo e rollover na página da campanha.", "url": "/campanha/deposite-r-50-e-ganhe-100-giros-no-fortune-tiger"}
+      "promo": {"text": "Bônus do app: 50 giros no Fortune Tiger no depósito a partir de R$ 10, para quem instala o app. Vale 1 vez por conta.", "note": "Campanha de teste da plataforma. Giros válidos por 7 dias; condições completas na área de promoções após o login.", "url": "/promocoes"}
     },
     {
       "key": "fortune-rabbit",
