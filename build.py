@@ -48,10 +48,10 @@ def game_href(k, mode):
 def hub_href(mode):
     return './' if mode == 'pages' else f'{PAGES}/'
 
-POS = ('header', 'hero', 'vitrine', 'final')  # utm_content: posição do link na página (o data-cta do GA4 detalha o botão)
+POS = ('header', 'hero', 'vitrine', 'final')  # utm_content: posição do link na página (o data-cta do GA4 detalha o botão); cartões de promoção: promo-<n>
 
 def utm(path, key, pos):
-    assert pos in POS, pos
+    assert pos in POS or re.fullmatch(r'promo-\d+', pos), pos
     sep = '&' if '?' in path else '?'
     return f"{BASE}{path}{sep}utm_source=landing&utm_medium=guia&utm_campaign={key}&utm_content={pos}"
 
@@ -322,6 +322,28 @@ def hero_char(g):
     w, h = webp_size(a[0])
     return f'<img class="hero-ch" src="{a[0]}" width="{w}" height="{h}" alt="{e(a[1])}" decoding="async">'
 
+PROMO_NOTA = '18+ · Regras completas em cada campanha. Jogue com responsabilidade.'
+
+def promos(key, hub=False):
+    """Seção "Promoções ativas" (site.promos): um cartão por campanha (selo, título, texto, detalhes e botão largo).
+    Grade de 3 colunas no desktop; no celular, carrossel horizontal com snap e o próximo cartão cortado na borda.
+    Links com UTM utm_content=promo-<n> e, no GA4, lp_cta com data-cta e posicao promo-<n>. Na index (hub=True), vermelho e roxo."""
+    ps = S.get('promos') or []
+    if not ps: return ''
+    cards = ''
+    for i, p in enumerate(ps, 1):
+        assert p['url'].startswith(BASE + '/'), f'promo {i}: url fora da plataforma'
+        pos = f'promo-{i}'
+        cards += (f'<article class="pcard"><span class="pselo">{e(p["badge"])}</span><h3>{e(p["title"])}</h3><p>{e(p["text"])}</p>'
+                  f'<small>{e(p["details"])}</small><a class="btn btn-main" data-cta="{pos}" data-pos="{pos}" href="{utm(p["url"][len(BASE):], key, pos)}">{e(p["cta"])} {ARROW}</a></article>')
+    return f'''
+<section class="s{" promos-hub" if hub else ""}" id="promocoes"><div class="wrap">
+<p class="eyebrow">Campanhas da plataforma</p><h2>Promoções <span class="hl">ativas</span></h2>
+<div class="promos">{cards}</div>
+<p class="note">{e(PROMO_NOTA)}</p>
+</div></section>
+'''
+
 FAQ_OBRIG = ('Qual o valor mínimo de aposta?', 'Como sacar?', 'Funciona no celular?', 'O que é RTP?')
 
 def game_page(g, mode='pages'):
@@ -344,13 +366,8 @@ def game_page(g, mode='pages'):
                  f'width="300" height="375" aria-label="Prévia do {e(n)}"></video>')
     else:
         media = f'<img class="kb" src="assets/img/{k}-thumb.webp" width="300" height="350" loading="lazy" decoding="async" alt="{e(cover_alt(g))}">'
-    promo = ''
-    if g.get('promo'):
-        pr = g['promo']; note = ''
-        if pr.get('note'):  # com note_url, a nota vira link (ex.: página de promoções da plataforma)
-            nt = f'<a data-cta="promo_regras" href="{utm(pr["note_url"], k, "vitrine")}">{e(pr["note"])}</a>' if pr.get('note_url') else e(pr['note'])
-            note = f'<small>{nt}</small>'
-        promo = f'<p class="promo">{e(pr["text"])} <a data-cta="promo" href="{utm(pr["url"], k, "vitrine")}">Ver campanha</a>{note}</p>'
+    # vitrine_promos: link que rola até "Promoções ativas" (o texto das campanhas fica só na seção)
+    promo = '<p class="vlink"><a href="#promocoes">Ver promoções ativas</a></p>' if g.get('vitrine_promos') and S.get('promos') else ''
     feats = ''.join(f'<button class="xcard" type="button" data-k="{e(f["title"])}" aria-expanded="{"true" if i == 0 else "false"}"><span class="n">0{i + 1}</span><h3>{e(f["title"])}</h3><p>{e(f["text"])}</p></button>'
                     for i, f in enumerate(g['features']))
     others = ''.join(card(o, game_href(o['key'], mode), o['provider'], lazy=False) for o in G if o['key'] != k)
@@ -384,7 +401,7 @@ def game_page(g, mode='pages'):
 <div class="metrics">{''.join(metric(m) for m in g['metrics'])}</div>
 <p class="note">RTP é uma média teórica de longo prazo, não uma previsão para a sua sessão.</p>
 </div></section>
-{char_section(g, mode)}
+{promos(k)}{char_section(g, mode)}
 <section class="s" id="recursos"><div class="wrap">
 <p class="eyebrow">Recursos</p><h2>Como o jogo <span class="hl">paga</span></h2>
 <div class="xcards">{feats}</div>
@@ -463,7 +480,7 @@ def hub():
 <div class="grid">{grid}</div>
 <h3 class="ler">Como ler os guias</h3><p class="sub">{e(HUB_INTRO)}</p>
 <p class="note more"><a href="personagens.html">Personagens dos jogos</a></p></div></section>
-<section class="final"><h2>Cadastro em poucos minutos</h2><p class="sub" style="margin:0 auto">Cadastro rápido, Pix na hora e centenas de jogos.</p>
+{promos('hub', hub=True)}<section class="final"><h2>Cadastro em poucos minutos</h2><p class="sub" style="margin:0 auto">Cadastro rápido, Pix na hora e centenas de jogos.</p>
 <div class="ctas">{com18(f'<a class="btn btn-main" data-cta="hub_final" href="{utm(S["register"], "hub", "final")}">Criar conta e jogar {ARROW}</a>')}</div></section>
 </main>
 {footer('hub')}

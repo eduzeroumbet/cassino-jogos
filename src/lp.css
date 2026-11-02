@@ -147,9 +147,19 @@ h2 .hl{color:var(--acc)}
 .phone img.kb{animation:kb 14s ease-in-out infinite alternate}
 @keyframes kb{to{transform:scale(1.12) translate(-3%,-2%)}}
 .phone .tag{position:absolute;left:12px;bottom:12px;font-size:13px;font-weight:800;padding:7px 12px;border-radius:999px;background:rgba(11,20,48,.75);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.promo{margin-top:18px;padding:16px 18px;border-radius:var(--r);border:1px dashed color-mix(in srgb,var(--acc) 60%,transparent);background:rgba(245,185,66,.06);font-size:15px}
-.promo a{font-weight:800;color:var(--acc)}
-.promo small{display:block;margin-top:8px;font-size:14px;color:var(--muted)}
+.vlink{margin-top:14px;font-size:14px;font-weight:800}.vlink a{color:var(--acc);display:inline-flex;align-items:center;min-height:44px}
+/* promoções ativas: carrossel com snap no celular (o próximo cartão aparece cortado), grade de 3 colunas no desktop */
+.promos{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--pad);padding:6px var(--pad) 18px;margin:26px calc(var(--pad) * -1) 0;scrollbar-width:none}
+.promos::-webkit-scrollbar{display:none}
+.pcard{flex:0 0 84%;max-width:360px;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px;padding:22px 20px;border-radius:var(--r);background:linear-gradient(160deg,var(--bg3),var(--bg2));border:1px solid color-mix(in srgb,var(--acc) 40%,transparent);border-top:3px solid var(--acc)}
+.pselo{align-self:flex-start;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:999px;background:var(--acc);color:var(--bg)}
+.pcard h3{font-size:20px;font-weight:800;line-height:1.2}
+.pcard p{color:var(--muted);font-size:15px}
+.pcard small{font-size:13px;line-height:1.45;color:var(--muted)}
+.pcard .btn{margin-top:auto;width:100%;min-height:52px;font-size:15px}
+/* na index: vermelho e roxo */
+.promos-hub{--acc:var(--coral);--acc2:#C9A2FF}
+.promos-hub .pcard{background:linear-gradient(160deg,color-mix(in srgb,var(--acc2) 22%,var(--bg3)),var(--bg2));border-color:color-mix(in srgb,var(--acc2) 45%,transparent);border-top-color:var(--acc)}
 /* step path */
 .steps{position:relative;margin-top:30px;padding-left:58px}
 .steps svg{position:absolute;left:18px;top:8px;height:calc(100% - 16px);width:12px;overflow:visible}
@@ -212,6 +222,7 @@ footer nav a{text-decoration:none;font-weight:700;color:var(--cream);min-height:
   .metrics{grid-template-columns:repeat(4,1fr)}
   .reel{grid-template-columns:1fr 1fr}
   .card{flex-basis:200px}
+  .pcard{flex-basis:46%}
   .grid{grid-template-columns:repeat(4,1fr)}
   .hero-in{padding-bottom:64px}
   .collage{grid-template-columns:repeat(6,1fr);transform:rotate(-8deg) scale(1.15)}
@@ -242,6 +253,8 @@ footer nav a{text-decoration:none;font-weight:700;color:var(--cream);min-height:
   /* outros favoritos: no desktop, grade com todos os cards inteiros (sem card cortado na borda) */
   .rail{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:22px 0 0;padding:6px 0 0}
   .rail .card{max-width:none}
+  .promos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;overflow:visible;margin:26px 0 0;padding:6px 0 0}
+  .pcard{max-width:none}
   .card:hover{transform:translateY(-6px)}
 }
 @media (prefers-reduced-motion:reduce){
