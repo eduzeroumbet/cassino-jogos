@@ -13,12 +13,12 @@ $$('.fx').forEach(function(fx){
   }
   if(!RM)fx.innerHTML=h;
 });
-/* barra fixa: só aparece quando o CTA do hero saiu da tela e o CTA final não está visível */
+/* barra fixa: só aparece depois que o hero inteiro saiu da tela (nunca sobre os botões do hero) e some no CTA final */
 var sticky=d.querySelector('.sticky');
-if(sticky){var heroCta=d.querySelector('.hero .btn-main'),fin=d.querySelector('.final'),vis={hero:true,fin:false};
+if(sticky){var heroEl=d.querySelector('.hero'),fin=d.querySelector('.final'),vis={hero:true,fin:false};
   d.body.classList.add('has-sticky');
-  if('IntersectionObserver' in w&&heroCta){var so=new IntersectionObserver(function(es){es.forEach(function(e){vis[e.target===heroCta?'hero':'fin']=e.isIntersecting});
-    sticky.classList.toggle('show',!vis.hero&&!vis.fin)});so.observe(heroCta);if(fin)so.observe(fin)}}
+  if('IntersectionObserver' in w&&heroEl){var so=new IntersectionObserver(function(es){es.forEach(function(e){vis[e.target===heroEl?'hero':'fin']=e.isIntersecting});
+    sticky.classList.toggle('show',!vis.hero&&!vis.fin)});so.observe(heroEl);if(fin)so.observe(fin)}}
 /* parallax do hero + caminho dos passos */
 var hero=d.querySelector('.hero'),steps=d.querySelector('.steps'),tick=false;
 function frame(){

@@ -19,10 +19,17 @@ a{color:inherit}
 .logo{font-weight:900;letter-spacing:.14em;font-size:14px;text-decoration:none;text-transform:uppercase;display:flex;align-items:center;gap:8px}
 .logo i{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--coral),var(--gold));display:inline-block}
 .top-nav{display:flex;align-items:center;gap:8px}
-.top-jogos{display:none;font-size:14px;font-weight:800;text-decoration:none;min-height:44px;align-items:center;padding:0 10px}
+/* "Jogos" com ícone de grade em todas as telas; no celular, compacto, e o nome da marca fica só para leitores de tela */
+.top-jogos{display:inline-flex;gap:6px;font-size:13px;font-weight:800;text-decoration:none;min-height:44px;align-items:center;padding:0 4px}
+.top-jogos svg{width:16px;height:16px;flex:0 0 auto;color:var(--acc)}
 .top .btn-sm{font-size:13px;font-weight:800;text-decoration:none;padding:10px 14px;border-radius:999px;border:1.5px solid rgba(244,238,230,.5);min-height:44px;display:inline-flex;align-items:center;white-space:nowrap}
 .top .btn-acc{background:var(--cta);border-color:var(--cta);color:#fff}
-@media (max-width:379px){.logo span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
+@media (max-width:479px){.logo span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.top-nav{gap:6px}.top .btn-sm{padding:10px 12px}}
+/* trilha "Jogos › Nome do jogo" logo abaixo do cabeçalho, sobre o hero */
+.crumbs{position:absolute;z-index:2;top:calc(var(--hh) + 10px);left:0;right:0;max-width:1120px;margin:0 auto;padding:0 var(--pad);display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;overflow:hidden}
+.crumbs a{color:var(--cream);text-decoration:none;min-height:32px;display:inline-flex;align-items:center}
+.crumbs [aria-current]{overflow:hidden;text-overflow:ellipsis}
+.crumbs~.hero-in{padding-top:calc(var(--hh) + 52px)}
 /* hero */
 .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;overflow:clip;isolation:isolate}
 .hero-art{position:absolute;inset:0;z-index:-2;overflow:hidden}
@@ -49,6 +56,7 @@ a{color:inherit}
 .hero-in{width:100%;padding:0 var(--pad) 34px;max-width:1120px;margin:0 auto}
 .kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;border-radius:999px;background:rgba(11,20,48,.6);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .kicker b{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc)}
+.kickers{display:flex;flex-wrap:wrap;gap:8px}
 h1,.hname{font-weight:900;font-size:clamp(44px,13vw,104px);line-height:.92;letter-spacing:-.02em;text-transform:uppercase;margin:16px 0 10px}
 h1 em,.hname em{font-style:normal;display:block;background:linear-gradient(180deg,#fff 10%,var(--acc) 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .headline{font-size:clamp(20px,5.4vw,30px);font-weight:800;line-height:1.15;max-width:22ch}
@@ -62,6 +70,9 @@ h1 em,.hname em{font-style:normal;display:block;background:linear-gradient(180de
 .btn-main{background:var(--cta);color:#fff;box-shadow:0 10px 30px -8px rgba(230,46,77,.7),inset 0 -3px 0 rgba(0,0,0,.18)}
 .btn-ghost{background:rgba(11,20,48,.6);border:1.5px solid var(--cream);color:var(--cream)}
 .btn svg{flex:0 0 auto;width:20px;height:20px}
+/* botão principal com o selo 18+ pequeno ao lado (hero e CTA final) */
+.cta18{display:flex;align-items:center;gap:10px}.cta18 .btn{flex:1 1 auto}
+.age18{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:2px solid var(--coral);display:grid;place-items:center;font-size:11px;font-weight:900;color:var(--cream);background:rgba(11,20,48,.6)}
 .trust{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:18px;font-size:13px;color:var(--muted);font-weight:600}
 .trust span{display:inline-flex;align-items:center;gap:6px}
 .trust span:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--acc)}
@@ -72,14 +83,15 @@ h2{font-size:clamp(28px,7.4vw,48px);font-weight:900;line-height:1.02;letter-spac
 h2 .hl{color:var(--acc)}
 .sub{color:var(--muted);max-width:56ch}
 /* métricas */
+/* cada cartão ocupa 3 linhas da grade (rótulo, valor, nível) com subgrid: os valores da mesma fileira ficam na mesma linha de base */
 .metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px}
-.m{background:linear-gradient(180deg,var(--bg2),rgba(19,34,74,.55));border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:18px 16px;min-height:132px;display:flex;flex-direction:column;justify-content:space-between}
-.m small{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.m strong{display:block;font-size:clamp(26px,7vw,40px);font-weight:900;line-height:1;margin-top:8px}
+.m{background:linear-gradient(180deg,var(--bg2),rgba(19,34,74,.55));border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:18px 16px;display:grid;grid-row:span 3;grid-template-rows:subgrid;row-gap:0;align-content:start}
+.m small{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);align-self:start}
+.m strong{display:block;font-size:clamp(26px,7vw,40px);font-weight:900;line-height:1;margin-top:8px;align-self:end}
 .m strong .pre{font-size:.5em;font-weight:800;color:var(--muted)}
 .bar{height:8px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:14px}
 .bar i{display:block;height:100%;width:0;border-radius:8px;background:linear-gradient(90deg,var(--acc2),var(--acc));transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
-.lv{display:flex;gap:6px;margin-top:14px}.lv i{flex:1;height:8px;border-radius:8px;background:rgba(255,255,255,.1)}
+.lv{display:flex;gap:6px;margin-top:14px;align-self:start}.lv i{flex:1;height:8px;border-radius:8px;background:rgba(255,255,255,.1)}
 .lv i.f{background:var(--acc)}
 .m-text strong{font-size:clamp(18px,4.6vw,24px);line-height:1.15}
 .note{font-size:13px;color:var(--muted);margin-top:12px}
@@ -107,13 +119,15 @@ h2 .hl{color:var(--acc)}
 .hero .h1-txt{font-size:clamp(24px,6.6vw,36px);font-weight:900;line-height:1.1;letter-spacing:-.01em;text-transform:none;margin:0 0 10px;color:var(--cream)}
 .h1-txt~.headline{font-size:clamp(16px,4.4vw,21px);font-weight:700;line-height:1.3;max-width:34ch}
 .hname+.h1-txt{margin-top:-2px}
-/* h1 da index: no HTML "Os jogos de cassino mais jogados: guias e RTP"; caixa alta e quebras em CSS, com "mais jogados" em destaque */
-.h1-hub .h1-l{display:block;font-size:clamp(14px,3.8vw,18px);font-weight:800;line-height:1.3;letter-spacing:.12em;color:var(--cream)}
-.h1-hub .h1-l:first-child{margin-bottom:6px}.h1-hub .h1-l:last-child{margin-top:8px}
-/* sem filter:drop-shadow: com a máscara, a sombra é cortada na caixa da imagem e marca uma faixa sobre o fundo */
-.hero-ch{position:absolute;z-index:0;top:62px;left:50%;height:min(40svh,380px);width:auto;max-width:none;transform:translateX(-50%);pointer-events:none;
+/* h1 da index: no HTML "Os jogos de cassino mais jogados"; caixa alta e quebras em CSS, com "mais jogados" em destaque */
+.h1-hub .h1-l{display:block;font-size:clamp(14px,3.8vw,18px);font-weight:800;line-height:1.3;letter-spacing:.12em;color:var(--cream);margin-bottom:6px}
+/* "Como ler os guias": abaixo da grade de jogos da index */
+.ler{font-size:20px;font-weight:800;margin:40px 0 8px}
+/* sem filter:drop-shadow: com a máscara, a sombra é cortada na caixa da imagem e marca uma faixa sobre o fundo.
+   No celular a arte fica abaixo da trilha "Jogos › Nome do jogo" e 25% mais baixa que antes (40svh/380px) */
+.hero-ch{position:absolute;z-index:0;top:calc(var(--hh) + 36px);left:50%;height:min(30svh,285px);width:auto;max-width:none;transform:translateX(-50%);pointer-events:none;
   -webkit-mask-image:linear-gradient(180deg,#000 74%,transparent);mask-image:linear-gradient(180deg,#000 74%,transparent)}
-.has-ch .hero-in{position:relative;z-index:1;padding-top:calc(62px + min(40svh,380px) - 56px)}
+.has-ch .hero-in{position:relative;z-index:1;padding-top:calc(var(--hh) + 36px + min(30svh,285px) - 40px)}
 .more{margin-top:22px;text-align:center}.more a{color:var(--muted)}
 /* expanded cards */
 .xcards{display:flex;flex-direction:column;gap:10px;margin-top:26px}
@@ -192,7 +206,7 @@ footer nav a{text-decoration:none;font-weight:700;color:var(--cream);min-height:
 .collage img{width:100%;height:auto;aspect-ratio:300/350;object-fit:cover;border-radius:14px}
 @media (min-width:720px){
   :root{--pad:32px}
-  .ctas{flex-direction:row;flex-wrap:wrap}.ctas .btn{flex:1 0 auto}
+  .ctas{flex-direction:row;flex-wrap:wrap}.ctas .btn,.ctas .cta18{flex:1 0 auto}
   .hero .ctas .btn,.final .ctas .btn{min-width:240px}
   .final .ctas{display:grid;grid-auto-flow:column;grid-auto-columns:1fr}
   .metrics{grid-template-columns:repeat(4,1fr)}
@@ -208,9 +222,9 @@ footer nav a{text-decoration:none;font-weight:700;color:var(--cream);min-height:
 @media (min-width:960px){
   .hero-ch{top:auto;left:auto;right:max(2vw,calc(50% - 620px));bottom:0;height:min(86svh,780px);transform:none;
     -webkit-mask-image:linear-gradient(180deg,#000 82%,transparent);mask-image:linear-gradient(180deg,#000 82%,transparent)}
-  .has-ch .hero-in{padding-top:96px}.has-ch .hero-in>*{max-width:560px}
+  .has-ch .hero-in{padding-top:calc(var(--hh) + 52px)}.has-ch .hero-in>*{max-width:560px}
   .h1-logo img{max-width:420px;max-height:260px}
-  .top-jogos{display:inline-flex}
+  .top-jogos{font-size:14px;padding:0 10px}
 }
 @media (min-width:1024px){
   .hero{align-items:center}
