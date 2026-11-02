@@ -48,9 +48,18 @@ def game_href(k, mode):
 def hub_href(mode):
     return './' if mode == 'pages' else f'{PAGES}/'
 
-def utm(path, key, cta):
+POS = ('header', 'hero', 'vitrine', 'final')  # utm_content: posição do link na página (o data-cta do GA4 detalha o botão)
+
+def utm(path, key, pos):
+    assert pos in POS, pos
     sep = '&' if '?' in path else '?'
-    return f"{BASE}{path}{sep}utm_source=lp&utm_medium=landing&utm_campaign={key}&utm_content={cta}"
+    return f"{BASE}{path}{sep}utm_source=landing&utm_medium=guia&utm_campaign={key}&utm_content={pos}"
+
+SAIDA_RE = re.compile(r'<a ((?:(?!rel=)[^>])*?href="' + re.escape(BASE) + r'[^"]*"[^>]*)>')
+
+def saida(t):
+    """Links de saída para a plataforma com rel="sponsored noopener"."""
+    return SAIDA_RE.sub(r'<a \1 rel="sponsored noopener">', t)
 
 def play_url(g):
     return f"/cassino/jogar/{g['provider_code']}/{g['slug']}"
@@ -77,20 +86,24 @@ def head(title, desc, og, canonical, accent, preload=None, extra='', noindex=Fal
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23FF3D5A'/%3E%3C/svg%3E">
 <style>{CSS}:root{{--acc:{accent}}}</style>{extra}</head>'''
 
-def top(hub='./'):
-    return (f'<header class="top"><a class="logo" href="{hub}" aria-label="{e(S["brand"])}: todos os jogos"><i></i>{e(S["brand"])}</a>'
-            f'<a class="btn-sm" data-cta="topo_entrar" href="{utm("/login", "topo", "entrar")}">Entrar</a></header>')
+def top(key, hub='./'):
+    """Cabeçalho fixo (sticky): logo, "Jogos" (só no desktop), "Entrar" e "Criar conta"."""
+    return (f'<header class="top"><a class="logo" href="{hub}" aria-label="{e(S["brand"])}: todos os jogos"><i></i><span>{e(S["brand"])}</span></a>'
+            f'<nav class="top-nav" aria-label="Conta"><a class="top-jogos" href="{hub}">Jogos</a>'
+            f'<a class="btn-sm" data-cta="topo_entrar" href="{utm("/login", key, "header")}">Entrar</a>'
+            f'<a class="btn-sm btn-acc" data-cta="topo_cadastro" href="{utm(S["register"], key, "header")}">Criar conta</a></nav></header>')
 
 def footer(key, hub='./'):
     return f'''<footer><div class="wrap"><div class="rg"><span class="age">18+</span><p>Proibido para menores de 18 anos. Jogue com responsabilidade: defina um valor por sessão, faça pausas e não trate o jogo como fonte de renda. Os valores de RTP são teóricos, informados pelos provedores, e não garantem resultado.</p></div>
-<nav><a href="{hub}">Todos os jogos</a><a data-cta="rodape_cassino" href="{utm("/cassino", key, "rodape")}">Cassino</a><a data-cta="rodape_cadastro" href="{utm(S["register"], key, "rodape")}">Criar conta</a><a href="{utm("/usuario/carteira", key, "rodape")}">Depósito Pix</a></nav>
-<nav class="docs" aria-label="Documentos da plataforma"><a href="{utm("/pagina/terms", key, "rodape")}">Termos e Condições</a><a href="{utm("/pagina/privacy", key, "rodape")}">Política de Privacidade</a><a href="{utm("/pagina/responsible-gaming", key, "rodape")}">Jogo Responsável</a><a href="{utm("/faq", key, "rodape")}">Central de Ajuda</a></nav>
+<nav><a href="{hub}">Todos os jogos</a><a data-cta="rodape_cassino" href="{utm("/cassino", key, "final")}">Cassino</a><a data-cta="rodape_cadastro" href="{utm(S["register"], key, "final")}">Criar conta</a><a href="{utm("/usuario/carteira", key, "final")}">Depósito Pix</a></nav>
+<nav class="docs" aria-label="Documentos da plataforma"><a href="{utm("/pagina/terms", key, "final")}">Termos e Condições</a><a href="{utm("/pagina/privacy", key, "final")}">Política de Privacidade</a><a href="{utm("/pagina/responsible-gaming", key, "final")}">Jogo Responsável</a><a href="{utm("/faq", key, "final")}">Central de Ajuda</a></nav>
 <p>Página informativa de {e(S["brand"])}. Os jogos citados pertencem aos respectivos provedores.</p></div></footer>'''
 
-def pic(k, alt, cls='', eager=False):
+def pic(k, cls='', eager=False):
+    """Arte de fundo do hero sem acervo (Mines): decorativa, alt vazio e aria-hidden."""
     pr = 'fetchpriority="high"' if eager else 'loading="lazy" decoding="async"'
     return (f'<img class="{cls}" src="assets/img/{k}-hero-600.webp" srcset="assets/img/{k}-hero-600.webp 600w, assets/img/{k}-hero-896.webp 896w" '
-            f'sizes="(min-width:1024px) 58vw, 100vw" width="896" height="1200" alt="{e(alt)}" {pr}>')
+            f'sizes="(min-width:1024px) 58vw, 100vw" width="896" height="1200" alt="" aria-hidden="true" {pr}>')
 
 # ---------------------------------------------------------------- artes oficiais do acervo
 
@@ -110,17 +123,17 @@ def hero_preload(k):
     return bg[-1]['arquivo'], ', '.join(f'{i["arquivo"]} {i["w"]}w' for i in reversed(bg)), HERO_SIZES
 
 def hero_art(g):
-    """Fundo do topo: arte oficial do acervo (WebP até 1600 px, carregada antes de tudo, sem lazy); o escurecimento vem do .hero:after.
-    Jogo sem acervo (Mines) mantém a arte própria."""
+    """Fundo do topo (decorativo: alt vazio e aria-hidden): arte oficial do acervo (WebP até 1600 px, carregada antes de tudo, sem lazy);
+    o escurecimento vem do .hero:after. Jogo sem acervo (Mines) mantém a arte própria."""
     k = g['key']; bg = hero_bg(k)
-    if not bg: return pic(k, 'Arte do ' + g['name'], eager=True)
+    if not bg: return pic(k, eager=True)
     src, srcset, sizes = hero_preload(k)
     return (f'<img src="{src}" srcset="{srcset}" sizes="{sizes}" width="{bg[0]["w"]}" height="{bg[0]["h"]}" '
-            f'alt="Cenário oficial do {e(g["name"])}" fetchpriority="high">')
+            f'alt="" aria-hidden="true" fetchpriority="high">')
 
 def hero_title(g):
     """Título do hero: o logo oficial em português do acervo (alt = nome do jogo); sem logo, o nome em letras grandes.
-    O h1 é texto ("<jogo>: como jogar, RTP e recursos"), pequeno, logo abaixo, acima do subtítulo."""
+    O h1 é texto ("<jogo>: como jogar, RTP e recursos"), logo abaixo, maior que a frase de apoio, que fica como subtítulo."""
     lg = acv(g['key'], 'logo')
     h1 = f'<h1 class="h1-txt">{e(g["name"])}: como jogar, RTP e recursos</h1>'
     if not lg: return f'<p class="hname">{h1name(g["name"])}</p>{h1}'
@@ -217,12 +230,19 @@ def metric(m):
     bar = f'<div class="bar" aria-hidden="true"><i data-w="{v / m.get("max", 100) * 100:.1f}"></i></div>' if m['type'] == 'bar' else ''
     return f'<div class="m"><small>{e(m["label"])}</small>{body}{bar}</div>'
 
-def card(g, href, sub, lazy=True):
-    """Card de jogo. lazy=False nos primeiros do carrossel: a miniatura carrega mesmo sem rolar a página."""
-    lz = 'loading="lazy" ' if lazy else ''
+def rtp(g):
+    """RTP do card: "RTP 96,81%" (com o prefixo da métrica, ex.: "RTP até 98,89%")."""
+    m = next(m for m in g['metrics'] if 'RTP' in m['label'])
+    return f'RTP {m.get("prefix", "")}{m["value"]:.2f}%'.replace('.', ',')
+
+def card(g, href, sub, lazy=True, com_rtp=False):
+    """Card de jogo: link rastreável (data-cta). lazy=False no carrossel "Outros favoritos": com lazy e decoding async,
+    no desktop alguns cards apareciam só como bloco de cor. com_rtp: linha "RTP 96,81%" abaixo da grade (index)."""
+    lz = 'loading="lazy" decoding="async" ' if lazy else ''
     t = thumb(g['key']); w, h = webp_size(t)
-    return (f'<a class="card" href="{href}" style="--ca:{g["accent"]}"><img src="{t}" width="{w}" height="{h}" {lz}decoding="async" alt="{e(cover_alt(g))}">'
-            f'<span>{e(g["name"])}<small>{e(sub)}</small></span></a>')
+    r = f'<small class="rtp">{e(rtp(g))}</small>' if com_rtp else ''
+    return (f'<a class="card" href="{href}" data-cta="card_{g["key"]}" style="--ca:{g["accent"]}"><img src="{t}" width="{w}" height="{h}" {lz}alt="{e(cover_alt(g))}">'
+            f'<span>{e(g["name"])}<small>{e(sub)}</small>{r}</span></a>')
 
 def art_view(p, crop=None):
     """Tamanho, classe da moldura, estilo da moldura e estilo da imagem da arte p.
@@ -268,7 +288,7 @@ def char_section(g, mode='pages'):
         for i, (p, crop, alt) in enumerate(arts):
             w, h, cls, box, ist = art_view(p, crop); t = THUMB[p]; tw, th = webp_size(t)
             xs += (f'<button type="button" aria-pressed="{"true" if i == 0 else "false"}" aria-label="Ver {e(alt)}" data-src="{p}" data-w="{w}" data-h="{h}" '
-                   f'data-alt="{e(alt)}" data-cls="{cls}" data-box="{box}" data-img="{ist}"><img src="{t}" width="{tw}" height="{th}" decoding="async" alt=""></button>')
+                   f'data-alt="{e(alt)}" data-cls="{cls}" data-box="{box}" data-img="{ist}"><img src="{t}" width="{tw}" height="{th}" decoding="async" alt="" aria-hidden="true"></button>')
         xs = f'<div class="ch-x" aria-label="Outras artes do personagem">{xs}</div>'
     todos = 'personagens.html' if mode == 'pages' else f'{PAGES}/personagens.html'
     return f'''
@@ -281,12 +301,12 @@ def char_section(g, mode='pages'):
 
 def hero_char_art(g):
     """(caminho, alt) do personagem recortado do hero: o oficial do acervo (char-1); sem ele, a arte principal do jogo
-    se tiver fundo transparente (Zeus); senão None (Fortune Tiger, cujo pacote não traz personagem, e os jogos do elenco da casa)."""
+    se tiver fundo transparente (Zeus) e o personagem não tiver "hero": false; senão None (Fortune Tiger, cujo pacote não traz personagem, e os jogos do elenco da casa)."""
     ch = acv(g['key'], 'char')
     c = g.get('character') or {}
     nome = c.get('name') or 'Personagem'
     if ch: return ch[0]['arquivo'], f'{nome}, personagem oficial do {g["name"]}'
-    if c and not c.get('crop') and TRANSP.get(c['main']): return c['main'], c['alt']
+    if c and not c.get('crop') and c.get('hero', True) and TRANSP.get(c['main']): return c['main'], c['alt']
     return None
 
 def hero_char(g):
@@ -297,6 +317,8 @@ def hero_char(g):
     w, h = webp_size(a[0])
     return f'<img class="hero-ch" src="{a[0]}" width="{w}" height="{h}" alt="{e(a[1])}" decoding="async">'
 
+FAQ_OBRIG = ('Qual o valor mínimo de aposta?', 'Como sacar?', 'Funciona no celular?', 'O que é RTP?')
+
 def game_page(g, mode='pages'):
     k = g['key']; n = g['name']
     reg = utm(S['register'], k, 'hero'); play = utm(play_url(g), k, 'vitrine')
@@ -304,7 +326,9 @@ def game_page(g, mode='pages'):
     desc = meta_desc(g)
     canonical = game_url(k); og = f'{game_root(k)}/{og_image(g)}'
     hub = hub_href(mode); hc = hero_char(g)
-    assert len(g['faq']) >= 5, f'FAQ de {k}: pelo menos 5 perguntas'
+    assert 5 <= len(g['faq']) <= 6, f'FAQ de {k}: de 5 a 6 perguntas'
+    falta = set(FAQ_OBRIG) - {f['q'] for f in g['faq']}
+    assert not falta, f'FAQ de {k}: faltam {sorted(falta)}'
     faq_ld = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
         {"@type": "Question", "name": f['q'], "acceptedAnswer": {"@type": "Answer", "text": f['a']}} for f in g['faq']]}, ensure_ascii=False)
     if g.get('video'):
@@ -314,19 +338,22 @@ def game_page(g, mode='pages'):
         media = f'<img class="kb" src="assets/img/{k}-thumb.webp" width="300" height="350" loading="lazy" decoding="async" alt="{e(cover_alt(g))}">'
     promo = ''
     if g.get('promo'):
-        note = f'<small>{e(g["promo"]["note"])}</small>' if g['promo'].get('note') else ''
-        promo = f'<p class="promo">{e(g["promo"]["text"])} <a data-cta="promo" href="{utm(g["promo"]["url"], k, "promo")}">Ver campanha</a>{note}</p>'
+        pr = g['promo']; note = ''
+        if pr.get('note'):  # com note_url, a nota vira link (ex.: página de promoções da plataforma)
+            nt = f'<a data-cta="promo_regras" href="{utm(pr["note_url"], k, "vitrine")}">{e(pr["note"])}</a>' if pr.get('note_url') else e(pr['note'])
+            note = f'<small>{nt}</small>'
+        promo = f'<p class="promo">{e(pr["text"])} <a data-cta="promo" href="{utm(pr["url"], k, "vitrine")}">Ver campanha</a>{note}</p>'
     feats = ''.join(f'<button class="xcard" type="button" data-k="{e(f["title"])}" aria-expanded="{"true" if i == 0 else "false"}"><span class="n">0{i + 1}</span><h3>{e(f["title"])}</h3><p>{e(f["text"])}</p></button>'
                     for i, f in enumerate(g['features']))
-    others = ''.join(card(o, game_href(o['key'], mode), o['provider'], lazy=i >= 3) for i, o in enumerate(o for o in G if o['key'] != k))
+    others = ''.join(card(o, game_href(o['key'], mode), o['provider'], lazy=False) for o in G if o['key'] != k)
     faqs = ''.join(f'<details><summary>{e(f["q"])}</summary><p>{e(f["a"])}</p></details>' for f in g['faq'])
     style = f'<style>:root{{--acc:{g["accent"]};--acc2:{g.get("accent2", "#FF3D5A")}}}</style>'
     cls = ' has-ch' if hc else ''
     if hero_bg(k): cls += ' hero-acv'
-    return head(title, desc, og, canonical, g['accent'], hero_preload(k), style + f'<script type="application/ld+json">{faq_ld}</script>',
+    return saida(head(title, desc, og, canonical, g['accent'], hero_preload(k), style + f'<script type="application/ld+json">{faq_ld}</script>',
                 og_alt=f'Arte oficial do {n}' if k in ACJ else f'{n}: guia do jogo') + f'''
 <body data-page="{k}" data-ga="{S.get('ga4', '')}">
-{top(hub)}
+{top(k, hub)}
 <main>
 <section class="hero{cls}" aria-label="{e(n)}">
 <div class="veil l" aria-hidden="true"></div><div class="veil r" aria-hidden="true"></div>
@@ -361,9 +388,9 @@ def game_page(g, mode='pages'):
 </div></section>
 
 <section class="s"><div class="wrap">
-<p class="eyebrow">Comece em 1 minuto</p><h2>Do cadastro ao <span class="hl">primeiro giro</span></h2>
+<p class="eyebrow">Cadastro em poucos minutos</p><h2>Do cadastro ao <span class="hl">primeiro giro</span></h2>
 <div class="steps"><svg viewBox="0 0 12 100" preserveAspectRatio="none" aria-hidden="true"><path d="M6 0V100"/><path class="draw" d="M6 0V100"/></svg>
-<div class="step"><span class="dot">1</span><h3>Crie sua conta</h3><p>Nome, CPF e e-mail. Leva menos de um minuto.</p></div>
+<div class="step"><span class="dot">1</span><h3>Crie sua conta</h3><p>Nome, CPF, e-mail e confirmação de identidade.</p></div>
 <div class="step"><span class="dot">2</span><h3>Deposite via Pix</h3><p>Escolha o valor, pague no app do banco e o saldo cai em segundos.</p></div>
 <div class="step"><span class="dot">3</span><h3>Abra o {e(n)}</h3><p>Busque pelo nome ou use o botão desta página. Defina seu limite e jogue.</p></div>
 </div></div></section>
@@ -384,44 +411,52 @@ def game_page(g, mode='pages'):
 </section>
 </main>
 {footer(k, hub)}
-<div class="sticky"><span class="sn">{e(g['provider'])}<b>{e(n)}</b></span><a class="btn btn-main" data-cta="sticky_cadastro" href="{utm(S['register'], k, 'sticky')}">Jogar agora {ARROW}</a></div>
+<div class="sticky"><span class="sn">{e(g['provider'])}<b>{e(n)}</b></span><a class="btn btn-main" data-cta="sticky_cadastro" href="{utm(S['register'], k, 'final')}">Jogar agora {ARROW}</a></div>
 <script>{JS}</script>
-</body></html>'''
+</body></html>''')
 
 LZ = 'loading="lazy"'
+# parágrafo abaixo de "Escolha o seu jogo" (80 a 120 palavras; o build confere)
+HUB_INTRO = ('Cada guia reúne o que vale saber antes de abrir o jogo. Você encontra o RTP teórico informado pelo provedor, o ganho máximo '
+             'em vezes a aposta e a volatilidade, que indica se os prêmios tendem a ser mais frequentes e menores ou mais raros e maiores. '
+             'Também explicamos como o jogo paga: grade, linhas ou pagamento em qualquer posição, curingas, multiplicadores e giros grátis. '
+             'No fim de cada página há um passo a passo do cadastro ao primeiro giro e respostas para dúvidas comuns, como aposta mínima, '
+             'saque via Pix e uso no celular.')
+assert 80 <= len(HUB_INTRO.split()) <= 120, len(HUB_INTRO.split())
 
 def hub():
-    col = ''.join(f'<img src="{thumb(g["key"])}" width="{webp_size(thumb(g["key"]))[0]}" height="{webp_size(thumb(g["key"]))[1]}" alt="" {LZ if i >= 6 else str()} decoding="async">'
+    col = ''.join(f'<img src="{thumb(g["key"])}" width="{webp_size(thumb(g["key"]))[0]}" height="{webp_size(thumb(g["key"]))[1]}" alt="" aria-hidden="true" {LZ if i >= 6 else str()} decoding="async">'
                   for i, g in enumerate(G + G[:4]))
-    grid = ''.join(card(g, game_href(g['key'], 'pages'), g['kicker'].split('·')[-1].strip()) for g in G)
+    grid = ''.join(card(g, game_href(g['key'], 'pages'), g['kicker'].split('·')[-1].strip(), com_rtp=True) for g in G)
     title = f'Os jogos mais jogados: guias, RTP e recursos | {S["brand"]}'
     desc = 'Fortune Tiger, Gates of Olympus, Sweet Bonanza, Mines e mais: como cada jogo funciona, RTP e recursos, para jogar no celular.'
     lista = json.dumps({"@context": "https://schema.org", "@type": "ItemList", "name": "Os jogos de cassino mais jogados", "numberOfItems": len(G),
                         "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": g['name'], "url": game_url(g['key'])} for i, g in enumerate(G)]},
                        ensure_ascii=False)
-    return head(title, desc, f'{PAGES}/assets/img/fortune-tiger-og.jpg', f'{PAGES}/', '#F5B942',
+    return saida(head(title, desc, f'{PAGES}/assets/img/fortune-tiger-og.jpg', f'{PAGES}/', '#F5B942',
                 extra=f'<script type="application/ld+json">{lista}</script>') + f'''
 <body data-page="hub" data-ga="{S.get('ga4', '')}">
-{top()}
+{top('hub')}
 <main>
 <section class="hero" aria-label="Jogos">
 <div class="veil l" aria-hidden="true"></div><div class="veil r" aria-hidden="true"></div>
 <div class="cbox" aria-hidden="true"><div class="collage">{col}</div></div>
 <div class="fx fx-coins" aria-hidden="true"></div>
 <div class="hero-in"><span class="kicker"><b></b>Guia dos jogos</span>
-<h1 class="h1-hub"><small>Os jogos de cassino </small>mais<em> jogados<span class="sr">:</span></em><small> guias e RTP</small></h1>
+<h1 class="h1-hub"><span class="h1-l">Os jogos de cassino</span> mais <em>jogados:</em> <span class="h1-l">guias e RTP</span></h1>
 <p class="headline focus">{words('Escolha o seu e entenda o jogo antes do primeiro giro')}</p>
 <p class="lede">RTP, recursos e como jogar no celular, jogo por jogo. Tudo no navegador, com depósito via Pix.</p>
 <div class="ctas"><a class="btn btn-main" data-cta="hub_cadastro" href="{utm(S['register'], 'hub', 'hero')}">Criar conta {ARROW}</a><a class="btn btn-ghost" href="#jogos">Ver os jogos</a></div>
 </div></section>
 <section class="s" id="jogos"><div class="wrap"><p class="eyebrow">{len(G)} guias</p><h2>Escolha o <span class="hl">seu jogo</span></h2>
+<p class="sub">{e(HUB_INTRO)}</p>
 <div class="grid">{grid}</div><p class="note more"><a href="personagens.html">Personagens dos jogos</a></p></div></section>
-<section class="final"><h2>Tudo pronto em 1 minuto</h2><p class="sub" style="margin:0 auto">Cadastro rápido, Pix na hora e centenas de jogos.</p>
+<section class="final"><h2>Cadastro em poucos minutos</h2><p class="sub" style="margin:0 auto">Cadastro rápido, Pix na hora e centenas de jogos.</p>
 <div class="ctas"><a class="btn btn-main" data-cta="hub_final" href="{utm(S['register'], 'hub', 'final')}">Criar conta grátis {ARROW}</a></div></section>
 </main>
 {footer('hub')}
-<div class="sticky"><a class="btn btn-main" data-cta="sticky_cadastro" href="{utm(S['register'], 'hub', 'sticky')}">Jogar agora {ARROW}</a></div>
-<script>{JS}</script></body></html>'''
+<div class="sticky"><a class="btn btn-main" data-cta="sticky_cadastro" href="{utm(S['register'], 'hub', 'final')}">Jogar agora {ARROW}</a></div>
+<script>{JS}</script></body></html>''')
 
 GRUPOS = {'01-proprias': 'Próprias', '02-latam': 'LATAM', '03-zeroum': 'Zeroum', '04-oficiais-provedores': 'Oficiais dos provedores'}
 
@@ -452,10 +487,10 @@ def personagens():
              '@media (min-width:720px){.bf{grid-template-columns:1fr 1fr 1.4fr}.bg{grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}}</style>')
     pdata = json.dumps(data, ensure_ascii=False).replace('</', '<\\/')
     title = f'Personagens dos jogos | {S["brand"]}'
-    return head(title, 'Biblioteca interna de artes de personagens de cassino.', f'{PAGES}/assets/img/fortune-tiger-og.jpg',
+    return saida(head(title, 'Biblioteca interna de artes de personagens de cassino.', f'{PAGES}/assets/img/fortune-tiger-og.jpg',
                 f'{PAGES}/personagens.html', '#F5B942', extra=style, noindex=True) + f'''
 <body data-page="personagens">
-{top()}
+{top('hub')}
 <main class="bank"><div class="wrap">
 <p class="eyebrow">Uso interno</p><h1 class="bt">Personagens <span class="hl">dos jogos</span></h1>
 <p class="sub">{len(CAT)} artes de personagens do catálogo. Toque numa miniatura para ver a versão grande e o link do arquivo original no Drive.</p>
@@ -471,7 +506,7 @@ def personagens():
 <div class="dl"><a id="dd" href="#" target="_blank" rel="noopener">Abrir original no Drive</a><a id="dw" href="#" target="_blank" rel="noopener">Abrir versão web</a><button type="button" id="dx">Fechar</button></div></dialog>
 <script id="pdata" type="application/json">{pdata}</script>
 <script>{PJS}</script>
-</body></html>'''
+</body></html>''')
 
 def domain_404(k):
     return f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -485,18 +520,37 @@ def refs(t):
     """Todos os assets citados no HTML: src, srcset, href, poster, data-src, url() do CSS e o JSON do banco de personagens."""
     return set(ASSET_RE.findall(t))
 
+IMG_TAG = re.compile(r'<img\b[^>]*>')
+
+def visivel(t):
+    """Texto visível aproximado: sem <script>, <style> e tags."""
+    return re.sub(r'<[^>]+>', ' ', re.sub(r'<(script|style)\b.*?</\1>', ' ', t, flags=re.S))
+
 def check(base, label):
-    """Verificador de referências: todo asset citado existe; nenhum texto com travessão."""
+    """Verificador: todo asset citado existe; nenhum travessão; toda <img> com alt; um h1 por página;
+    nenhum "teste" em texto visível; nenhuma capa com loading="lazy" no carrossel "Outros favoritos"."""
     for f in sorted(os.listdir(base)):
         if f.endswith('.html'):
             t = open(os.path.join(base, f), encoding='utf-8').read()
             for ref in refs(t):
                 assert os.path.exists(os.path.join(base, ref)), (label, f, ref)
             assert '—' not in t, f'travessao em {label}/{f}'
+            sem_alt = [i for i in IMG_TAG.findall(t) if not re.search(r'\balt="', i)]
+            assert not sem_alt, (label, f, 'img sem alt', sem_alt[:2])
+            assert len(re.findall(r'<h1\b', t)) == 1, (label, f, 'deve ter um h1')
+            assert not re.search(r'\bteste\b', visivel(t), re.I), (label, f, '"teste" em texto visível')
+            rail = re.search(r'<div class="rail">(.*?)</div>', t, re.S)
+            assert not rail or 'loading="lazy"' not in rail.group(1), (label, f, 'lazy no carrossel')
             print(f'{label}/{f}', len(t) // 1024, 'KB')
 
-def robots():
-    return 'User-agent: *\n' + ('Allow: /\n' if S.get('indexar') else 'Disallow: /\n')
+def robots(sitemap=None):
+    return 'User-agent: *\n' + ('Allow: /\n' if S.get('indexar') else 'Disallow: /\n') + (f'Sitemap: {sitemap}\n' if sitemap and S.get('indexar') else '')
+
+def sitemap():
+    """sitemap.xml do docs/: a index e as landings dos jogos (o banco de personagens é noindex e fica de fora)."""
+    urls = [f'{PAGES}/'] + [f'{PAGES}/{g["key"]}.html' for g in G]
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+            + ''.join(f'  <url><loc>{u}</loc></url>\n' for u in urls) + '</urlset>\n')
 
 if __name__ == '__main__':
     for g in G: og_image(g)  # antes da cópia de assets/ (as OG ficam em assets/og/)
@@ -524,7 +578,8 @@ if __name__ == '__main__':
             os.makedirs(os.path.dirname(os.path.join(OUT, ref)), exist_ok=True)
             shutil.copy2(os.path.join(R, ref), os.path.join(OUT, ref))
     open(os.path.join(OUT, '.nojekyll'), 'w').write('')
-    open(os.path.join(OUT, 'robots.txt'), 'w').write(robots())
+    open(os.path.join(OUT, 'robots.txt'), 'w').write(robots(f'{PAGES}/sitemap.xml'))
+    open(os.path.join(OUT, 'sitemap.xml'), 'w', encoding='utf-8').write(sitemap())
     check(OUT, 'docs')
     # um site por jogo, para o domínio próprio (dist-dominios/<dominio>/)
     if os.path.exists(DIST): shutil.rmtree(DIST)

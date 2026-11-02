@@ -4,7 +4,7 @@
     "register": "/register",
     "brand": "Cassino",
     "ga4": "G-K23B4D0N14",
-    "indexar": false,
+    "indexar": true,
     "pages_url": "https://eduzeroumbet.github.io/cassino-jogos",
     "domains": {"fortune-tiger": "guiadotigrinho.win", "fortune-rabbit": "guiadocoelhinho.win", "fortune-ox": "guiadotourinho.win", "fortune-dragon": "guiadodragaozinho.win", "gates-of-olympus": "guiadozeus.win", "sweet-bonanza": "guiadosdoces.win", "big-bass-splash": "guiadapescaria.win", "mines": "guiadasminas.win"},
     "domains_active": false
@@ -24,7 +24,7 @@
       "kicker": "PG Soft · Slot 3x3",
       "headline": "Três rolos, cinco linhas e um recurso que pode encher a tela",
       "lede": "O tigre é o curinga. No recurso Fortune Tiger os rolos giram de novo com um único símbolo em jogo e, com a grade cheia, o prêmio do giro é multiplicado por dez.",
-      "character": {"main": "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/freepik-ultradetailed-3d-character-model-pixaranimation-st-23284.webp", "extras": ["assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/tigrinho.webp", "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/fortune-tiger-character-tiger1.webp", "assets/personagens/03-zeroum/cassino-mascotes/pgsoft/fortune-tiger/freepik-ultradetailed-3d-character-model-pixaranimation-st-23286.webp"], "name": "Tigre da Sorte", "alt": "Tigre da Sorte do Fortune Tiger pulando com envelopes vermelhos da sorte", "bio": "O Tigre da Sorte é o curinga do Fortune Tiger: substitui todos os símbolos e também paga sozinho quando forma linha. É ele quem pode ativar o recurso Fortune Tiger a qualquer giro, com os rolos girando de novo e um único símbolo em jogo até sair um prêmio."},
+      "character": {"main": "assets/personagens/03-zeroum/personagens-cassino-copa-site/pg/fortune-tiger/fortune-tiger-01.webp", "extras": ["assets/personagens/03-zeroum/personagens-cassino-copa-site/pg/fortune-tiger/fortune-tiger-02.webp", "assets/personagens/03-zeroum/personagens-cassino-copa-site/pg/fortune-tiger/fortune-tiger-03.webp"], "name": "Tigre da Sorte", "hero": false, "alt": "Tigre da Sorte do Fortune Tiger de camisa amarela e óculos escuros, com os braços para o alto", "bio": "O Tigre da Sorte é o curinga do Fortune Tiger: substitui todos os símbolos e também paga sozinho quando forma linha. É ele quem pode ativar o recurso Fortune Tiger a qualquer giro, com os rolos girando de novo e um único símbolo em jogo até sair um prêmio."},
       "metrics": [
         {"label": "RTP teórico", "value": 96.81, "suffix": "%", "type": "bar", "max": 100},
         {"label": "Ganho máximo", "value": 2500, "suffix": "x", "type": "count"},
@@ -37,13 +37,13 @@
         {"title": "Wild do tigre", "text": "O tigre é o curinga: substitui todos os símbolos e também paga sozinho quando forma linha."}
       ],
       "faq": [
-        {"q": "Fortune Tiger funciona no celular?", "a": "Sim. O jogo foi feito em formato vertical e roda direto no navegador do Android e do iPhone, sem baixar nada."},
-        {"q": "O que é o RTP de 96,81%?", "a": "É o retorno teórico ao jogador informado pelo provedor, calculado em milhões de rodadas. Não é garantia de resultado numa sessão; confira o valor na tela de regras dentro do jogo."},
+        {"q": "Funciona no celular?", "a": "Sim. O jogo foi feito em formato vertical e roda direto no navegador do Android e do iPhone, sem baixar nada."},
+        {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,81% no Fortune Tiger. Não é garantia de resultado numa sessão; confira o valor na tela de regras dentro do jogo."},
         {"q": "Como deposito para jogar?", "a": "Depois de criar a conta, escolha o valor e pague o Pix pelo app do seu banco. O saldo cai em segundos."},
-        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Tiger. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
-        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
+        {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Tiger. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ],
-      "promo": {"text": "Campanha ativa na plataforma: 100 giros no Fortune Tiger com depósito de R$ 50. Regras completas na página da campanha.", "note": "Campanha de teste da plataforma. Condições, prazo e rollover na página da campanha.", "url": "/campanha/deposite-r-50-e-ganhe-100-giros-no-fortune-tiger"}
+      "promo": {"text": "Campanha ativa na plataforma: 100 giros no Fortune Tiger com depósito de R$ 50.", "note": "Regras completas na página de promoções da plataforma", "note_url": "/promocoes", "url": "/campanha/deposite-r-50-e-ganhe-100-giros-no-fortune-tiger"}
     },
     {
       "key": "fortune-rabbit",
@@ -73,10 +73,10 @@
       ],
       "faq": [
         {"q": "Qual a diferença entre Fortune Rabbit e Fortune Tiger?", "a": "O Rabbit tem grade 3-4-3 com dez linhas e símbolos de prêmio com valor; o Tiger é 3x3 com cinco linhas e multiplicador x10."},
-        {"q": "Dá para jogar no iPhone?", "a": "Sim. Abra o site no Safari, entre na sua conta e toque no jogo. Funciona em tela cheia na vertical."},
-        {"q": "O RTP é garantido?", "a": "Não. O RTP é uma média teórica informada pelo provedor para milhões de rodadas; cada giro é independente."},
-        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Rabbit. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
-        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
+        {"q": "Funciona no celular?", "a": "Sim. O jogo roda no navegador do Android e do iPhone (no Safari): entre na sua conta e toque no jogo. Funciona em tela cheia na vertical."},
+        {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,75% no Fortune Rabbit. Não é garantido; cada giro é independente."},
+        {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Rabbit. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
     },
     {
@@ -107,10 +107,11 @@
       ],
       "faq": [
         {"q": "Qual a diferença entre Fortune Ox e Fortune Tiger?", "a": "O Ox tem grade 3-4-3 com dez linhas e o recurso que trava os rolos laterais; o Tiger é 3x3 com cinco linhas. O ganho máximo informado é de 2.000x no Ox e 2.500x no Tiger, e o RTP teórico dos dois é parecido."},
-        {"q": "Preciso baixar aplicativo?", "a": "Não. O jogo abre no navegador. Se preferir, dá para adicionar o site à tela de início do celular."},
+        {"q": "Funciona no celular?", "a": "Sim. O jogo abre no navegador do celular, sem baixar aplicativo. Se preferir, dá para adicionar o site à tela de início."},
         {"q": "Quanto tempo leva para o depósito cair?", "a": "No Pix o saldo costuma aparecer em segundos depois do pagamento no app do banco."},
-        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Ox. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
-        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
+        {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,75% no Fortune Ox. Não é uma previsão para a sua sessão; cada giro é independente."},
+        {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Ox. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
     },
     {
@@ -141,10 +142,11 @@
       ],
       "faq": [
         {"q": "Fortune Dragon é fácil de entender?", "a": "Sim. É um dos slots mais simples: 3x3, cinco linhas e um recurso principal."},
-        {"q": "Onde vejo as regras completas?", "a": "Dentro do jogo, no menu de informações. Lá estão a tabela de pagamentos e o RTP configurado."},
-        {"q": "Como começo?", "a": "Crie sua conta em cerca de um minuto, deposite via Pix e toque em Fortune Dragon."},
-        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Dragon. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
-        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
+        {"q": "Funciona no celular?", "a": "Sim. A grade 3x3 cabe na tela em pé e o jogo roda no navegador do Android e do iPhone, sem baixar aplicativo."},
+        {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,74% no Fortune Dragon. O valor configurado e a tabela de pagamentos ficam no menu de informações dentro do jogo."},
+        {"q": "Como começo?", "a": "Crie sua conta (o cadastro leva poucos minutos), deposite via Pix e toque em Fortune Dragon."},
+        {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Fortune Dragon. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
     },
     {
@@ -176,10 +178,11 @@
       ],
       "faq": [
         {"q": "O que quer dizer volatilidade alta?", "a": "Os prêmios tendem a ser menos frequentes e maiores. É bom definir um valor por sessão antes de começar."},
-        {"q": "Gates of Olympus roda bem no celular?", "a": "Sim. A grade se ajusta à tela vertical e as animações podem ser aceleradas no menu do jogo."},
+        {"q": "Funciona no celular?", "a": "Sim. A grade se ajusta à tela vertical e as animações podem ser aceleradas no menu do jogo."},
         {"q": "Os multiplicadores se somam?", "a": "Sim. Todos os multiplicadores que caem durante a sequência de cascatas são somados e aplicados ao prêmio total."},
-        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Gates of Olympus. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
-        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
+        {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,50% no Gates of Olympus. Com volatilidade alta, o resultado de uma sessão pode ficar longe dessa média."},
+        {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Gates of Olympus. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
     },
     {
@@ -211,10 +214,10 @@
       ],
       "faq": [
         {"q": "Sweet Bonanza é parecido com Gates of Olympus?", "a": "Usam a mesma mecânica de grade 6x5 com cascatas. No Sweet Bonanza os multiplicadores aparecem só nos giros grátis."},
-        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Sweet Bonanza. O depósito mínimo via Pix é exibido na tela de depósito."},
-        {"q": "Posso jogar na vertical?", "a": "Sim. A versão mobile reorganiza a grade para a tela em pé."},
-        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."},
-        {"q": "Preciso baixar aplicativo?", "a": "Não. O jogo abre no navegador do celular ou do computador, sem instalar nada."}
+        {"q": "Funciona no celular?", "a": "Sim. O jogo abre no navegador do celular ou do computador, sem instalar nada, e a versão mobile reorganiza a grade para a tela em pé."},
+        {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,48% no Sweet Bonanza. Não é uma previsão para a sua sessão; confira o valor na tela de regras dentro do jogo."},
+        {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Sweet Bonanza. O depósito mínimo via Pix é exibido na tela de depósito."},
+        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
     },
     {
@@ -246,9 +249,10 @@
       "faq": [
         {"q": "Como funcionam os giros grátis?", "a": "O pescador entra como curinga e coleta o valor de todos os peixes visíveis. Acumular pescadores sobe o multiplicador."},
         {"q": "Big Bass Splash é o mesmo que Big Bass Bonanza?", "a": "É da mesma série, com grade 5x3 e dez linhas, mas com recursos aleatórios extras antes dos giros grátis."},
-        {"q": "Precisa de internet rápida?", "a": "Não. O jogo é leve e funciona bem em 4G."},
-        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Big Bass Splash. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
-        {"q": "Como faço saque?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
+        {"q": "Funciona no celular?", "a": "Sim. O jogo roda no navegador do celular, sem baixar aplicativo, e é leve o bastante para o 4G."},
+        {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas: 96,71% no Big Bass Splash. Não é uma previsão para a sua sessão; cada giro é independente."},
+        {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Big Bass Splash. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como sacar?", "a": "O saque é feito via Pix, na carteira da plataforma: abra a carteira, escolha sacar e informe o valor. Condições e prazos estão nos Termos e Condições da plataforma."}
       ]
     },
     {
@@ -279,10 +283,10 @@
       ],
       "faq": [
         {"q": "Qual a melhor quantidade de minas?", "a": "Não existe configuração vencedora. Poucas minas dão acertos mais frequentes com multiplicador menor; muitas minas, o contrário."},
-        {"q": "O RTP é fixo?", "a": "O provedor informa uma faixa que pode chegar a 98,89% conforme a configuração. Confira o valor nas regras dentro do jogo."},
-        {"q": "Funciona no celular?", "a": "Sim. A grade é grande, com toques simples, ideal para jogar com uma mão."},
-        {"q": "Qual a aposta mínima?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Turbo Mines. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
-        {"q": "Como faço saque?", "a": "O botão de saque dentro do Turbo Mines só encerra a rodada e leva o valor para o seu saldo. Para retirar o saldo da conta, use a carteira da plataforma: o saque é feito via Pix. Condições e prazos estão nos Termos e Condições."}
+        {"q": "O que é RTP?", "a": "É o retorno teórico ao jogador, uma média informada pelo provedor para milhões de rodadas. No Turbo Mines, o provedor informa uma faixa que pode chegar a 98,89% conforme a configuração. Confira o valor nas regras dentro do jogo."},
+        {"q": "Funciona no celular?", "a": "Sim. A grade 5x5 ocupa a tela em pé e cada casa abre com um toque."},
+        {"q": "Qual o valor mínimo de aposta?", "a": "A aposta mínima é definida pelo próprio jogo e aparece no seletor de aposta dentro do Turbo Mines. Confira o valor antes de começar e escolha um que caiba no limite da sua sessão."},
+        {"q": "Como sacar?", "a": "O botão de saque dentro do Turbo Mines só encerra a rodada e leva o valor para o seu saldo. Para retirar o saldo da conta, use a carteira da plataforma: o saque é feito via Pix. Condições e prazos estão nos Termos e Condições."}
       ]
     }
   ]
