@@ -258,6 +258,41 @@ DOCKCSS = ('.dock{position:fixed;left:10px;right:10px;bottom:calc(10px + env(saf
            '.dock.off{transform:translateY(150%);opacity:0;visibility:hidden}'
            '@media (max-width:719px){body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}}@media (min-width:720px){.dock{display:none}}')
 
+# "Promoções ativas" (mesmo cartão de src/lp.css): carrossel com snap no celular (o próximo cartão aparece cortado), 3 colunas no desktop.
+# Cada site define as cores em .prm{--pc-*}; o botão é sempre #D41F42 com texto branco (contraste AA).
+PROMOCSS = ('.promos{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--pc-pad,16px);padding:6px var(--pc-pad,16px) 18px;'
+            'margin:18px calc(var(--pc-pad,16px) * -1) 0;scrollbar-width:none}.promos::-webkit-scrollbar{display:none}'
+            '.pcard{flex:0 0 84%;max-width:360px;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px;padding:22px 20px;border-radius:var(--pc-r,16px);'
+            'background:var(--pc-bg,#fff);color:var(--pc-tx,#111);border:var(--pc-bw,1px) solid var(--pc-bd,currentColor);border-top:3px solid var(--pc-ac,#111);box-shadow:var(--pc-sh,none);font-family:' + SANS + '}'
+            '.pselo{align-self:flex-start;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:999px;background:var(--pc-ac,#111);color:var(--pc-st,#fff)}'
+            '.pcard h3{font-size:20px;font-weight:800;line-height:1.2;color:var(--pc-tx,#111)}.pcard p{color:var(--pc-mu,#444);font-size:15px;line-height:1.5}'
+            '.pcard small{font-size:13px;line-height:1.45;color:var(--pc-mu,#444)}'
+            '.pcard .pbt{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:52px;padding:0 18px;border-radius:var(--pc-br,12px);'
+            'background:#D41F42;color:#fff;font:800 15px/1.2 ' + SANS + ';text-decoration:none;text-align:center}.pcard .pbt:hover{background:#B81A39}'
+            '.prm-n{font-size:13px;line-height:1.5;color:var(--pc-nt,var(--pc-mu,#444));margin-top:8px}'
+            '@media (min-width:1024px){.promos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;overflow:visible;margin:18px 0 0;padding:6px 0 8px}.pcard{max-width:none}}')
+
+PROMO_NOTA = '18+ · Regras completas em cada campanha. Jogue com responsabilidade.'
+
+def promos(s):
+    """Cartões de site.promos (data/games.json, os mesmos das landing pages) e a nota 18+. Cada site põe o título no próprio estilo.
+    Links: utm_source=site&utm_medium=guia&utm_campaign=<chave>&utm_content=promo-<n>, rel="sponsored noopener"."""
+    cards = ''
+    for i, p in enumerate(S.get('promos') or [], 1):
+        assert p['url'].startswith(BASE + '/'), f'promo {i}: url fora da plataforma'
+        path = p['url'][len(BASE):]; sep = '&' if '?' in path else '?'
+        u = f'{BASE}{path}{sep}utm_source=site&utm_medium=guia&utm_campaign={s["chave"]}&utm_content=promo-{i}'
+        cards += (f'<article class="pcard"><span class="pselo">{e(p["badge"])}</span><h3>{e(p["title"])}</h3><p>{e(p["text"])}</p>'
+                  f'<small>{e(p["details"])}</small><a class="pbt" data-cta="promo-{i}" rel="sponsored noopener" href="{u}">{e(p["cta"])} {ARROW}</a></article>')
+    return f'<div class="promos">{cards}</div><p class="prm-n">{e(PROMO_NOTA)}</p>'
+
+def promo_faq():
+    """Pergunta do FAQ sobre as campanhas, montada a partir de site.promos."""
+    ts = [p['title'] for p in S.get('promos') or []]
+    lista = ', '.join(ts[:-1]) + ' e ' + ts[-1] if len(ts) > 1 else ''.join(ts)
+    return {'q': 'Quais promoções estão ativas?',
+            'a': f'Hoje são {len(ts)} campanhas: {lista}. Cada uma tem regras próprias (valor mínimo, prazo e limite por CPF); confira os detalhes nos cartões de Promoções ativas antes de participar.'}
+
 def dock(s):
     return (f'<div class="dock"><span>{e(s["dock"])}<b>Cadastro em 1 minuto</b></span>'
             f'<a data-cta="dock_cadastro" href="{utm(s, P["register"], "dock")}">Criar conta</a></div>')
@@ -279,7 +314,7 @@ def head(s, css, preload=None, extra=''):
 <meta property="og:image:alt" content="{e(s['hero_arte']['alt'])}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{og}">{pl}{extra}
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='{fav}'/%3E%3C/svg%3E">
-<style>{BASECSS}{FOOTCSS}{DOCKCSS}{css}</style></head>'''
+<style>{BASECSS}{FOOTCSS}{DOCKCSS}{PROMOCSS}{css}</style></head>'''
 
 def footer(s):
     k = s['chave']; r = C['rodape']
@@ -410,6 +445,7 @@ h1{font-size:clamp(34px,8.4vw,64px);line-height:1.04;letter-spacing:-.02em;margi
 .assine .btn-l{background:none;color:var(--paper);border-color:var(--paper)}
 .ft{background:var(--paper);border-top:4px double var(--ink);color:var(--ink)}
 .ft-guias a{border-radius:0}
+.prm{--pc-pad:20px;--pc-bg:var(--paper);--pc-tx:var(--ink);--pc-mu:var(--soft);--pc-ac:var(--acc);--pc-st:#fff;--pc-bd:var(--rule);--pc-r:0;--pc-br:0}
 @media (min-width:720px){.mast-top .hide-m{display:inline}.vit{grid-template-columns:repeat(4,1fr)}.pix{grid-template-columns:1fr 1fr}.pix .quote{grid-column:1/-1}}
 @media (min-width:960px){
 .capa{grid-template-columns:minmax(0,5fr) minmax(0,6fr);align-items:start;gap:48px}
@@ -480,6 +516,8 @@ def site_revista(s):
 <div class="cols">{corpo}<p class="box">{e(t['comecar']['nota'])}</p></div>
 <a class="btn" data-cta="comecar_cadastro" href="{utm(s, P['register'], 'comecar')}">Começar o cadastro {ARROW}</a></article>
 
+<section class="mat prm" id="promocoes" aria-labelledby="prm-h"><header class="mat-h"><p class="lbl kick">Campanhas da plataforma</p><h2 id="prm-h">Promoções ativas</h2></header>{promos(s)}</section>
+
 <section class="mat" id="categorias"><header class="mat-h"><p class="lbl kick">02 · Guia de categorias</p><h2>{e(t['categorias']['titulo'])}</h2><p class="olho">{e(t['categorias']['olho'])}</p></header>
 <div class="cats">{cats}</div></section>
 
@@ -492,7 +530,7 @@ def site_revista(s):
 <section class="mat" id="maisjogados"><header class="mat-h"><p class="lbl kick">05 · Vitrine</p><h2>{e(t['vitrine']['titulo'])}</h2><p class="olho">{e(t['vitrine']['olho'])}</p></header>
 <div class="vit">{vit}</div></section>
 
-<section class="mat faq" id="faq"><header class="mat-h"><p class="lbl kick">06 · Dúvidas</p><h2>Perguntas frequentes</h2></header>{faq(t['faq'])}</section>
+<section class="mat faq" id="faq"><header class="mat-h"><p class="lbl kick">06 · Dúvidas</p><h2>Perguntas frequentes</h2></header>{faq(t['faq'] + [promo_faq()])}</section>
 
 <section class="assine"><h2>Pronto para o primeiro giro?</h2><p>Cadastro rápido, Pix na hora e jogos no navegador.</p>
 <a class="btn" data-cta="final_cadastro" href="{utm(s, P['register'], 'final')}">Criar conta grátis {ARROW}</a><a class="btn btn-l" data-cta="final_entrar" href="{utm(s, P['login'], 'final_entrar')}">Já tenho conta</a></section>
@@ -578,6 +616,7 @@ td a{color:var(--ac);font-weight:700;display:inline-flex;align-items:center;just
 .fin{text-align:center;padding:32px 18px}
 .fin p{color:var(--mu);margin:6px 0 16px}
 .ft{border-top:1px solid var(--ln);color:var(--mu)}
+.prm{--pc-pad:18px;--pc-bg:var(--p2);--pc-tx:var(--tx);--pc-mu:var(--mu);--pc-ac:var(--ac);--pc-st:#111;--pc-bd:var(--ln);--pc-r:12px;--pc-br:10px}
 .ft a{color:var(--tx)}.ft strong{color:var(--tx)}.ft-18{color:var(--ac)}
 @media (max-width:639px){
 .bar .b{padding:0 12px}.logo{font-size:16px}
@@ -666,6 +705,7 @@ def site_dash(s):
 <figure class="hart" data-topo>{hero(s)}</figure>
 <div class="kpis">{kpis}</div></section>
 <section class="pan" aria-labelledby="pod-h"><div class="pan-h"><div><h2 id="pod-h">{e(t['podio_titulo'])}</h2><p>{e(t['podio_sub'])}</p></div></div><div class="pod">{pod}</div></section>
+<section class="pan prm" id="promocoes" aria-labelledby="prm-h"><div class="pan-h"><div><p class="tag">Campanhas da plataforma</p><h2 id="prm-h">Promoções ativas</h2></div></div>{promos(s)}</section>
 <section class="pan" id="ranking" aria-labelledby="rk-h"><div class="pan-h"><div><h2 id="rk-h">{e(t['tabela_titulo'])}</h2><p>{e(t['tabela_sub'])}</p></div><span class="cnt" id="cnt" aria-live="polite">{len(js)} slots</span></div>
 <div class="chips" role="group" aria-label="Filtrar por provedor">{chips}</div>
 <div class="tw" tabindex="0" role="region" aria-labelledby="rk-h"><table><caption class="sr">{e(t['tabela_titulo'])}: slots com RTP teórico, volatilidade e ganho máximo</caption>
@@ -765,6 +805,8 @@ td .nd{color:var(--mu);font-size:14px}
 .fin h2{font-size:clamp(30px,6vw,46px);color:var(--au2);margin-bottom:10px}
 .fin p{color:var(--mu);margin-bottom:22px}
 .ft{background:#2E0606;color:var(--mu);border-top:3px solid var(--au)}
+.prm{--pc-pad:20px;--pc-bg:#3A0808;--pc-tx:var(--au2);--pc-mu:var(--mu);--pc-ac:var(--au);--pc-st:#4E0B0B;--pc-bd:var(--au);--pc-bw:2px;--pc-r:16px;--pc-br:999px}
+.prm .prm-n{text-align:center}
 .ft a{color:var(--au2)}.ft strong{color:var(--tx)}
 @media (min-width:720px){.pg{grid-template-columns:repeat(4,1fr)}.idx{justify-content:center}}
 @media (min-width:960px){.cap .w{grid-template-columns:1.1fr .9fr}.cap:nth-of-type(even) .art{order:-1}.cap-n{right:auto;left:40px}.cap:nth-of-type(odd) .cap-n{left:auto;right:40px}}
@@ -834,6 +876,7 @@ def site_fest(s):
 </div></section>
 <nav class="idx" aria-label="Capítulos">{caps_idx}<a href="#quiz">Quiz</a><a href="#comparativo">Comparativo</a></nav>
 {caps}
+<section class="sec prm" id="promocoes" aria-labelledby="prm-h"><div class="w"><p class="cap-k" style="text-align:center">Campanhas da plataforma</p><h2 id="prm-h">Promoções ativas</h2>{promos(s)}</div></section>
 <section class="sec" id="quiz" aria-labelledby="qz-h"><div class="w"><h2 id="qz-h">{e(q['titulo'])}</h2><p class="lead">{e(q['sub'])}</p>
 <form class="quiz" id="qz">{qs}<div class="ctas"><button class="bt" type="submit" style="border:0">Ver meu Fortune</button></div><p id="qz-msg" role="status" style="text-align:center;color:var(--au2)"></p>{res}</form></div></section>
 <section class="sec" id="comparativo" aria-labelledby="cp-h"><div class="w"><h2 id="cp-h">{e(t['comparativo_titulo'])}</h2><p class="lead">{e(t['comparativo_sub'])}</p>
@@ -922,6 +965,8 @@ h1 span{background:var(--ci);padding:0 .12em;box-decoration-break:clone;-webkit-
 .fin p{margin:10px 0 18px}
 .fin .btn{color:var(--ink)}
 .ft{border-top:3px solid var(--ink);background:var(--am)}
+.prm{--pc-pad:16px;--pc-bg:#fff;--pc-tx:var(--ink);--pc-mu:#333;--pc-nt:var(--ink);--pc-ac:var(--am);--pc-st:var(--ink);--pc-bd:var(--ink);--pc-bw:3px;--pc-r:14px;--pc-br:10px;--pc-sh:6px 6px 0 var(--ink)}
+.prm .pcard{border-top-color:var(--ink)}.prm .pselo{border:2px solid var(--ink)}
 .ft-guias a,.ft-18{border-width:3px;background:#fff;box-shadow:3px 3px 0 var(--ink)}
 @media (min-width:720px){.grid{grid-template-columns:repeat(4,1fr)}.vs,.live{grid-template-columns:1fr 1fr}}
 @media (min-width:1024px){
@@ -990,6 +1035,7 @@ def site_bento(s):
 <div class="ctas"><a class="btn btn-r bx k" data-cta="hero_cadastro" href="{utm(s, P['register'], 'hero')}">Criar conta {ARROW}</a><a class="btn btn-a bx k" data-cta="hero_provedor" href="{utm(s, P['pragmatic'], 'hero_provedor')}">Todos os Pragmatic</a></div></div>
 <figure class="hart bx" data-topo>{hero(s)}</figure></section>
 <section class="bento" aria-label="Destaques da Pragmatic Play">{tiles}</section>
+<section class="sec prm" id="promocoes" aria-labelledby="prm-h"><span class="stk k bx">Campanhas da plataforma</span><h2 class="k" id="prm-h" style="margin-top:12px">Promoções ativas</h2>{promos(s)}</section>
 <section class="sec" id="mecanicas" aria-labelledby="mc-h"><h2 class="k" id="mc-h">{e(t['abas_titulo'])}</h2>
 <div class="tabs" role="tablist" aria-label="Mecânicas">{tabs}</div>
 <div class="pan bx" id="tab-p" role="tabpanel" aria-labelledby="tab-0" tabindex="0"><p id="tab-d">{e(s['abas'][0]['texto'])}</p><div class="grid">{gcs}</div></div></section>
@@ -1077,6 +1123,7 @@ h2::before{content:"> ";color:var(--g)}
 .fin{padding:40px 16px;text-align:center;border-top:1px solid var(--ln)}
 .fin p{color:var(--mu);margin:8px 0 18px}
 .ft{border-top:1px solid var(--g);color:var(--mu)}
+.prm{--pc-pad:16px;--pc-bg:var(--p);--pc-tx:#fff;--pc-mu:var(--mu);--pc-ac:var(--g);--pc-st:#031;--pc-bd:var(--ln);--pc-r:0;--pc-br:0}
 .ft a{color:var(--g)}.ft strong{color:var(--tx)}
 @media (min-width:720px){.og{grid-template-columns:repeat(5,1fr)}.ex{grid-template-columns:repeat(3,1fr)}}
 @media (min-width:1024px){.hero{grid-template-columns:5fr 6fr;align-items:center;padding:48px 0}.ls{columns:2;column-gap:0}.ls li{break-inside:avoid;border-right:1px solid var(--ln)}}
@@ -1137,6 +1184,7 @@ def site_hud(s):
 <section class="sec" aria-labelledby="ex-h"><h2 id="ex-h">Como funciona</h2><div class="ex">{ex}</div></section>
 <section class="sec" id="lista" aria-labelledby="ls-h"><h2 id="ls-h">{e(t['lista_titulo'])}</h2><ul class="ls">{ls}</ul>
 <p style="margin-top:16px"><a class="b" data-cta="lista_crash" href="{utm(s, P['crash'], 'lista_crash')}">Ver categoria crash completa</a></p></section>
+<section class="sec prm" id="promocoes" aria-labelledby="prm-h"><p class="tag">// CAMPANHAS DA PLATAFORMA</p><h2 id="prm-h">Promoções ativas</h2>{promos(s)}</section>
 <section class="sec" id="originais" aria-labelledby="og-h"><h2 id="og-h">{e(t['originais_titulo'])}</h2><div class="og">{og}</div></section>
 <section class="fin"><h2 style="display:inline-block">Pronto para a rodada real?</h2><p>Defina um limite e um saque automático antes de começar.</p>
 <a class="b b-g" data-cta="final_cadastro" href="{utm(s, P['register'], 'final')}">Criar conta grátis {ARROW}</a></section>
@@ -1208,6 +1256,7 @@ details[open] summary::after{content:"\\2212"}
 details p{padding-bottom:16px;color:var(--mu)}
 .dock{border-radius:999px;backdrop-filter:blur(8px)}.dock a{border-radius:999px}
 .ft{background:var(--ink);color:#C7D3E8;border-radius:36px 36px 0 0;margin-top:30px}
+.prm{--pc-pad:16px;--pc-bg:#fff;--pc-tx:var(--ink);--pc-mu:var(--mu);--pc-ac:var(--ceu);--pc-st:#fff;--pc-bd:#D5E1F5;--pc-r:24px;--pc-br:999px;--pc-sh:0 8px 24px -14px rgba(16,35,63,.4)}
 .ft a{color:#fff}.ft strong{color:#fff}
 @media (min-width:720px){.steps{grid-template-columns:repeat(3,1fr)}.st{grid-template-columns:1fr}.gl{grid-template-columns:1fr 1fr}}
 @media (min-width:960px){.hero{grid-template-columns:1.2fr .8fr;padding:30px 0 70px}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.two .card{margin:18px 0 0}}
@@ -1247,7 +1296,8 @@ def site_app(s):
 </div>
 <section aria-labelledby="jg-h" style="margin-top:28px"><h2 id="jg-h" style="font-size:clamp(24px,6vw,34px);margin-bottom:14px">{e(t['jogos_titulo'])}</h2><div class="gl">{gl}</div>
 <p style="margin-top:16px"><a class="pill pill-w" style="box-shadow:0 0 0 2px var(--ink) inset" data-cta="lista_crash" href="{utm(s, P['crash'], 'lista_crash')}">Ver todos os crash games</a></p></section>
-<section class="card" aria-labelledby="fq-h"><h2 id="fq-h">Perguntas rápidas</h2>{faq(t['faq'])}</section>
+<section class="prm" id="promocoes" aria-labelledby="prm-h" style="margin-top:28px"><span class="selo" style="background:var(--ceu);color:#fff">Campanhas da plataforma</span><h2 id="prm-h" style="font-size:clamp(24px,6vw,34px);margin-top:10px">Promoções ativas</h2>{promos(s)}</section>
+<section class="card" aria-labelledby="fq-h"><h2 id="fq-h">Perguntas rápidas</h2>{faq(t['faq'] + [promo_faq()])}</section>
 </main>
 {dock(s)}
 {footer(s)}
@@ -1290,7 +1340,10 @@ def check(dst, s):
             kb = os.path.getsize(os.path.join(dst, pre)) / 1024
             assert kb < 120, (s['dominio'], f, 'imagem do hero pesada', pre, kb)
         kb = len(t.encode('utf-8')) / 1024
-        if f == 'index.html': assert kb < 150, (s['dominio'], 'index.html com', kb, 'KB')
+        if f == 'index.html':
+            assert kb < 150, (s['dominio'], 'index.html com', kb, 'KB')
+            for i in range(1, len(S.get('promos') or []) + 1):  # cartões de "Promoções ativas"
+                assert f'utm_medium=guia&utm_campaign={s["chave"]}&utm_content=promo-{i}"' in t, (s['dominio'], 'falta promo', i)
         print(f'dist-sites/{s["dominio"]}/{f}', f'{kb:.0f} KB')
 
 if __name__ == '__main__':
